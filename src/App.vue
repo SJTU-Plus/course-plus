@@ -20,9 +20,8 @@
                       v-for="year in availableYear"
                       :key="year"
                       :value="year"
+                      >{{ year }}</option
                     >
-                      {{ year }}
-                    </option>
                   </select>
                 </div>
                 <div class="col-md-6 mb-3">
@@ -165,7 +164,7 @@
             </form>
           </div>
         </div>
-        <div class="col-9 h-100 overflow-auto">
+        <div class="col-9 h-100">
           <LessonList
             :data="dataFiltered"
             :tableHeader="tableHeader"
