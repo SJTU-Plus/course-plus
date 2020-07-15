@@ -38,6 +38,9 @@
                   </select>
                 </div>
                 <div class="col-12 mb-3">
+                  <Loading :ready="dataLoaded"></Loading>
+                </div>
+                <div class="col-12 mb-3">
                   <label for="inputKeyword">搜索方式</label>
                   <div id="searchBox" class="input-group">
                     <div class="input-group-prepend">
@@ -164,7 +167,7 @@ import Loading from "./components/Loading.vue";
 
 const dataURL = "/course-plus-data/";
 @Component({
-  components: { LessonList },
+  components: { LessonList, Loading },
   filters: {
     semesterCode2name(semesterCode: string) {
       switch (semesterCode) {
