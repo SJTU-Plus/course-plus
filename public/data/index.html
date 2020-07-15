@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280, initial-scale=1, shrink-to-fit=yes">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="//cdn.bootcss.com/twitter-bootstrap/4.2.1/css/bootstrap.min.css">
+
+  <title>学期开课表</title>
+
+
+  <style>
+    .header {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .navbar-toggler:focus {
+      outline: none;
+    }
+
+    .bg-lightgrey {
+      background-color: #e9ecef;
+    }
+
+    .blogroll {
+      height: 25px;
+    }
+
+    #blogrolls {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    /************以下为表单样式************/
+    #keyword-type {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    /************以下为表格样式************/
+    .table-header {
+      text-align: center;
+    }
+
+    .kcbm {
+      min-width: 5em;
+    }
+
+    .yxmc {
+      min-width: 5em;
+    }
+
+    .xm {
+      text-align: center;
+      min-width: 3em;
+    }
+
+    .kcmc {
+      max-width: 15em;
+      min-width: 8em;
+    }
+
+    .xsxf {
+      min-width: 5em;
+      text-align: center;
+    }
+
+    .sksj {
+      min-width: 20em;
+      text-align: center;
+    }
+    
+    .jxdd {
+      min-width: 8em;
+      text-align: center;
+    }
+
+    .bz {
+      min-width: 8em;
+      max-width: 25em;
+    }
+
+    .nj {
+      text-align: center;
+    }
+    
+    .item_limit_dropdown {
+      width: 5em;
+      margin-left: 3em;
+    }
+    
+    .pagination {
+      margin-left: 8em;
+    }
+    
+    .page-item.active .page-link {
+      background-color: darkgray !important;
+      border-color: darkgray !important;
+    }
+    .btn-secondary {
+      background-color: darkgray !important;
+      border-color: darkgray !important;
+    }
+    .dropdown-item.active {
+      background-color: darkgray !important;
+      color: white !important;
+    }
+  </style>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">学期开课表</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="../qGroupList/index.html">交流群列表</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">学期开课表</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../epqg/index.html">F18工试班群</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="header bg-lightgrey">
+    <h1 class="text-center">学期开课表</h1>
+  </header>
+
+  <div class="container" id="app" style="display: none">
+    <div class="container">
+      <form name="LessonFilter">
+        <h4 class="text-center">
+          <span>当前学期：</span>
+          <span>
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">{{selectedYear}}</button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" :class="{'active':year==selectedYear}" @click="selectedYear=year" v-for="year in availableYear">{{year}}</a>
+            </div>
+          </span>
+          <span>学年</span>
+          <span>
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">{{selectedSemester|semesterCode2name}}</button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" :class="{'active':semester==selectedSemester}" @click="selectedSemester=semester" v-for="semester in availableSemester">{{semester|semesterCode2name}}</a>
+            </div>
+          </span>
+          <span>学期</span>
+        </h4>
+        <div class="form-group row">
+          <div id="searchBox" class="input-group mb-3">
+            <div class="input-group-prepend">
+              <select class="custom-select" id="keyword-type" v-model="formData.keyword.keywordType">
+                <option value="kcmc">课程名称</option>
+                <option value="kch">课号</option>
+              </select>
+            </div>
+            <input type="text" class="form-control" v-model="formData.keyword.keyword">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">上课时间</span>
+            </div>
+            <input type="text" class="form-control" placeholder="不限时间" v-model="formData.scheduleKey">
+            <div class="input-group-prepend">
+              <span class="input-group-text">教师</span>
+            </div>
+            <input type="text" class="form-control" placeholder="不限教师" v-model="formData.lecturerKey">
+            <div class="input-group-prepend">
+              <span class="input-group-text">地点</span>
+            </div>
+            <input type="text" class="form-control" placeholder="不限地点" v-model="formData.placeKey">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2 col-sm-12 col-form-label">年级</label>
+          <div class="col-md-10 col-sm-12 container">
+            <div class="row">
+              <span class="form-check col-lg-4 col-md-6 col-sm-12" v-for="nj in njOptionList">
+                <input class="form-check-input" name='nj' type="checkbox" :id="nj" :value="nj" v-model="formData.checkedNj">
+                <label class="form-check-label" :for="nj">{{ nj }}</label>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2 col-sm-12 col-form-label">课程类型</label>
+          <div class="col-md-10 col-sm-12 container">
+            <div class="row">
+              <span class="form-check col-lg-4 col-md-6 col-sm-12" v-for="lx in lxOptionList">
+                <input class="form-check-input" name='lx' type="checkbox" :id="lx" :value="lx" v-model="formData.checkedLx">
+                <label class="form-check-label" :for="lx">{{ lx }}</label>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2 col-sm-12 col-form-label">开课院系</label>
+          <div class="col-md-10 col-sm-12 container">
+            <div class="row">
+              <div class="form-check col-lg-4 col-md-6 col-sm-12" v-for="yx in yxOptionList">
+                <input class="form-check-input" name='yx' type="checkbox" :id="yx" :value="yx" v-model="formData.checkedYx">
+                <label class="form-check-label" :for="yx">{{ yx }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    
+    <div class="table-responsive-md" v-if="data_paged!=0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="table-header" class="tablefieldDict" v-for="header in tableHeader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="lesson in data_paged">
+            <th class="kcbm" scope="row">{{ lesson.kch }}</th>
+            <td class="yxmc">{{ lesson.kkxy }}</td>
+            <td class="xm" v-html="b(lesson.jszc,',')"></td>
+            <td class="kcmc">{{ lesson.kcmc }}</td>
+            <td class="xsxf">{{ lesson.rwzxs }} / {{ lesson.xf }}</td>
+            <td class="sksj" v-html="b(lesson.sksj,';')"></td>
+            <td class="jxdd" v-html="b(lesson.jxdd,';')"></td>
+            <td class="bz">{{ lesson.xkbz }}</td>
+            <td class="nj">{{ lesson.nj }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-center" v-if="pageCount!=0">
+      <nav>
+        <div class="row">
+          <ul class="pagination">
+            <li class="page-item" :class="{disabled:pageNow==1}">
+              <a class="page-link" @click="pageNow-=1">
+                <span>上一页</span>
+              </a>
+            </li>
+            <li class="page-item" :class="{active:pageNow==pageNum,disabled:pageNum=='···'}" v-for="pageNum in pageShowRange">
+              <a class="page-link" @click="pageNow=pageNum">
+                <span>{{pageNum}}</span>
+              </a>
+            </li>
+            <li class="page-item" :class="{disabled:pageNow==pageCount}">
+              <a class="page-link" @click="pageNow+=1">
+                <span>下一页</span>
+              </a>
+            </li>
+          </ul>
+          
+          <div class="dropdown item_limit_dropdown">
+            <div>
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">{{pageMaxItemCount}}</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" :class="{'active':countNum==pageMaxItemCount}" @click="pageMaxItemCount=countNum" v-for="countNum in pageMaxItemCountList">{{countNum}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <footer class="footer bg-lightgrey py-4">
+    <div class="container-fluid">
+      <div class="row">
+        <div id="footer-icons" class="col-md-6 offset-md-3 offset-0">
+          <div class="row">
+            <div class="col text-right">
+              <img src="../img/logo.png" style="max-height: 30vw; max-width: 150px" alt="">
+            </div>
+            <div class="col text-left">
+              <img src="../img/qrcode.png" style="max-height: 30vw; max-width: 150px" alt="">
+            </div>
+          </div>
+        </div>
+        <ul id="blogrolls" class="col d-md-block d-none">
+          <li class="blogroll">
+            <a href="https://i.sjtu.edu.cn/" title="上海交通大学教学信息服务网">
+              <img height="24" class="float-left" viewBox="0 0 16 16" width="24" src="../img/logo.png">
+              iSJTU
+            </a>
+          </li>
+          <li class="blogroll">
+            <a href="https://github.com/skyzh/SJTU_Diploma"  title="SJTU_Diploma">
+              <svg height="24" class="float-left" viewBox="0 0 16 16" version="1.1" width="24"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+              Github Repository
+            </a>
+          </li>
+          <li class="blogroll">
+            <a href="https://github.com/skyzh/SJTU_Diploma/issues/new" title="Github issue">
+              <svg height="24" class="float-left" viewBox="0 0 16 16" version="1.1" width="24"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+              New issue
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="//cdn.bootcss.com/vue/2.5.22/vue.min.js"></script>
+  <script src="//cdn.bootcss.com/babel-polyfill/7.6.0/polyfill.min.js"></script>
+  
+  <!-- Bootstrap Dependency -->
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="//cdn.bootcss.com/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+  <!-- Bootstrap Dependency End-->
+
+  <script>
+    function cmpChs(a, b) {
+      return a.localeCompare(b,'zh-cn')
+    }
+    function range(count, startAt) {
+      return [...Array(count).keys()].map(i=>i+startAt)
+    }
+    var app = new Vue({
+      el: "#app",
+      data: {
+        fieldDict: {
+          "xn": "学年",
+          "xq": "学期",
+          "xqj": "星期几",
+          "skjc": "上课节次",
+          "qsjsz": "起始周",
+          "kch": "课程号",
+          "cdbh": "场地编号",
+          "kcmc": "课程名称",
+          "cdmc": "场地名称",
+          "cdlbmc": "场地类别名称",
+          "cdqsjsz": "场地上课起始周",
+          "cdskjc": "场地上课节次",
+          "xqmc": "校区",
+          "jxbrs": "教学班人数",
+          "jxbzc": "教学班组成",
+          "jxbmc": "选课课号",
+          "xf": "学分",
+          "rwzxs": "总学时",
+          "kkxy": "开课学院",
+          "xkrs": "选课人数",
+          "zhxs": "周学时",
+          "sksj": "上课时间",
+          "jxdd": "上课地点",
+          "xkbz": "选课备注",
+          "kcxzmc": "课程性质",
+          "kklx": "开课类型",
+          "nj": "年级",
+          "zjs": "上课教师",
+          "zws": "座位数",
+          "jxlmc": "教学楼",
+          "jszc": "教师组成"
+        },
+        tableHeader: [
+          "课号",
+          "开课院系",
+          "教师姓名",
+          "课程",
+          "学时/学分",
+          "上课时间",
+          "上课地点",
+          "备注",
+          "年级"
+        ],
+        dataLoaded: false,
+        selectedYear: '',
+        selectedSemester: '',
+        data_index: [],
+        data_raw: [],
+        formData: {
+          checkedNj: [],
+          checkedLx: [],
+          checkedYx: [],
+          scheduleKey: '',
+          lecturerKey: '',
+          placeKey: '',
+          keyword: {
+            'keywordType': $('#keyword-type > option').attr('value'),
+            'keyword': '',
+          }
+        },
+        pageNow: 1,
+        pageMaxItemCount: 3,
+        pageMaxItemCountBeforeChange: 3,
+        pageMaxItemCountList: [
+          1,3,5,10,20,30,50,80,100,150,200,250,300
+        ]
+      },
+      computed: {
+        availableYear() {
+          var yearSet= new Set()
+          this.data_index.forEach(function (item) {
+            yearSet.add(item.year)
+          })
+          return [...yearSet]
+        },
+        availableSemester() {
+          const selectedYear=this.selectedYear
+          var newIndex= this.data_index.filter(function(item){
+            return item.year==selectedYear
+          })
+          var semesterSet= new Set()
+          newIndex.forEach(function (item) {
+            semesterSet.add(item.semester)
+          })
+          return [...semesterSet]
+        },
+        optionRange() {
+          if(this.formData.keyword['keyword']!=''){
+            return this.data_afterKeyword
+          }
+          else{
+            return this.data_raw
+          }
+        },
+        yxOptionList() {
+          return this.optionGenerator(this.optionRange, 'kkxy')
+        },
+        lxOptionList() {
+          return this.optionGenerator(this.optionRange, 'kcxzmc')
+        },
+        njOptionList() {
+          return this.optionGenerator(this.optionRange, 'nj').sort(cmpChs).filter(function(option){
+            return option.indexOf(',') == -1
+            }).sort(cmpChs)
+        },
+        data_afterKeyword() {
+          if(!this.dataLoaded) {
+            return []
+          }
+          else {
+            var filtering_data=[]
+            var keyword=this.formData.keyword['keyword']
+            var keywordType=this.formData.keyword['keywordType']
+            var scheduleKey=this.formData.scheduleKey
+            var lecturerKey=this.formData.lecturerKey
+            var placeKey=this.formData.placeKey
+            
+            if (keyword) {
+              filtering_data = this.data_raw.filter(function (lesson) {
+                if (lesson[keywordType]) {
+                  return lesson[keywordType].search(keyword) > -1
+                } else {
+                  return false
+                }
+              })
+            } else {
+              filtering_data = this.data_raw
+            }
+            
+            if (scheduleKey) {
+              filtering_data = filtering_data.filter(function (lesson) {
+                return lesson.sksj.search(scheduleKey) > -1
+              })
+            }
+            if (lecturerKey) {
+              filtering_data = filtering_data.filter(function (lesson) {
+                return lesson.jsxx.search(lecturerKey) > -1
+              })
+            }
+            if (placeKey) {
+              filtering_data = filtering_data.filter(function (lesson) {
+                return (lesson.jxdd?lesson.jxdd:'').search(placeKey) > -1
+              })
+            }
+            return filtering_data
+          }
+        },
+        data_filtered() {
+          var filtering_data = this.data_afterKeyword
+          var checkedNj=this.formData.checkedNj
+          var checkedLx=this.formData.checkedLx
+          var checkedYx=this.formData.checkedYx
+          
+          if (checkedNj.length) {
+            filtering_data = filtering_data.filter(function (lesson) {
+              return checkedNj.find(function (x) {
+                return x == lesson.nj
+              })
+            })
+          }
+          if (checkedLx.length) {
+            filtering_data = filtering_data.filter(function (lesson) {
+              return checkedLx.find(function (x) {
+                return x == lesson.kcxzmc
+              })
+            })
+          }
+          if (checkedYx.length) {
+            filtering_data = filtering_data.filter(function (lesson) {
+              return checkedYx.find(function (x) {
+                return x == lesson.kkxy
+              })
+            })
+          }
+          return filtering_data
+        },
+        data_paged() {
+          var data_offset=this.pageMaxItemCount*(this.pageNow-1)
+          return this.data_filtered.slice(data_offset,this.pageMaxItemCount+data_offset)
+        },
+        pageShowRange() {
+          //共显示九个项目
+          //示例格式：
+          //            < 1 > < 2 > < 3 > < 4 > < 5 >              当前可能页：< 1 > - < 5 >
+          //< 1 > < 2 > < 3 > < 4 > < 5 > < 6 > < 7 > < 8 > < 9 >  当前可能页：< 1 > - < 9 >
+          //< 1 > <···> < 4 > < 5 > < 6 > < 7 > < 8 > <···> <11 >  当前可能页：< 6 >
+          //< 1 > <···> < 4 > < 5 > < 6 > < 7 > < 8 > < 9 > <10 >  当前可能页：< 6 > - <10 >
+          //< 1 > < 2 > < 3 > < 4 > < 5 > < 6 > < 7 > <···> <10 >  当前可能页：< 1 > - < 5 >
+          const midPartCount=5
+          
+          if(this.pageCount<=2*midPartCount-1){
+            return range(this.pageCount,1)
+          }
+          
+          var omittedFlagL=this.pageNow>=1+midPartCount
+          var omittedFlagR=this.pageNow<=this.pageCount-midPartCount
+          
+          var midPage
+          if(omittedFlagL&&!omittedFlagR){
+            midPage=this.pageCount-midPartCount+1
+          }
+          else if(omittedFlagR&&!omittedFlagL){
+            midPage=midPartCount
+          }
+          else{
+            midPage=this.pageNow
+          }
+          
+          return (omittedFlagL?[1,'···']:[1,2])
+            .concat(range(midPartCount,midPage-midPartCount+3))
+            .concat(omittedFlagR?['···',this.pageCount]:[this.pageCount-1,this.pageCount])
+        },
+        pageCount() {
+          return Math.ceil(this.data_filtered.length/this.pageMaxItemCount)
+        }
+      },
+      filters: {
+        semesterCode2name(semesterCode) {
+          switch(semesterCode){
+            case '1':
+              return '秋季'
+            case '2':
+              return '春季'
+            case '3':
+              return '夏季'
+            default:
+              return '未知'
+         }
+        }
+      },
+      methods: {
+        b(s,sep) {
+          if(s==undefined) return ''
+          return s.split(sep).join('<br>')
+        },
+        optionGenerator(data, attr) {
+          attrVals = new Set()
+          data.forEach(function (item, index) {
+            attrVals.add(item[attr])
+          })
+          return [...attrVals]
+        },
+        updateSrcData() {
+          this.dataLoaded=false
+          //先检查数据是否有效
+          var foundFlag=false
+          this.data_index.forEach(x=>{//woc 还有这种语法？？nb！
+            if(this.selectedYear==x.year&&this.selectedSemester==x.semester){
+              foundFlag=true
+            }
+          })
+          //再获取数据
+          if(foundFlag){
+            fetch('lessionData_'+this.selectedYear+'_'+this.selectedSemester+'.json')
+            .then((res)=>res.json())
+            .then((data)=>{
+              this.data_raw=data
+              this.dataLoaded=true
+            })
+          }
+          else{
+            this.selectedSemester=this.availableSemester[this.availableSemester.length-1]
+          }
+        },
+        clearInvalidFormSelections() {
+          // v-model双向绑定后，视图上选项消失后数据中仍然存在
+          var currentNjSelections= [...$("input[name='nj']")].map(i=>$(i).attr('value'))
+          var newCheckNj=this.formData.checkedNj.filter(i=>currentNjSelections.includes(i))
+          this.formData.checkedNj=newCheckNj
+          
+          var currentLxSelections= [...$("input[name='lx']")].map(i=>$(i).attr('value'))
+          var newCheckLx=this.formData.checkedLx.filter(i=>currentLxSelections.includes(i))
+          this.formData.checkedLx=newCheckLx
+          
+          var currentYxSelections= [...$("input[name='yx']")].map(i=>$(i).attr('value'))
+          var newCheckYx=this.formData.checkedYx.filter(i=>currentYxSelections.includes(i))
+          this.formData.checkedYx=newCheckYx
+          
+        }
+      },
+      created() {
+        fetch('lessionData_index.json')
+        .then((res)=>res.json())
+        .then((data)=>{
+          this.data_index=data
+          this.selectedYear=this.data_index[this.data_index.length-1]['year']
+          this.selectedSemester=this.data_index[this.data_index.length-1]['semester']
+        })
+      },
+      watch: {
+        selectedYear() {
+          this.updateSrcData()
+        },
+        selectedSemester() {
+          this.updateSrcData()
+        },
+        'formData.keyword': {
+          handler() {
+            this.clearInvalidFormSelections()
+          },
+          deep: true
+        },
+        data_raw() {
+          this.clearInvalidFormSelections()
+        },
+        data_filtered() {
+          this.pageNow=1
+        },
+        pageMaxItemCount() {
+          this.pageNow=1+Math.floor((this.pageNow-1)*this.pageMaxItemCountBeforeChange/this.pageMaxItemCount)
+          console.log(this.pageNow)
+          this.pageMaxItemCountBeforeChange=this.pageMaxItemCount
+        }
+      }
+    })
+  </script>
+
+  <script>
+    $("#app").show();
+  </script>
+
+</body>
+
+</html>
