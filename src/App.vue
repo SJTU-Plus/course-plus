@@ -40,7 +40,7 @@
                   </select>
                 </div>
                 <div class="col-12 mb-3">
-                  <Loading :ready="dataLoaded"></Loading>
+                  <Loading :ready="dataLoaded" :message="message"></Loading>
                   <hr />
                 </div>
                 <div class="col-12 mb-3">
@@ -185,6 +185,7 @@ import { LessonIndex, Lesson } from "./models";
 import { cmpChs } from "./utils";
 import LessonList from "./components/LessonList.vue";
 import Loading from "./components/Loading.vue";
+import fetchProgress from "fetch-progress";
 
 const dataURL = "/course-plus-data/";
 @Component({
@@ -252,6 +253,7 @@ export default class App extends Vue {
     "年级"
   ];
   dataLoaded = false;
+  message = "";
 
   dataIndex: LessonIndex[] = [];
   dataRaw: Lesson[] = [];
@@ -410,15 +412,6 @@ export default class App extends Vue {
   onSelectedSemesterChanged() {
     this.updateSrcData();
   }
-  @Watch("formData.keyword", { deep: true })
-  onFormDataChanged() {
-    this.clearInvalidFormSelections();
-  }
-
-  @Watch("dataRaw")
-  onDataRawChanged() {
-    this.clearInvalidFormSelections();
-  }
 
   updateSrcData() {
     this.dataLoaded = false;
@@ -431,10 +424,23 @@ export default class App extends Vue {
       }
     });
     //再获取数据
+
     if (foundFlag) {
+      this.message = "";
       fetch(
         `${dataURL}lessionData_${this.selectedYear}_${this.selectedSemester}.json`
       )
+        .then(
+          fetchProgress({
+            // eslint-disable-next-line
+            onProgress: (progress: any) => {
+              let { transferred, total } = progress;
+              transferred = Math.round(transferred / 1024);
+              total = Math.round(total / 1024);
+              setTimeout(() => (this.message = `${transferred}/${total}KB`), 0);
+            }
+          })
+        )
         .then(res => res.json())
         .then(data => {
           this.dataRaw = data;
@@ -445,10 +451,6 @@ export default class App extends Vue {
         this.availableSemester.length - 1
       ];
     }
-  }
-
-  clearInvalidFormSelections() {
-    console.log("!");
   }
 }
 </script>
