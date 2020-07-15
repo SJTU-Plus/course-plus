@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="table-responsive-md" v-if="dataPaged!=0">
+    <div class="table-responsive-md" v-if="dataPaged != 0">
       <table class="table">
         <thead>
           <tr>
@@ -9,18 +9,20 @@
               class="table-header"
               v-for="header in tableHeader"
               :key="header"
-            >{{ header }}</th>
+            >
+              {{ header }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="lesson in dataPaged" :key="lesson.jxbmc">
             <th class="kcbm" scope="row">{{ lesson.kch }}</th>
             <td class="yxmc">{{ lesson.kkxy }}</td>
-            <td class="xm" v-html="b(lesson.jszc,',')"></td>
+            <td class="xm" v-html="b(lesson.jszc, ',')"></td>
             <td class="kcmc">{{ lesson.kcmc }}</td>
             <td class="xsxf">{{ lesson.rwzxs }} / {{ lesson.xf }}</td>
-            <td class="sksj" v-html="b(lesson.sksj,';')"></td>
-            <td class="jxdd" v-html="b(lesson.jxdd,';')"></td>
+            <td class="sksj" v-html="b(lesson.sksj, ';')"></td>
+            <td class="jxdd" v-html="b(lesson.jxdd, ';')"></td>
             <td class="bz">{{ lesson.xkbz }}</td>
             <td class="nj">{{ lesson.nj }}</td>
           </tr>
@@ -29,8 +31,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
@@ -49,5 +49,4 @@ export default class LessonList extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
