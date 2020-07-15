@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="table-responsive-md">
-      <table class="table table-sm">
+      <table class="table table-sm sjtu-table">
         <thead>
           <tr>
             <th
@@ -58,4 +58,8 @@ export default class LessonList extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.sjtu-table {
+  table-layout: fixed;
+}
+</style>

@@ -1,153 +1,155 @@
 <template>
-  <div id="app">
-    <nav class="navbar navbar-light bg-light mb-3">
-      <span class="navbar-brand mb-0">SJTU 学期开课表</span>
-    </nav>
-    <div class="container">
-      <form name="LessonFilter">
-        <div class="form-row">
-          <div class="col-md-3 mb-3">
-            <label for="inputYear">学年</label>
-            <select
-              class="form-control form-control-sm"
-              id="inputYear"
-              v-model="selectedYear"
-            >
-              <option v-for="year in availableYear" :key="year" :value="year">
-                {{ year }}
-              </option>
-            </select>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="inputSemester">学期</label>
-            <select
-              class="form-control form-control-sm"
-              id="inputSemester"
-              v-model="selectedSemester"
-            >
-              <option
-                v-for="semester in availableSemester"
-                :key="semester"
-                :value="semester"
-                >{{ semester | semesterCode2name }}</option
-              >
-            </select>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="inputKeyword">搜索方式</label>
-            <div id="searchBox" class="input-group">
-              <div class="input-group-prepend">
-                <select
-                  class="form-control form-control-sm"
-                  v-model="formData.keyword.keyword"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="col-md-4 mb-3">
-              <label for="inputTime">上课时间</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                placeholder="不限时间"
-                id="inputTime"
-                v-model="formData.scheduleKey"
-              />
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="inputLecturer">教师</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                placeholder="不限教师"
-                id="inputLecturer"
-                v-model="formData.lecturerKey"
-              />
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="inputPlace">地点</label>
-              <input
-                type="text"
-                id="inputPlace"
-                class="form-control form-control-sm"
-                placeholder="不限地点"
-                v-model="formData.placeKey"
-              />
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-md-2 col-sm-12 col-form-label">年级</label>
-            <div class="col-md-10 col-sm-12 container">
-              <div class="row">
-                <span
-                  class="form-check col-lg-4 col-md-6 col-sm-12"
-                  v-for="nj in njOptionList"
-                  :key="nj"
-                >
+  <div id="app" class="vh-100">
+    <div class="container-fluid h-100">
+      <div class="row h-100">
+        <div class="col-3 h-100 bg-light overflow-auto">
+          <nav class="navbar navbar-light mb-3">
+            <span class="navbar-brand mb-0">SJTU 学期开课表</span>
+          </nav>
+          <div class="container">
+            <form name="LessonFilter">
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="inputYear">学年</label>
+                  <select
+                    class="form-control form-control-sm"
+                    id="inputYear"
+                    v-model="selectedYear"
+                  >
+                    <option v-for="year in availableYear" :key="year" :value="year">
+                      {{
+                      year
+                      }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="inputSemester">学期</label>
+                  <select
+                    class="form-control form-control-sm"
+                    id="inputSemester"
+                    v-model="selectedSemester"
+                  >
+                    <option
+                      v-for="semester in availableSemester"
+                      :key="semester"
+                      :value="semester"
+                    >{{ semester | semesterCode2name }}</option>
+                  </select>
+                </div>
+                <div class="col-12 mb-3">
+                  <label for="inputKeyword">搜索方式</label>
+                  <div id="searchBox" class="input-group">
+                    <div class="input-group-prepend">
+                      <select
+                        class="form-control form-control-sm"
+                        id="keyword-type"
+                        v-model="formData.keyword.keywordType"
+                      >
+                        <option value="kcmc">课程名称</option>
+                        <option value="kch">课号</option>
+                      </select>
+                    </div>
+                    <input
+                      type="text"
+                      id="inputKeyword"
+                      class="form-control form-control-sm"
+                      v-model="formData.keyword.keyword"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="inputTime">上课时间</label>
                   <input
-                    class="form-check-input"
-                    name="nj"
-                    type="checkbox"
-                    :id="nj"
-                    :value="nj"
-                    v-model="formData.checkedNj"
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="不限时间"
+                    id="inputTime"
+                    v-model="formData.scheduleKey"
                   />
-                  <label class="form-check-label" :for="nj">{{ nj }}</label>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-md-2 col-sm-12 col-form-label">课程类型</label>
-            <div class="col-md-10 col-sm-12 container">
-              <div class="row">
-                <span
-                  class="form-check col-lg-4 col-md-6 col-sm-12"
-                  v-for="lx in lxOptionList"
-                  :key="lx"
-                >
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="inputLecturer">教师</label>
                   <input
-                    class="form-check-input"
-                    name="lx"
-                    type="checkbox"
-                    :id="lx"
-                    :value="lx"
-                    v-model="formData.checkedLx"
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="不限教师"
+                    id="inputLecturer"
+                    v-model="formData.lecturerKey"
                   />
-                  <label class="form-check-label" :for="lx">{{ lx }}</label>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-md-2 col-sm-12 col-form-label">开课院系</label>
-            <div class="col-md-10 col-sm-12 container">
-              <div class="row">
-                <div
-                  class="form-check col-lg-4 col-md-6 col-sm-12"
-                  v-for="yx in yxOptionList"
-                  :key="yx"
-                >
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="inputPlace">地点</label>
                   <input
-                    class="form-check-input"
-                    name="yx"
-                    type="checkbox"
-                    :id="yx"
-                    :value="yx"
-                    v-model="formData.checkedYx"
+                    type="text"
+                    id="inputPlace"
+                    class="form-control form-control-sm"
+                    placeholder="不限地点"
+                    v-model="formData.placeKey"
                   />
-                  <label class="form-check-label" :for="yx">{{ yx }}</label>
                 </div>
               </div>
-            </div>
+              <div class="form-row">
+                <label class="col-form-label">年级</label>
+                <div class="col-12">
+                  <div class="row">
+                    <span class="form-check col-lg-6" v-for="nj in njOptionList" :key="nj">
+                      <input
+                        class="form-check-input"
+                        name="nj"
+                        type="checkbox"
+                        :id="nj"
+                        :value="nj"
+                        v-model="formData.checkedNj"
+                      />
+                      <label class="form-check-label" :for="nj">{{ nj }}</label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="col-form-label">课程类型</label>
+                <div class="col-12">
+                  <div class="row">
+                    <span class="form-check col-lg-6" v-for="lx in lxOptionList" :key="lx">
+                      <input
+                        class="form-check-input"
+                        name="lx"
+                        type="checkbox"
+                        :id="lx"
+                        :value="lx"
+                        v-model="formData.checkedLx"
+                      />
+                      <label class="form-check-label" :for="lx">{{ lx }}</label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="col-form-label">开课院系</label>
+
+                <div class="col-12">
+                  <div class="row">
+                    <div class="form-check col-12" v-for="yx in yxOptionList" :key="yx">
+                      <input
+                        class="form-check-input"
+                        name="yx"
+                        type="checkbox"
+                        :id="yx"
+                        :value="yx"
+                        v-model="formData.checkedYx"
+                      />
+                      <label class="form-check-label" :for="yx">{{ yx }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-      <div class="col-8 h-100 overflow-auto">
-        <LessonList :data="dataFiltered" :tableHeader="tableHeader"></LessonList>
-      </div>
+        </div>
+        <div class="col-9 h-100 overflow-auto">
+          <LessonList :data="dataFiltered" :tableHeader="tableHeader"></LessonList>
+        </div>
       </div>
     </div>
   </div>
@@ -158,8 +160,9 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { LessonIndex, Lesson } from "./models";
 import { cmpChs, range } from "./utils";
 import LessonList from "./components/LessonList.vue";
+import Loading from "./components/Loading.vue";
 
-const dataURL = "course-plus-data/";
+const dataURL = "/course-plus-data/";
 @Component({
   components: { LessonList },
   filters: {
