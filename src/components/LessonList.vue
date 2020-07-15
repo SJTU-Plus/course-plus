@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="h-100 overflow-auto" ref="self">
+    <p class="text-center mt-3">共 {{ data | length }} 条记录</p>
     <div class="table-responsive-md">
       <table class="table table-sm sjtu-table">
         <thead>
@@ -9,9 +10,7 @@
               class="table-header"
               v-for="header in tableHeader"
               :key="header"
-            >
-              {{ header }}
-            </th>
+            >{{ header }}</th>
           </tr>
         </thead>
         <tbody>
@@ -28,16 +27,30 @@
           </tr>
         </tbody>
       </table>
+      <div
+        class="d-flex align-items-center justify-content-center mb-3"
+        v-if="maxElements < data.length"
+      >
+        <div class="spinner-border spinner-border-sm mr-3 text-muted"></div>
+        <span class="text-muted">正在加载数据……</span>
+      </div>
+      <div
+        class="d-flex align-items-center justify-content-center mb-3"
+        v-if="maxElements >= data.length"
+      >
+        <span class="text-muted">以上为全部 {{ data | length}} 条记录</span>
+      </div>
     </div>
-    <p class="text-center">共 {{ data | length }} 条记录</p>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch, Ref } from "vue-property-decorator";
 import { Lesson } from "@/models";
+import Loading from "./Loading.vue";
 
 @Component({
+  components: { Loading },
   filters: {
     length(data: Lesson[]) {
       return data.length;
@@ -47,6 +60,10 @@ import { Lesson } from "@/models";
 export default class LessonList extends Vue {
   @Prop() private data!: Lesson[];
   @Prop() private tableHeader!: string[];
+  @Ref("self") readonly selfDiv!: HTMLDivElement;
+
+  bottom = false;
+  maxElements = 10;
 
   b(s: string, sep: string) {
     if (!s) return "";
@@ -54,7 +71,32 @@ export default class LessonList extends Vue {
   }
 
   get pagedData() {
-    return this.data.slice(0, 10);
+    return this.data.slice(0, this.maxElements);
+  }
+
+  bottomVisible() {
+    const scrollY = this.selfDiv.scrollTop;
+    const visible = this.selfDiv.clientHeight;
+    const pageHeight = this.selfDiv.scrollHeight;
+    const bottomOfPage = visible + scrollY >= pageHeight;
+    return bottomOfPage || pageHeight < visible;
+  }
+
+  moreElements() {
+    this.maxElements = Math.min(this.maxElements + 10, this.data.length);
+  }
+
+  @Watch("bottom")
+  onBottomChanged(bottom: boolean) {
+    if (bottom) {
+      this.moreElements();
+    }
+  }
+
+  mounted() {
+    this.selfDiv.addEventListener("scroll", () => {
+      this.bottom = this.bottomVisible();
+    });
   }
 }
 </script>

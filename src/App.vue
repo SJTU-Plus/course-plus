@@ -16,13 +16,7 @@
                     id="inputYear"
                     v-model="selectedYear"
                   >
-                    <option
-                      v-for="year in availableYear"
-                      :key="year"
-                      :value="year"
-                    >
-                      {{ year }}
-                    </option>
+                    <option v-for="year in availableYear" :key="year" :value="year">{{ year }}</option>
                   </select>
                 </div>
                 <div class="col-md-6 mb-3">
@@ -36,8 +30,7 @@
                       v-for="semester in availableSemester"
                       :key="semester"
                       :value="semester"
-                      >{{ semester | semesterCode2name }}</option
-                    >
+                    >{{ semester | semesterCode2name }}</option>
                   </select>
                 </div>
                 <div class="col-12 mb-3">
@@ -99,11 +92,7 @@
                 <label class="col-form-label">年级</label>
                 <div class="col-12">
                   <div class="row">
-                    <span
-                      class="form-check col-lg-6"
-                      v-for="nj in njOptionList"
-                      :key="nj"
-                    >
+                    <span class="form-check col-lg-6" v-for="nj in njOptionList" :key="nj">
                       <input
                         class="form-check-input"
                         name="nj"
@@ -121,11 +110,7 @@
                 <label class="col-form-label">课程类型</label>
                 <div class="col-12">
                   <div class="row">
-                    <span
-                      class="form-check col-lg-6"
-                      v-for="lx in lxOptionList"
-                      :key="lx"
-                    >
+                    <span class="form-check col-lg-6" v-for="lx in lxOptionList" :key="lx">
                       <input
                         class="form-check-input"
                         name="lx"
@@ -144,11 +129,7 @@
 
                 <div class="col-12">
                   <div class="row">
-                    <div
-                      class="form-check col-12"
-                      v-for="yx in yxOptionList"
-                      :key="yx"
-                    >
+                    <div class="form-check col-12" v-for="yx in yxOptionList" :key="yx">
                       <input
                         class="form-check-input"
                         name="yx"
@@ -165,11 +146,8 @@
             </form>
           </div>
         </div>
-        <div class="col-9 h-100 overflow-auto">
-          <LessonList
-            :data="dataFiltered"
-            :tableHeader="tableHeader"
-          ></LessonList>
+        <div class="col-9 h-100">
+          <LessonList :data="dataFiltered" :tableHeader="tableHeader"></LessonList>
         </div>
       </div>
     </div>
