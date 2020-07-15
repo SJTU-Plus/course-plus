@@ -10,7 +10,9 @@
               class="table-header"
               v-for="header in tableHeader"
               :key="header"
-            >{{ header }}</th>
+            >
+              {{ header }}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -38,7 +40,7 @@
         class="d-flex align-items-center justify-content-center mb-3"
         v-if="maxElements >= data.length"
       >
-        <span class="text-muted">以上为全部 {{ data | length}} 条记录</span>
+        <span class="text-muted">以上为全部 {{ data | length }} 条记录</span>
       </div>
     </div>
   </div>
