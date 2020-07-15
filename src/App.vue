@@ -8,22 +8,29 @@
         <div class="form-row">
           <div class="col-md-3 mb-3">
             <label for="inputYear">学年</label>
-            <select class="form-control form-control-sm" id="inputYear" v-model="selectedYear">
+            <select
+              class="form-control form-control-sm"
+              id="inputYear"
+              v-model="selectedYear"
+            >
               <option v-for="year in availableYear" :key="year" :value="year">
-                {{
-                year
-                }}
+                {{ year }}
               </option>
             </select>
           </div>
           <div class="col-md-3 mb-3">
             <label for="inputSemester">学期</label>
-            <select class="form-control form-control-sm" id="inputSemester" v-model="selectedSemester">
+            <select
+              class="form-control form-control-sm"
+              id="inputSemester"
+              v-model="selectedSemester"
+            >
               <option
                 v-for="semester in availableSemester"
                 :key="semester"
                 :value="semester"
-              >{{ semester | semesterCode2name }}</option>
+                >{{ semester | semesterCode2name }}</option
+              >
             </select>
           </div>
           <div class="col-md-6 mb-3">
@@ -150,7 +157,10 @@
       </form>
     </div>
     <div class="container-fluid">
-      <LessonList :dataPaged="dataPaged" :tableHeader="tableHeader"></LessonList>
+      <LessonList
+        :dataPaged="dataPaged"
+        :tableHeader="tableHeader"
+      ></LessonList>
     </div>
   </div>
 </template>
