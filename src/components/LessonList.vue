@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="table-responsive-md" v-if="dataPaged != 0">
-      <table class="table table-sm">
+    <div class="table-responsive-md">
+      <table class="table table-sm sjtu-table">
         <thead>
           <tr>
             <th
@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="lesson in dataPaged" :key="lesson.jxbmc">
+          <tr v-for="lesson in pagedData" :key="lesson.row_id">
             <th class="kcbm" scope="row">{{ lesson.kch }}</th>
             <td class="yxmc">{{ lesson.kkxy }}</td>
             <td class="xm" v-html="b(lesson.jszc, ',')"></td>
@@ -29,6 +29,7 @@
         </tbody>
       </table>
     </div>
+    <p class="text-center">共 {{ data | length }} 条记录</p>
   </div>
 </template>
 
@@ -36,17 +37,31 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Lesson } from "@/models";
 
-@Component
+@Component({
+  filters: {
+    length(data: Lesson[]) {
+      return data.length;
+    }
+  }
+})
 export default class LessonList extends Vue {
-  @Prop() private dataPaged!: Lesson[];
+  @Prop() private data!: Lesson[];
   @Prop() private tableHeader!: string[];
 
   b(s: string, sep: string) {
     if (!s) return "";
     return s.split(sep).join("<br>");
   }
+
+  get pagedData() {
+    return this.data.slice(0, 10);
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.sjtu-table {
+  table-layout: fixed;
+}
+</style>
