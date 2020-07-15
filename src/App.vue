@@ -5,7 +5,9 @@
         <span>当前学期：</span>
 
         <select class="form-control" v-model="selectedYear">
-          <option v-for="year in availableYear" :key="year" :value="year">{{ year }}</option>
+          <option v-for="year in availableYear" :key="year" :value="year">{{
+            year
+          }}</option>
         </select>
 
         <span>学年</span>
@@ -14,7 +16,8 @@
             v-for="semester in availableSemester"
             :key="semester"
             :value="semester"
-          >{{ semester | semesterCode2name }}</option>
+            >{{ semester | semesterCode2name }}</option
+          >
         </select>
 
         <span>学期</span>
@@ -22,12 +25,20 @@
       <div class="form-group row">
         <div id="searchBox" class="input-group mb-3">
           <div class="input-group-prepend">
-            <select class="custom-select" id="keyword-type" v-model="formData.keyword.keywordType">
+            <select
+              class="custom-select"
+              id="keyword-type"
+              v-model="formData.keyword.keywordType"
+            >
               <option value="kcmc">课程名称</option>
               <option value="kch">课号</option>
             </select>
           </div>
-          <input type="text" class="form-control" v-model="formData.keyword.keyword" />
+          <input
+            type="text"
+            class="form-control"
+            v-model="formData.keyword.keyword"
+          />
         </div>
       </div>
       <div class="form-group row">
@@ -35,15 +46,30 @@
           <div class="input-group-prepend">
             <span class="input-group-text">上课时间</span>
           </div>
-          <input type="text" class="form-control" placeholder="不限时间" v-model="formData.scheduleKey" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="不限时间"
+            v-model="formData.scheduleKey"
+          />
           <div class="input-group-prepend">
             <span class="input-group-text">教师</span>
           </div>
-          <input type="text" class="form-control" placeholder="不限教师" v-model="formData.lecturerKey" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="不限教师"
+            v-model="formData.lecturerKey"
+          />
           <div class="input-group-prepend">
             <span class="input-group-text">地点</span>
           </div>
-          <input type="text" class="form-control" placeholder="不限地点" v-model="formData.placeKey" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="不限地点"
+            v-model="formData.placeKey"
+          />
         </div>
       </div>
       <div class="form-group row">
@@ -121,11 +147,11 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { LessonIndex, Lesson } from "./models";
 import { cmpChs, range } from "./utils";
-import LessonList from './components/LessonList.vue';
+import LessonList from "./components/LessonList.vue";
 
 const dataURL = "data/";
 @Component({
-  components: {LessonList},
+  components: { LessonList },
   filters: {
     semesterCode2name(semesterCode: string) {
       switch (semesterCode) {
@@ -224,7 +250,8 @@ export default class App extends Vue {
 
   optionGenerator(data: Lesson[], attr: string): string[] {
     const attrVals: Set<string> = new Set();
-    data.forEach((item: Lesson, index: number) => {
+    data.forEach((item: Lesson) => {
+      // eslint-disable-next-line
       const itemAny = item as any;
       attrVals.add(itemAny[attr]);
     });
@@ -283,6 +310,7 @@ export default class App extends Vue {
 
       if (keyword) {
         filteringData = this.dataRaw.filter((lesson: Lesson) => {
+          // eslint-disable-next-line
           const lessonAny = lesson as any;
           if (lessonAny[keywordType]) {
             return lessonAny[keywordType].search(keyword) > -1;

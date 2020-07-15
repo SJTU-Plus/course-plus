@@ -10,4 +10,5 @@ jobs:
         with:
           node-version: "12"
       - run: npm install
+      - run: npm run lint -- --max-warnings 0 --no-fix
       - run: npm run build
