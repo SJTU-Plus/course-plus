@@ -9,7 +9,9 @@
               class="table-header"
               v-for="header in tableHeader"
               :key="header"
-            >{{ header }}</th>
+            >
+              {{ header }}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +39,7 @@ import { Lesson } from "@/models";
 
 @Component({
   filters: {
-    length(data: any[]) {
+    length(data: Lesson[]) {
       return data.length;
     }
   }

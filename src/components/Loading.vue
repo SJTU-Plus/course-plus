@@ -18,5 +18,4 @@ export default class Loading extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
