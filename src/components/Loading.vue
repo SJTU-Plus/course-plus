@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="d-flex align-items-center" v-if="!ready">
         <div class="spinner-border spinner-border-sm mr-3"></div>
-        <span class="text-info">正在加载数据……</span>
+        <span class="text-info">正在加载数据…… {{ message }}</span>
       </div>
     </transition>
   </div>
@@ -15,6 +15,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 @Component
 export default class Loading extends Vue {
   @Prop() private ready!: boolean;
+  @Prop() private message!: string;
 }
 </script>
 
