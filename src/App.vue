@@ -41,6 +41,7 @@
                 </div>
                 <div class="col-12 mb-3">
                   <Loading :ready="dataLoaded" :message="message"></Loading>
+                  <hr />
                 </div>
                 <div class="col-12 mb-3">
                   <label for="inputKeyword">搜索方式</label>
@@ -162,6 +163,9 @@
                 </div>
               </div>
             </form>
+            <p class="text-muted mt-3 small">
+              免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。本网站所展示的数据可能不是最新版本。具体开课情况以教务网为准。
+            </p>
           </div>
         </div>
         <div class="col-9 h-100">
