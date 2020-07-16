@@ -12,7 +12,7 @@
                 <div class="col-md-6 mb-3">
                   <label for="inputYear">学年</label>
                   <select
-                    class="form-control form-control-sm"
+                    class="form-control custom-select"
                     id="inputYear"
                     v-model="selectedYear"
                   >
@@ -27,7 +27,7 @@
                 <div class="col-md-6 mb-3">
                   <label for="inputSemester">学期</label>
                   <select
-                    class="form-control form-control-sm"
+                    class="form-control custom-select"
                     id="inputSemester"
                     v-model="selectedSemester"
                   >
@@ -48,7 +48,7 @@
                   <div id="searchBox" class="input-group">
                     <div class="input-group-prepend">
                       <select
-                        class="form-control form-control-sm"
+                        class="form-control custom-select"
                         id="keyword-type"
                         v-model="formData.keyword.keywordType"
                       >
@@ -59,7 +59,7 @@
                     <input
                       type="text"
                       id="inputKeyword"
-                      class="form-control form-control-sm"
+                      class="form-control"
                       v-model="formData.keyword.keyword"
                     />
                   </div>
@@ -68,7 +68,7 @@
                   <label for="inputTime">上课时间</label>
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     placeholder="不限时间"
                     id="inputTime"
                     v-model="formData.scheduleKey"
@@ -78,7 +78,7 @@
                   <label for="inputLecturer">教师</label>
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     placeholder="不限教师"
                     id="inputLecturer"
                     v-model="formData.lecturerKey"
@@ -89,7 +89,7 @@
                   <input
                     type="text"
                     id="inputPlace"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     placeholder="不限地点"
                     v-model="formData.placeKey"
                   />
