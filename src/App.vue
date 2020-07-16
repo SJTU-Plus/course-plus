@@ -114,7 +114,7 @@
                       />
                       <label class="form-check-label" :for="nj">
                         {{ nj }}
-                        <span class="badge badge-secondary">
+                        <span class="badge badge-pill badge-secondary">
                           {{ filterDataLength(dataAfterKeyword, "nj", nj) }}
                         </span>
                       </label>
@@ -127,7 +127,7 @@
                 <div class="col-12">
                   <div class="row">
                     <span
-                      class="form-check col-lg-6"
+                      class="form-check col-12"
                       v-for="lx in lxOptionList"
                       :key="lx"
                     >
@@ -141,7 +141,7 @@
                       />
                       <label class="form-check-label" :for="lx">
                         {{ lx }}
-                        <span class="badge badge-secondary">
+                        <span class="badge badge-pill badge-secondary">
                           {{ filterDataLength(dataAfterKeyword, "kcxzmc", lx) }}
                         </span>
                       </label>
@@ -169,7 +169,7 @@
                       />
                       <label class="form-check-label" :for="yx">
                         {{ yx }}
-                        <span class="badge badge-secondary">
+                        <span class="badge badge-pill badge-secondary">
                           {{ filterDataLength(dataAfterKeyword, "kkxy", yx) }}
                         </span>
                       </label>
@@ -435,6 +435,7 @@ export default class App extends Vue {
         return checkedNj.find(x => x == lesson.nj);
       });
     }
+    
     if (checkedLx.length) {
       filteringData = filteringData.filter((lesson: Lesson) => {
         return checkedLx.find(x => x == lesson.kcxzmc);
@@ -475,6 +476,11 @@ export default class App extends Vue {
       )
         .then(res => res.json())
         .then(data => {
+          data.forEach((item: any) => {
+            if (!item.kcxzmc) {
+              item.kcxzmc = "undefined"
+            }
+          })
           this.dataRaw = data;
           this.dataLoaded = true;
         });
