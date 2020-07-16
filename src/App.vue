@@ -11,8 +11,17 @@
               <div class="form-row">
                 <div class="col-md-6 mb-3">
                   <label for="inputYear">学年</label>
-                  <select class="form-control custom-select" id="inputYear" v-model="selectedYear">
-                    <option v-for="year in availableYear" :key="year" :value="year">{{ year }}</option>
+                  <select
+                    class="form-control custom-select"
+                    id="inputYear"
+                    v-model="selectedYear"
+                  >
+                    <option
+                      v-for="year in availableYear"
+                      :key="year"
+                      :value="year"
+                      >{{ year }}</option
+                    >
                   </select>
                 </div>
                 <div class="col-md-6 mb-3">
@@ -26,7 +35,8 @@
                       v-for="semester in availableSemester"
                       :key="semester"
                       :value="semester"
-                    >{{ semester | semesterCode2name }}</option>
+                      >{{ semester | semesterCode2name }}</option
+                    >
                   </select>
                 </div>
                 <div class="col-12 mb-3">
@@ -89,7 +99,11 @@
                 <label class="col-form-label">年级</label>
                 <div class="col-12">
                   <div class="row">
-                    <span class="form-check col-lg-6" v-for="nj in njOptionList" :key="nj">
+                    <span
+                      class="form-check col-lg-6"
+                      v-for="nj in njOptionList"
+                      :key="nj"
+                    >
                       <input
                         class="form-check-input"
                         name="nj"
@@ -101,9 +115,7 @@
                       <label class="form-check-label" :for="nj">
                         {{ nj }}
                         <span class="badge badge-secondary">
-                          {{
-                          filterDataLength(dataAfterKeyword, "nj", nj)
-                          }}
+                          {{ filterDataLength(dataAfterKeyword, "nj", nj) }}
                         </span>
                       </label>
                     </span>
@@ -114,7 +126,11 @@
                 <label class="col-form-label">课程类型</label>
                 <div class="col-12">
                   <div class="row">
-                    <span class="form-check col-lg-6" v-for="lx in lxOptionList" :key="lx">
+                    <span
+                      class="form-check col-lg-6"
+                      v-for="lx in lxOptionList"
+                      :key="lx"
+                    >
                       <input
                         class="form-check-input"
                         name="lx"
@@ -126,9 +142,7 @@
                       <label class="form-check-label" :for="lx">
                         {{ lx }}
                         <span class="badge badge-secondary">
-                          {{
-                          filterDataLength(dataAfterKeyword, "kcxzmc", lx)
-                          }}
+                          {{ filterDataLength(dataAfterKeyword, "kcxzmc", lx) }}
                         </span>
                       </label>
                     </span>
@@ -140,7 +154,11 @@
 
                 <div class="col-12">
                   <div class="row">
-                    <div class="form-check col-12" v-for="yx in yxOptionList" :key="yx">
+                    <div
+                      class="form-check col-12"
+                      v-for="yx in yxOptionList"
+                      :key="yx"
+                    >
                       <input
                         class="form-check-input"
                         name="yx"
@@ -152,9 +170,7 @@
                       <label class="form-check-label" :for="yx">
                         {{ yx }}
                         <span class="badge badge-secondary">
-                          {{
-                          filterDataLength(dataAfterKeyword, "kkxy", yx)
-                          }}
+                          {{ filterDataLength(dataAfterKeyword, "kkxy", yx) }}
                         </span>
                       </label>
                     </div>
@@ -162,13 +178,16 @@
                 </div>
               </div>
             </form>
-            <p
-              class="text-muted mt-3 small"
-            >免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。本网站所展示的数据可能不是最新版本。具体开课情况以教务网为准。</p>
+            <p class="text-muted mt-3 small">
+              免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。本网站所展示的数据可能不是最新版本。具体开课情况以教务网为准。
+            </p>
           </div>
         </div>
         <div class="col-9 h-100">
-          <LessonList :data="dataFiltered" :tableHeader="tableHeader"></LessonList>
+          <LessonList
+            :data="dataFiltered"
+            :tableHeader="tableHeader"
+          ></LessonList>
         </div>
       </div>
     </div>
