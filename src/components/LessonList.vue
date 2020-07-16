@@ -61,10 +61,13 @@ import Loading from "./Loading.vue";
 })
 export default class LessonList extends Vue {
   @Prop() private data!: Lesson[];
+
   @Prop() private tableHeader!: string[];
+
   @Ref("self") readonly selfDiv!: HTMLDivElement;
 
   bottom = false;
+
   maxElements = 10;
 
   b(s: string, sep: string) {

@@ -206,7 +206,9 @@ const dataURL = "/course-plus-data/";
 })
 export default class App extends Vue {
   selectedYear = "";
+
   selectedSemester = "";
+
   fieldDict = {
     xn: "学年",
     xq: "学期",
@@ -240,6 +242,7 @@ export default class App extends Vue {
     jxlmc: "教学楼",
     jszc: "教师组成"
   };
+
   tableHeader = [
     "课号",
     "开课院系",
@@ -251,10 +254,13 @@ export default class App extends Vue {
     "备注",
     "年级"
   ];
+
   dataLoaded = false;
 
   dataIndex: LessonIndex[] = [];
+
   dataRaw: Lesson[] = [];
+
   formData = {
     checkedNj: [],
     checkedLx: [],
@@ -297,6 +303,7 @@ export default class App extends Vue {
     });
     return [...yearSet];
   }
+
   get availableSemester(): string[] {
     const selectedYear = this.selectedYear;
     const newIndex = this.dataIndex.filter(item => {
@@ -308,6 +315,7 @@ export default class App extends Vue {
     });
     return [...semesterSet];
   }
+
   get optionRange() {
     if (this.formData.keyword["keyword"] != "") {
       return this.dataAfterKeyword;
@@ -315,12 +323,15 @@ export default class App extends Vue {
       return this.dataRaw;
     }
   }
+
   get yxOptionList() {
     return this.optionGenerator(this.optionRange, "kkxy");
   }
+
   get lxOptionList() {
     return this.optionGenerator(this.optionRange, "kcxzmc");
   }
+
   get njOptionList() {
     return this.optionGenerator(this.optionRange, "nj")
       .sort(cmpChs)
@@ -329,6 +340,7 @@ export default class App extends Vue {
       })
       .sort(cmpChs);
   }
+
   get dataAfterKeyword() {
     if (!this.dataLoaded) {
       return [];
@@ -372,6 +384,7 @@ export default class App extends Vue {
       return filteringData;
     }
   }
+
   get dataFiltered() {
     let filteringData = this.dataAfterKeyword;
     const checkedNj = this.formData.checkedNj;
@@ -406,10 +419,12 @@ export default class App extends Vue {
   onSelectedYearChanged() {
     this.updateSrcData();
   }
+
   @Watch("selectedSemester")
   onSelectedSemesterChanged() {
     this.updateSrcData();
   }
+
   @Watch("formData.keyword", { deep: true })
   onFormDataChanged() {
     this.clearInvalidFormSelections();
