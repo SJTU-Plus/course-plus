@@ -2,7 +2,7 @@
   <div v-if="!ready">
     <transition name="fade">
       <div class="d-flex align-items-center">
-        <div class="spinner-border spinner-border-sm mr-3"></div>
+        <div class="spinner-border spinner-border-sm mr-3 text-info"></div>
         <span class="text-info">正在加载数据……</span>
       </div>
     </transition>
