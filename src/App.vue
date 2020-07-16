@@ -112,7 +112,12 @@
                         :value="nj"
                         v-model="formData.checkedNj"
                       />
-                      <label class="form-check-label" :for="nj">{{ nj }}</label>
+                      <label class="form-check-label" :for="nj">
+                        {{ nj }}
+                        <span class="badge badge-secondary">
+                          {{ filterDataLength(dataAfterKeyword, "nj", nj) }}
+                        </span>
+                      </label>
                     </span>
                   </div>
                 </div>
@@ -134,7 +139,12 @@
                         :value="lx"
                         v-model="formData.checkedLx"
                       />
-                      <label class="form-check-label" :for="lx">{{ lx }}</label>
+                      <label class="form-check-label" :for="lx">
+                        {{ lx }}
+                        <span class="badge badge-secondary">
+                          {{ filterDataLength(dataAfterKeyword, "kcxzmc", lx) }}
+                        </span>
+                      </label>
                     </span>
                   </div>
                 </div>
@@ -157,7 +167,12 @@
                         :value="yx"
                         v-model="formData.checkedYx"
                       />
-                      <label class="form-check-label" :for="yx">{{ yx }}</label>
+                      <label class="form-check-label" :for="yx">
+                        {{ yx }}
+                        <span class="badge badge-secondary">
+                          {{ filterDataLength(dataAfterKeyword, "kkxy", yx) }}
+                        </span>
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -286,6 +301,13 @@ export default class App extends Vue {
       });
   }
 
+  concatUnique<T>(a: T[], b: T[]): T[] {
+    const vals: Set<T> = new Set();
+    a.forEach(item => vals.add(item));
+    b.forEach(item => vals.add(item));
+    return [...vals];
+  }
+
   optionGenerator(data: Lesson[], attr: string): string[] {
     const attrVals: Set<string> = new Set();
     data.forEach((item: Lesson) => {
@@ -325,15 +347,24 @@ export default class App extends Vue {
   }
 
   get yxOptionList() {
-    return this.optionGenerator(this.optionRange, "kkxy");
+    return this.concatUnique(
+      this.optionGenerator(this.optionRange, "kkxy"),
+      this.formData.checkedYx
+    );
   }
 
   get lxOptionList() {
-    return this.optionGenerator(this.optionRange, "kcxzmc");
+    return this.concatUnique(
+      this.optionGenerator(this.optionRange, "kcxzmc"),
+      this.formData.checkedLx
+    );
   }
 
   get njOptionList() {
-    return this.optionGenerator(this.optionRange, "nj")
+    return this.concatUnique(
+      this.optionGenerator(this.optionRange, "nj"),
+      this.formData.checkedNj
+    )
       .sort(cmpChs)
       .filter(function(option) {
         return option.indexOf(",") == -1;
@@ -385,6 +416,14 @@ export default class App extends Vue {
     }
   }
 
+  filterDataLength(data: Lesson[], field: string, value: string): number {
+    return data.filter((lesson: Lesson) => {
+      // eslint-disable-next-line
+      const lessonAny = lesson as any;
+      return lessonAny[field] == value;
+    }).length;
+  }
+
   get dataFiltered() {
     let filteringData = this.dataAfterKeyword;
     const checkedNj = this.formData.checkedNj;
@@ -393,23 +432,17 @@ export default class App extends Vue {
 
     if (checkedNj.length) {
       filteringData = filteringData.filter((lesson: Lesson) => {
-        return checkedNj.find(function(x) {
-          return x == lesson.nj;
-        });
+        return checkedNj.find(x => x == lesson.nj);
       });
     }
     if (checkedLx.length) {
       filteringData = filteringData.filter((lesson: Lesson) => {
-        return checkedLx.find(function(x) {
-          return x == lesson.kcxzmc;
-        });
+        return checkedLx.find(x => x == lesson.kcxzmc);
       });
     }
     if (checkedYx.length) {
       filteringData = filteringData.filter((lesson: Lesson) => {
-        return checkedYx.find(function(x) {
-          return x == lesson.kkxy;
-        });
+        return checkedYx.find(x => x == lesson.kkxy);
       });
     }
     return filteringData;
@@ -423,16 +456,6 @@ export default class App extends Vue {
   @Watch("selectedSemester")
   onSelectedSemesterChanged() {
     this.updateSrcData();
-  }
-
-  @Watch("formData.keyword", { deep: true })
-  onFormDataChanged() {
-    this.clearInvalidFormSelections();
-  }
-
-  @Watch("dataRaw")
-  onDataRawChanged() {
-    this.clearInvalidFormSelections();
   }
 
   updateSrcData() {
@@ -460,20 +483,6 @@ export default class App extends Vue {
         this.availableSemester.length - 1
       ];
     }
-  }
-
-  clearInvalidFormSelections() {
-    // v-model双向绑定后，视图上选项消失后数据中仍然存在
-    this.formData.checkedNj = this.formData.checkedNj.filter(i =>
-      this.njOptionList.includes(i)
-    );
-    this.formData.checkedLx = this.formData.checkedLx.filter(i =>
-      this.lxOptionList.includes(i)
-    );
-
-    this.formData.checkedYx = this.formData.checkedYx.filter(i =>
-      this.yxOptionList.includes(i)
-    );
   }
 }
 </script>
