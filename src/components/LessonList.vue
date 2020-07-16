@@ -2,7 +2,7 @@
   <div class="h-100 overflow-auto" ref="self">
     <p class="text-center mt-3">共 {{ data | length }} 条记录</p>
     <div class="table-responsive-md">
-      <table class="table table-sm sjtu-table">
+      <table class="table table-sm small sjtu-table">
         <thead>
           <tr>
             <th
