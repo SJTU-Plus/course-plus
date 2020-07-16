@@ -448,7 +448,17 @@ export default class App extends Vue {
   }
 
   clearInvalidFormSelections() {
-    console.log("!");
+    // v-model双向绑定后，视图上选项消失后数据中仍然存在
+    this.formData.checkedNj = this.formData.checkedNj.filter(i =>
+      this.njOptionList.includes(i)
+    );
+    this.formData.checkedLx = this.formData.checkedLx.filter(i =>
+      this.lxOptionList.includes(i)
+    );
+
+    this.formData.checkedYx = this.formData.checkedYx.filter(i =>
+      this.yxOptionList.includes(i)
+    );
   }
 }
 </script>
