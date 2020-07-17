@@ -68,7 +68,7 @@ export default class LessonList extends Vue {
 
   bottom = false;
 
-  maxElements = 10;
+  maxElements = 100;
 
   b(s: string, sep: string) {
     if (!s) return "";
@@ -88,7 +88,7 @@ export default class LessonList extends Vue {
   }
 
   moreElements() {
-    this.maxElements = Math.min(this.maxElements + 10, this.data.length);
+    this.maxElements = Math.min(this.maxElements + 100, this.data.length);
   }
 
   @Watch("bottom")
@@ -96,6 +96,12 @@ export default class LessonList extends Vue {
     if (bottom) {
       this.moreElements();
     }
+  }
+
+  @Watch("data")
+  onDataChanged() {
+    this.maxElements = 100;
+    this.selfDiv.scrollTop = 0;
   }
 
   mounted() {
