@@ -31,14 +31,14 @@
       </table>
       <div
         class="d-flex align-items-center justify-content-center mb-3"
-        v-if="maxElements < data.length"
+        v-if="pagedSize < data.length"
       >
         <div class="spinner-border spinner-border-sm mr-3 text-muted"></div>
         <span class="text-muted">正在加载数据……</span>
       </div>
       <div
         class="d-flex align-items-center justify-content-center mb-3"
-        v-if="maxElements >= data.length"
+        v-if="pagedSize >= data.length"
       >
         <span class="text-muted">以上为全部 {{ data | length }} 条记录</span>
       </div>
@@ -68,7 +68,9 @@ export default class LessonList extends Vue {
 
   bottom = false;
 
-  maxElements = 100;
+  increasement = 20;
+
+  pagedSize = 0;
 
   b(s: string, sep: string) {
     if (!s) return "";
@@ -76,19 +78,22 @@ export default class LessonList extends Vue {
   }
 
   get pagedData() {
-    return this.data.slice(0, this.maxElements);
+    return this.data.slice(0, this.pagedSize);
   }
 
   bottomVisible() {
-    const scrollY = this.selfDiv.scrollTop;
-    const visible = this.selfDiv.clientHeight;
+    const scrollY = Math.ceil(this.selfDiv.scrollTop); // ceil it for compatibility
+    const visible = Math.ceil(this.selfDiv.clientHeight + 1); // ceil it for compatibility
     const pageHeight = this.selfDiv.scrollHeight;
     const bottomOfPage = visible + scrollY >= pageHeight;
     return bottomOfPage || pageHeight < visible;
   }
 
   moreElements() {
-    this.maxElements = Math.min(this.maxElements + 100, this.data.length);
+    this.pagedSize = Math.min(
+      this.pagedSize + this.increasement,
+      this.data.length
+    );
   }
 
   @Watch("bottom")
@@ -100,7 +105,7 @@ export default class LessonList extends Vue {
 
   @Watch("data")
   onDataChanged() {
-    this.maxElements = 100;
+    this.pagedSize = this.increasement;
     this.selfDiv.scrollTop = 0;
   }
 
