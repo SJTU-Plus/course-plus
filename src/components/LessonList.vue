@@ -31,6 +31,7 @@
       </table>
       <div
         class="d-flex align-items-center justify-content-center mb-3"
+        v-observe-visibility="onBottomVisibilityChanged"
         v-if="pagedSize < data.length"
       >
         <div class="spinner-border spinner-border-sm mr-3 text-muted"></div>
@@ -48,8 +49,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch, Ref } from "vue-property-decorator";
+import VueObserveVisibility from "vue-observe-visibility";
 import { Lesson } from "@/models";
 import Loading from "./Loading.vue";
+
+Vue.use(VueObserveVisibility);
 
 @Component({
   components: { Loading },
@@ -66,8 +70,6 @@ export default class LessonList extends Vue {
 
   @Ref("self") readonly selfDiv!: HTMLDivElement;
 
-  bottom = false;
-
   increasement = 20;
 
   pagedSize = 0;
@@ -81,14 +83,6 @@ export default class LessonList extends Vue {
     return this.data.slice(0, this.pagedSize);
   }
 
-  bottomVisible() {
-    const scrollY = Math.ceil(this.selfDiv.scrollTop); // ceil it for compatibility
-    const visible = Math.ceil(this.selfDiv.clientHeight + 1); // ceil it for compatibility
-    const pageHeight = this.selfDiv.scrollHeight;
-    const bottomOfPage = visible + scrollY >= pageHeight;
-    return bottomOfPage || pageHeight < visible;
-  }
-
   moreElements() {
     this.pagedSize = Math.min(
       this.pagedSize + this.increasement,
@@ -96,10 +90,9 @@ export default class LessonList extends Vue {
     );
   }
 
-  @Watch("bottom")
-  onBottomChanged(bottom: boolean) {
-    if (bottom) {
-      this.moreElements();
+  onBottomVisibilityChanged(bottomVisible: boolean) {
+    if (bottomVisible) {
+      setTimeout(() => this.moreElements(), 200); // you should be patient
     }
   }
 
@@ -107,12 +100,6 @@ export default class LessonList extends Vue {
   onDataChanged() {
     this.pagedSize = this.increasement;
     this.selfDiv.scrollTop = 0;
-  }
-
-  mounted() {
-    this.selfDiv.addEventListener("scroll", () => {
-      this.bottom = this.bottomVisible();
-    });
   }
 }
 </script>
