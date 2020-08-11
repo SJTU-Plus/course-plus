@@ -46,3 +46,16 @@ export interface Lesson {
   row_id: number;
   jxdd: string;
 }
+
+export interface SearchFilter {
+  checkedNj: string[];
+  checkedLx: string[];
+  checkedYx: string[];
+  scheduleKey: string;
+  lecturerKey: string;
+  placeKey: string;
+  keyword: {
+    keywordType: string;
+    keyword: string;
+  };
+}
