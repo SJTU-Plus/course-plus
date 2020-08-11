@@ -4,7 +4,26 @@
       <div class="row h-100">
         <div class="col-3 h-100 bg-light overflow-auto">
           <nav class="navbar navbar-light mb-3">
-            <span class="navbar-brand mb-0">SJTU 学期开课表</span>
+            <span class="navbar-brand mb-0" v-if="route == 'search'"
+              >SJTU 学期开课表 · 搜索</span
+            >
+            <a
+              class="small text-muted"
+              v-if="route == 'search'"
+              v-on:click="route = 'arrange'"
+              href="javascript:"
+              >切换到排课</a
+            >
+            <span class="navbar-brand mb-0" v-if="route == 'arrange'"
+              >SJTU 学期开课表 · 排课</span
+            >
+            <a
+              class="small text-muted"
+              v-if="route == 'arrange'"
+              v-on:click="route = 'search'"
+              href="javascript:"
+              >切换到搜索</a
+            >
           </nav>
           <div class="container">
             <form name="LessonFilter">
@@ -43,139 +62,11 @@
                   <Loading :ready="dataLoaded"></Loading>
                   <hr />
                 </div>
-                <div class="col-12 mb-3">
-                  <label for="inputKeyword">搜索方式</label>
-                  <div id="searchBox" class="input-group">
-                    <div class="input-group-prepend">
-                      <select
-                        class="form-control custom-select"
-                        id="keyword-type"
-                        v-model="formData.keyword.keywordType"
-                      >
-                        <option value="kcmc">课程名称</option>
-                        <option value="kch">课号</option>
-                      </select>
-                    </div>
-                    <input
-                      type="text"
-                      id="inputKeyword"
-                      class="form-control"
-                      v-model="formData.keyword.keyword"
-                    />
-                  </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="inputTime">上课时间</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="不限时间"
-                    id="inputTime"
-                    v-model="formData.scheduleKey"
-                  />
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="inputLecturer">教师</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="不限教师"
-                    id="inputLecturer"
-                    v-model="formData.lecturerKey"
-                  />
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label for="inputPlace">地点</label>
-                  <input
-                    type="text"
-                    id="inputPlace"
-                    class="form-control"
-                    placeholder="不限地点"
-                    v-model="formData.placeKey"
-                  />
-                </div>
-              </div>
-              <div class="form-row">
-                <label class="col-form-label">年级</label>
-                <div class="col-12">
-                  <div class="row">
-                    <span
-                      class="form-check col-lg-6"
-                      v-for="nj in njOptionList"
-                      :key="nj"
-                    >
-                      <input
-                        class="form-check-input"
-                        name="nj"
-                        type="checkbox"
-                        :id="nj"
-                        :value="nj"
-                        v-model="formData.checkedNj"
-                      />
-                      <label class="form-check-label" :for="nj">
-                        {{ nj }}
-                        <span class="badge badge-pill badge-secondary">
-                          {{ filterDataLength(dataAfterKeyword, "nj", nj) }}
-                        </span>
-                      </label>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <label class="col-form-label">课程类型</label>
-                <div class="col-12">
-                  <div class="row">
-                    <span
-                      class="form-check col-12"
-                      v-for="lx in lxOptionList"
-                      :key="lx"
-                    >
-                      <input
-                        class="form-check-input"
-                        name="lx"
-                        type="checkbox"
-                        :id="lx"
-                        :value="lx"
-                        v-model="formData.checkedLx"
-                      />
-                      <label class="form-check-label" :for="lx">
-                        {{ lx }}
-                        <span class="badge badge-pill badge-secondary">
-                          {{ filterDataLength(dataAfterKeyword, "kcxzmc", lx) }}
-                        </span>
-                      </label>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row">
-                <label class="col-form-label">开课院系</label>
-
-                <div class="col-12">
-                  <div class="row">
-                    <div
-                      class="form-check col-12"
-                      v-for="yx in yxOptionList"
-                      :key="yx"
-                    >
-                      <input
-                        class="form-check-input"
-                        name="yx"
-                        type="checkbox"
-                        :id="yx"
-                        :value="yx"
-                        v-model="formData.checkedYx"
-                      />
-                      <label class="form-check-label" :for="yx">
-                        {{ yx }}
-                        <span class="badge badge-pill badge-secondary">
-                          {{ filterDataLength(dataAfterKeyword, "kkxy", yx) }}
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
+                <FilterForm
+                  v-if="route == 'search'"
+                  v-model="formData"
+                  :dataAfterKeyword="dataAfterKeyword"
+                ></FilterForm>
               </div>
             </form>
             <p class="text-muted mt-3 small">
@@ -185,9 +76,11 @@
         </div>
         <div class="col-9 h-100">
           <LessonList
+            v-if="route == 'search'"
             :data="dataFiltered"
             :tableHeader="tableHeader"
           ></LessonList>
+          <div v-if="route == 'arrange'">排课功能正在开发中</div>
         </div>
       </div>
     </div>
@@ -196,14 +89,16 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { LessonIndex, Lesson } from "./models";
-import { cmpChs } from "./utils";
+import { LessonIndex, Lesson, SearchFilter } from "./models";
+
 import LessonList from "./components/LessonList.vue";
+import FilterForm from "./FilterForm.vue";
 import Loading from "./components/Loading.vue";
+import { fieldDict } from "./data";
 
 const dataURL = "/course-plus-data/";
 @Component({
-  components: { LessonList, Loading },
+  components: { LessonList, Loading, FilterForm },
   filters: {
     semesterCode2name(semesterCode: string) {
       switch (semesterCode) {
@@ -224,39 +119,7 @@ export default class App extends Vue {
 
   selectedSemester = "";
 
-  fieldDict = {
-    xn: "学年",
-    xq: "学期",
-    xqj: "星期几",
-    skjc: "上课节次",
-    qsjsz: "起始周",
-    kch: "课程号",
-    cdbh: "场地编号",
-    kcmc: "课程名称",
-    cdmc: "场地名称",
-    cdlbmc: "场地类别名称",
-    cdqsjsz: "场地上课起始周",
-    cdskjc: "场地上课节次",
-    xqmc: "校区",
-    jxbrs: "教学班人数",
-    jxbzc: "教学班组成",
-    jxbmc: "选课课号",
-    xf: "学分",
-    rwzxs: "总学时",
-    kkxy: "开课学院",
-    xkrs: "选课人数",
-    zhxs: "周学时",
-    sksj: "上课时间",
-    jxdd: "上课地点",
-    xkbz: "选课备注",
-    kcxzmc: "课程性质",
-    kklx: "开课类型",
-    nj: "年级",
-    zjs: "上课教师",
-    zws: "座位数",
-    jxlmc: "教学楼",
-    jszc: "教师组成"
-  };
+  fieldDict = fieldDict;
 
   tableHeader = [
     "课号",
@@ -276,7 +139,7 @@ export default class App extends Vue {
 
   dataRaw: Lesson[] = [];
 
-  formData = {
+  formData: SearchFilter = {
     checkedNj: [],
     checkedLx: [],
     checkedYx: [],
@@ -289,6 +152,8 @@ export default class App extends Vue {
     }
   };
 
+  route = "search";
+
   created() {
     fetch(`${dataURL}lessionData_index.json`)
       .then(res => res.json())
@@ -299,23 +164,6 @@ export default class App extends Vue {
           "semester"
         ];
       });
-  }
-
-  concatUnique<T>(a: T[], b: T[]): T[] {
-    const vals: Set<T> = new Set();
-    a.forEach(item => vals.add(item));
-    b.forEach(item => vals.add(item));
-    return [...vals];
-  }
-
-  optionGenerator(data: Lesson[], attr: string): string[] {
-    const attrVals: Set<string> = new Set();
-    data.forEach((item: Lesson) => {
-      // eslint-disable-next-line
-      const itemAny = item as any;
-      attrVals.add(itemAny[attr]);
-    });
-    return [...attrVals];
   }
 
   get availableYear(): string[] {
@@ -336,40 +184,6 @@ export default class App extends Vue {
       semesterSet.add(item.semester);
     });
     return [...semesterSet];
-  }
-
-  get optionRange() {
-    if (this.formData.keyword["keyword"] != "") {
-      return this.dataAfterKeyword;
-    } else {
-      return this.dataRaw;
-    }
-  }
-
-  get yxOptionList() {
-    return this.concatUnique(
-      this.optionGenerator(this.optionRange, "kkxy"),
-      this.formData.checkedYx
-    );
-  }
-
-  get lxOptionList() {
-    return this.concatUnique(
-      this.optionGenerator(this.optionRange, "kcxzmc"),
-      this.formData.checkedLx
-    );
-  }
-
-  get njOptionList() {
-    return this.concatUnique(
-      this.optionGenerator(this.optionRange, "nj"),
-      this.formData.checkedNj
-    )
-      .sort(cmpChs)
-      .filter(function(option) {
-        return option.indexOf(",") == -1;
-      })
-      .sort(cmpChs);
   }
 
   get dataAfterKeyword() {
@@ -414,14 +228,6 @@ export default class App extends Vue {
       }
       return filteringData;
     }
-  }
-
-  filterDataLength(data: Lesson[], field: string, value: string): number {
-    return data.filter((lesson: Lesson) => {
-      // eslint-disable-next-line
-      const lessonAny = lesson as any;
-      return lessonAny[field] == value;
-    }).length;
   }
 
   get dataFiltered() {
