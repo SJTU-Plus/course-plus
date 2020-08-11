@@ -8,7 +8,7 @@
             <select
               class="form-control custom-select"
               id="keyword-type"
-              v-model="value.keyword.keywordType"
+              v-model="formData.keyword.keywordType"
             >
               <option value="kcmc">课程名称</option>
               <option value="kch">课号</option>
@@ -18,7 +18,7 @@
             type="text"
             id="inputKeyword"
             class="form-control"
-            v-model="value.keyword.keyword"
+            v-model="formData.keyword.keyword"
           />
         </div>
       </div>
@@ -29,7 +29,7 @@
           class="form-control"
           placeholder="不限时间"
           id="inputTime"
-          v-model="value.scheduleKey"
+          v-model="formData.scheduleKey"
         />
       </div>
       <div class="col-md-4 mb-3">
@@ -39,7 +39,7 @@
           class="form-control"
           placeholder="不限教师"
           id="inputLecturer"
-          v-model="value.lecturerKey"
+          v-model="formData.lecturerKey"
         />
       </div>
       <div class="col-md-4 mb-3">
@@ -49,7 +49,7 @@
           id="inputPlace"
           class="form-control"
           placeholder="不限地点"
-          v-model="value.placeKey"
+          v-model="formData.placeKey"
         />
       </div>
     </div>
@@ -68,7 +68,7 @@
               type="checkbox"
               :id="nj"
               :value="nj"
-              v-model="value.checkedNj"
+              v-model="formData.checkedNj"
             />
             <label class="form-check-label" :for="nj">
               {{ nj }}
@@ -92,7 +92,7 @@
               type="checkbox"
               :id="lx"
               :value="lx"
-              v-model="value.checkedLx"
+              v-model="formData.checkedLx"
             />
             <label class="form-check-label" :for="lx">
               {{ lx }}
@@ -116,7 +116,7 @@
               type="checkbox"
               :id="yx"
               :value="yx"
-              v-model="value.checkedYx"
+              v-model="formData.checkedYx"
             />
             <label class="form-check-label" :for="yx">
               {{ yx }}
@@ -138,7 +138,7 @@ import { cmpChs } from "./utils";
 
 @Component
 export default class FilterForm extends Vue {
-  @Model("input") value!: SearchFilter;
+  @Model("change") formData!: SearchFilter;
 
   @Prop() dataAfterKeyword!: Lesson[];
 
@@ -166,21 +166,21 @@ export default class FilterForm extends Vue {
   get yxOptionList() {
     return this.concatUnique(
       this.optionGenerator(this.optionRange, "kkxy"),
-      this.value.checkedYx
+      this.formData.checkedYx
     );
   }
 
   get lxOptionList() {
     return this.concatUnique(
       this.optionGenerator(this.optionRange, "kcxzmc"),
-      this.value.checkedLx
+      this.formData.checkedLx
     );
   }
 
   get njOptionList() {
     return this.concatUnique(
       this.optionGenerator(this.optionRange, "nj"),
-      this.value.checkedNj
+      this.formData.checkedNj
     )
       .sort(cmpChs)
       .filter(function(option) {
