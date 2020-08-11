@@ -67,6 +67,11 @@
                   v-model="formData"
                   :dataAfterKeyword="dataAfterKeyword"
                 ></FilterForm>
+                <StarredForm
+                  v-if="route == 'arrange'"
+                  :allCourses="starredAllCourses"
+                  v-model="selectedStarredCourses"
+                ></StarredForm>
               </div>
             </form>
             <p class="text-muted mt-3 small">
@@ -82,7 +87,10 @@
             v-bind:starredCourses="starredCourses"
             @change="saveStarredCourse($event)"
           ></LessonList>
-          <div v-if="route == 'arrange'">排课功能正在开发中</div>
+          <ClassTable
+            v-if="route == 'arrange'"
+            :lessons="selectedArrangeCourse"
+          ></ClassTable>
         </div>
       </div>
     </div>
@@ -94,13 +102,15 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { LessonIndex, Lesson, SearchFilter } from "./models";
 
 import LessonList from "./components/LessonList.vue";
-import FilterForm from "./FilterForm.vue";
+import ClassTable from "./components/ClassTable.vue";
+import FilterForm from "./components/FilterForm.vue";
+import StarredForm from "./components/StarredForm.vue";
 import Loading from "./components/Loading.vue";
 import { fieldDict } from "./data";
 
 const dataURL = "/course-plus-data/";
 @Component({
-  components: { LessonList, Loading, FilterForm },
+  components: { LessonList, Loading, FilterForm, StarredForm, ClassTable },
   filters: {
     semesterCode2name(semesterCode: string) {
       switch (semesterCode) {
@@ -154,9 +164,11 @@ export default class App extends Vue {
     }
   };
 
-  route = "search";
+  route = "arrange";
 
   starredCourses: number[] = [];
+
+  selectedStarredCourses: number[] = [];
 
   created() {
     fetch(`${dataURL}lessionData_index.json`)
@@ -206,7 +218,11 @@ export default class App extends Vue {
           // eslint-disable-next-line
           const lessonAny = lesson as any;
           if (lessonAny[keywordType]) {
-            return lessonAny[keywordType].search(keyword) > -1;
+            return (
+              lessonAny[keywordType]
+                .toLowerCase()
+                .search(keyword.toLowerCase()) > -1
+            );
           } else {
             return false;
           }
@@ -317,6 +333,18 @@ export default class App extends Vue {
     localStorage.setItem(
       `starred-${this.semesterID}`,
       JSON.stringify(this.starredCourses)
+    );
+  }
+
+  get starredAllCourses(): Lesson[] {
+    return this.dataRaw.filter(lesson =>
+      this.starredCourses.includes(lesson.row_id)
+    );
+  }
+
+  get selectedArrangeCourse(): Lesson[] {
+    return this.dataRaw.filter(lesson =>
+      this.selectedStarredCourses.includes(lesson.row_id)
     );
   }
 }

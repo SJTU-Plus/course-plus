@@ -133,8 +133,8 @@
 
 <script lang="ts">
 import { Component, Vue, Model, Prop } from "vue-property-decorator";
-import { Lesson, SearchFilter } from "./models";
-import { cmpChs } from "./utils";
+import { Lesson, SearchFilter } from "@/models";
+import { cmpChs } from "@/utils";
 
 @Component
 export default class FilterForm extends Vue {
