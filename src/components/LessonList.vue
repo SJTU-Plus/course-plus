@@ -17,7 +17,23 @@
         </thead>
         <tbody>
           <tr v-for="lesson in pagedData" :key="lesson.row_id">
-            <th class="kcbm" scope="row">{{ lesson.kch }}</th>
+            <th class="kcbm" scope="row">
+              <button
+                type="button"
+                class="btn btn-link btn-sm star-btn"
+                @click="star(lesson.row_id)"
+              >
+                <span
+                  v-bind:class="{
+                    'text-info': isStarred(lesson.row_id),
+                    'text-muted': !isStarred(lesson.row_id)
+                  }"
+                >
+                  <StarIcon size="1.5x"></StarIcon>
+                </span>
+              </button>
+              {{ lesson.kch }}
+            </th>
             <td class="yxmc">{{ lesson.kkxy }}</td>
             <td class="xm" v-html="b(lesson.jszc, ',')"></td>
             <td class="kcmc">{{ lesson.kcmc }}</td>
@@ -48,15 +64,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch, Ref } from "vue-property-decorator";
+import {
+  Component,
+  Prop,
+  Vue,
+  Watch,
+  Ref,
+  Model
+} from "vue-property-decorator";
 import VueObserveVisibility from "vue-observe-visibility";
 import { Lesson } from "@/models";
 import Loading from "./Loading.vue";
+import { StarIcon } from "vue-feather-icons";
 
 Vue.use(VueObserveVisibility);
 
 @Component({
-  components: { Loading },
+  components: { Loading, StarIcon },
   filters: {
     length(data: Lesson[]) {
       return data.length;
@@ -69,6 +93,8 @@ export default class LessonList extends Vue {
   @Prop() private tableHeader!: string[];
 
   @Ref("self") readonly selfDiv!: HTMLDivElement;
+
+  @Model("change") starredCourses!: number[];
 
   increasement = 20;
 
@@ -101,6 +127,22 @@ export default class LessonList extends Vue {
     this.pagedSize = this.increasement;
     this.selfDiv.scrollTop = 0;
   }
+
+  star(id: number) {
+    if (this.starredCourses.includes(id)) {
+      this.$emit(
+        "change",
+        this.starredCourses.filter(d => d != id)
+      );
+    } else {
+      this.starredCourses.push(id);
+      this.$emit("change", this.starredCourses);
+    }
+  }
+
+  isStarred(id: number) {
+    return this.starredCourses.includes(id);
+  }
 }
 </script>
 
@@ -108,5 +150,9 @@ export default class LessonList extends Vue {
 <style scoped lang="scss">
 .sjtu-table {
   table-layout: fixed;
+}
+
+.star-btn:focus {
+  outline: 0 !important;
 }
 </style>

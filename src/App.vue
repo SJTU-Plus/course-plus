@@ -10,7 +10,7 @@
             <a
               class="small text-muted"
               v-if="route == 'search'"
-              v-on:click="route = 'arrange'"
+              @click="route = 'arrange'"
               href="javascript:"
               >切换到排课</a
             >
@@ -20,7 +20,7 @@
             <a
               class="small text-muted"
               v-if="route == 'arrange'"
-              v-on:click="route = 'search'"
+              @click="route = 'search'"
               href="javascript:"
               >切换到搜索</a
             >
@@ -79,6 +79,8 @@
             v-if="route == 'search'"
             :data="dataFiltered"
             :tableHeader="tableHeader"
+            v-bind:starredCourses="starredCourses"
+            @change="saveStarredCourse($event)"
           ></LessonList>
           <div v-if="route == 'arrange'">排课功能正在开发中</div>
         </div>
@@ -153,6 +155,8 @@ export default class App extends Vue {
   };
 
   route = "search";
+
+  starredCourses: number[] = [];
 
   created() {
     fetch(`${dataURL}lessionData_index.json`)
@@ -265,6 +269,10 @@ export default class App extends Vue {
     this.updateSrcData();
   }
 
+  get semesterID(): string {
+    return `${this.selectedYear}-${this.selectedSemester}`;
+  }
+
   updateSrcData() {
     this.dataLoaded = false;
     //先检查数据是否有效
@@ -290,12 +298,26 @@ export default class App extends Vue {
           });
           this.dataRaw = data;
           this.dataLoaded = true;
+          const item = localStorage.getItem(`starred-${this.semesterID}`);
+          if (item) {
+            this.starredCourses = JSON.parse(item);
+          } else {
+            this.starredCourses = [];
+          }
         });
     } else {
       this.selectedSemester = this.availableSemester[
         this.availableSemester.length - 1
       ];
     }
+  }
+
+  saveStarredCourse(data: number[]) {
+    this.starredCourses = data;
+    localStorage.setItem(
+      `starred-${this.semesterID}`,
+      JSON.stringify(this.starredCourses)
+    );
   }
 }
 </script>
