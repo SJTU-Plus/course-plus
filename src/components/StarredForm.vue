@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="form-row">
-      <label class="col-form-label">星标课程</label>
+      <label class="col-form-label"
+        >星标课程 ({{ selectedScore }} / {{ totalScore }} 学分)</label
+      >
       <div class="col-12">
         <div class="row">
           <span
@@ -11,15 +13,23 @@
           >
             <input
               class="form-check-input"
-              name="lesson.row_id"
+              name="lesson.jxb_id"
               type="checkbox"
-              :id="lesson.row_id"
-              :value="lesson.row_id"
+              :id="lesson.jxb_id"
+              :value="lesson.jxb_id"
               v-model="selected"
             />
-            <label class="form-check-label" :for="lesson.row_id">
+            <label class="form-check-label" :for="lesson.jxb_id">
+              <span
+                class="course-square"
+                v-if="colorMapping[lesson.jxb_id]"
+                v-bind:style="{
+                  'background-color': colorMapping[lesson.jxb_id]
+                }"
+              ></span>
               {{ lesson.kch }}
               {{ lesson.kcmc }}
+              {{ lesson.jszc }}
             </label>
           </span>
         </div>
@@ -37,19 +47,54 @@ import { Lesson } from "@/models";
 export default class StarredForm extends Vue {
   @Prop() readonly allCourses!: Lesson[];
 
-  @Model("change") selectedCourses!: number[];
+  @Model("change") selectedCourses!: string[];
 
-  selected: number[] = [];
+  @Prop() private colorMapping!: { [id: string]: string };
+
+  selected: string[] = [];
 
   created() {
     this.selected = this.selectedCourses;
   }
 
+  @Watch("selectedCourses")
+  onEvent() {
+    this.selected = this.selectedCourses;
+  }
+
   @Watch("selected")
-  onSelectedChange(value: number[]) {
+  onSelectedChange(value: string[]) {
     this.$emit("change", value);
+  }
+
+  get totalScore() {
+    const courses = this.allCourses;
+    let score = 0;
+    courses.forEach(course => {
+      score += parseFloat(course.xf);
+    });
+    return score;
+  }
+
+  get selectedScore() {
+    const courses = this.allCourses;
+    let score = 0;
+    courses.forEach(course => {
+      if (this.selected.includes(course.jxb_id)) {
+        score += parseFloat(course.xf);
+      }
+    });
+
+    return score;
   }
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.course-square {
+  width: 8px;
+  height: 8px;
+  margin: 1px;
+  display: inline-block;
+}
+</style>

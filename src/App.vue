@@ -69,8 +69,10 @@
                 ></FilterForm>
                 <StarredForm
                   v-if="route == 'arrange'"
-                  :allCourses="starredAllCourses"
-                  v-model="selectedStarredCourses"
+                  :allCourses="uniqueStarredCourses"
+                  v-bind:selectedCourses="selectedStarredCourses"
+                  v-on:change="saveSelectedCourse($event)"
+                  :colorMapping="colorMapping"
                 ></StarredForm>
               </div>
             </form>
@@ -90,6 +92,7 @@
           <ClassTable
             v-if="route == 'arrange'"
             :lessons="selectedArrangeCourse"
+            :colorMapping="colorMapping"
           ></ClassTable>
         </div>
       </div>
@@ -100,7 +103,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { LessonIndex, Lesson, SearchFilter } from "./models";
-
+import chroma from "chroma-js";
 import LessonList from "./components/LessonList.vue";
 import ClassTable from "./components/ClassTable.vue";
 import FilterForm from "./components/FilterForm.vue";
@@ -164,12 +167,12 @@ export default class App extends Vue {
     }
   };
 
-  // route = "arrange";
-  route = "search";
+  route = "arrange";
+  // route = "search";
 
-  starredCourses: number[] = [];
+  starredCourses: string[] = [];
 
-  selectedStarredCourses: number[] = [];
+  selectedStarredCourses: string[] = [];
 
   created() {
     fetch(`${dataURL}lessionData_index.json`)
@@ -315,12 +318,13 @@ export default class App extends Vue {
           });
           this.dataRaw = data;
           this.dataLoaded = true;
-          const item = localStorage.getItem(`starred-${this.semesterID}`);
-          if (item) {
-            this.starredCourses = JSON.parse(item);
-          } else {
-            this.starredCourses = [];
-          }
+
+          this.starredCourses = this.getFromLocalStorage(
+            `starred-${this.semesterID}`
+          );
+          this.selectedStarredCourses = this.getFromLocalStorage(
+            `selected-${this.semesterID}`
+          );
         });
     } else {
       this.selectedSemester = this.availableSemester[
@@ -329,7 +333,16 @@ export default class App extends Vue {
     }
   }
 
-  saveStarredCourse(data: number[]) {
+  getFromLocalStorage(key: string) {
+    const item = localStorage.getItem(key);
+    if (item) {
+      return JSON.parse(item);
+    } else {
+      return [];
+    }
+  }
+
+  saveStarredCourse(data: string[]) {
     this.starredCourses = data;
     localStorage.setItem(
       `starred-${this.semesterID}`,
@@ -337,16 +350,52 @@ export default class App extends Vue {
     );
   }
 
+  saveSelectedCourse(data: string[]) {
+    this.selectedStarredCourses = data;
+    localStorage.setItem(
+      `selected-${this.semesterID}`,
+      JSON.stringify(this.selectedStarredCourses)
+    );
+  }
+
   get starredAllCourses(): Lesson[] {
     return this.dataRaw.filter(lesson =>
-      this.starredCourses.includes(lesson.row_id)
+      this.starredCourses.includes(lesson.jxb_id)
     );
   }
 
   get selectedArrangeCourse(): Lesson[] {
     return this.dataRaw.filter(lesson =>
-      this.selectedStarredCourses.includes(lesson.row_id)
+      this.selectedStarredCourses.includes(lesson.jxb_id)
     );
+  }
+
+  get uniqueStarredCourses() {
+    const result: Lesson[] = [];
+    const keys: { [id: string]: boolean } = {};
+    this.starredAllCourses.forEach(val => {
+      const key = val.jxb_id;
+      if (!(key in keys)) {
+        keys[key] = true;
+        result.push(val);
+      }
+    });
+    result.sort((a, b) => (a.kch < b.kch ? -1 : a.kch > b.kch ? 1 : 0));
+    return result;
+  }
+
+  get colorMapping(): { [id: string]: string } {
+    const colorScale = chroma.scale("Spectral");
+    // const colorScale = chroma.scale(['yellow', 'navy']).mode('lch');
+    const colors = colorScale.colors(this.uniqueStarredCourses.length);
+    const result: { [id: string]: string } = {
+      conflict: "red",
+      "": "white"
+    };
+    this.uniqueStarredCourses.forEach(
+      (val, idx) => (result[val.jxb_id] = colors[idx])
+    );
+    return result;
   }
 }
 </script>
