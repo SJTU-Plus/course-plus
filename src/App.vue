@@ -167,8 +167,8 @@ export default class App extends Vue {
     }
   };
 
-  route = "arrange";
-  // route = "search";
+  // route = "arrange";
+  route = "search";
 
   starredCourses: string[] = [];
 
