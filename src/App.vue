@@ -74,8 +74,9 @@
                   v-on:change="saveSelectedCourse($event)"
                   :colorMapping="colorMapping"
                 ></StarredForm>
+
                 <div v-if="route == 'arrange'">
-                  <div class="form-row">
+                  <div class="form-row my-3">
                     <div class="col-12">
                       <div class="row">
                         <span class="form-check col-12">
