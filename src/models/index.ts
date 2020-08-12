@@ -1,6 +1,7 @@
 export interface LessonIndex {
   year: string;
   semester: string;
+  updated_at: string;
 }
 
 export interface Lesson {

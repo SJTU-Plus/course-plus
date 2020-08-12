@@ -100,7 +100,9 @@
               </div>
             </form>
             <p class="text-muted mt-3 small">
-              免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。本网站所展示的数据可能不是最新版本。具体开课情况以教务网为准。
+              免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。本网站所展示的数据更新于{{
+                selectedUpdatedAt
+              }},可能不是最新版本。具体开课情况以教务网为准。
             </p>
           </div>
         </div>
@@ -158,6 +160,8 @@ export default class App extends Vue {
 
   selectedSemester = "";
 
+  selectedUpdatedAt = "";
+
   fieldDict = fieldDict;
 
   tableHeader = [
@@ -210,6 +214,9 @@ export default class App extends Vue {
         this.selectedYear = this.dataIndex[this.dataIndex.length - 1]["year"];
         this.selectedSemester = this.dataIndex[this.dataIndex.length - 1][
           "semester"
+        ];
+        this.selectedUpdatedAt = this.dataIndex[this.dataIndex.length - 1][
+          "updated_at"
         ];
       });
   }
