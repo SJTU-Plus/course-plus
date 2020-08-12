@@ -11,21 +11,36 @@
       v-bind:style="{ 'background-color': colorMapping[weekPoints[week]] }"
     ></span>
     <div v-if="!classTableConfig.simpleMode">
-      <div v-for="lesson in courses" :key="lesson.row_id" class="small my-1">
-        <span
-          class="week-dot"
-          v-if="colorMapping[lesson.jxb_id]"
-          v-bind:style="{
-            'background-color': colorMapping[lesson.jxb_id]
-          }"
-        ></span>
-        {{ lesson.kch }}
-        <br />
-        {{ lesson.kcmc }}
-        <br />
-        {{ lesson.jszc }}
-        <br />
-        {{ lesson.jxbmc }}
+      <div v-for="lesson in courses" :key="lesson.row_id" class="small my-2">
+        <div class="row">
+          <div class="col-auto p-0">
+            <span
+              class="week-dot mr-1"
+              v-if="colorMapping[lesson.jxb_id]"
+              v-bind:style="{
+                'background-color': colorMapping[lesson.jxb_id]
+              }"
+            ></span>
+          </div>
+          <div class="col p-0">
+            <span v-bind:class="{ 'text-danger': conflicts[lesson.jxb_id] }">
+              <span class="mr-1">{{ lesson.kch }}</span>
+              <span>{{ lesson.kcmc }}</span>
+            </span>
+            <span v-if="!simpleMode[lesson.jxb_id]">
+              <br />
+              <span class="mr-1">{{ lesson.jszc }}</span>
+              <span>{{ lesson.xf }} 学分</span>
+              <br />
+              <!-- <div
+            class="col p-0"
+            v-for="(data, idx) in parseTimeLocation(lesson.sksj, lesson.jxdd)"
+            :key="idx"
+              >{{ data.time }}@{{ data.location }}</div>-->
+              {{ parseTimeLocationDay(lesson.sksj, lesson.jxdd, day) }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,7 +48,14 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Lesson, ClassTableMapping, idOf, ClassTableConfig } from "@/models";
+import {
+  Lesson,
+  ClassTableMapping,
+  idOf,
+  ClassTableConfig,
+  LessonTimeLocation,
+  dayName
+} from "@/models";
 
 @Component
 export default class ClassBlock extends Vue {
@@ -69,6 +91,31 @@ export default class ClassBlock extends Vue {
     return result;
   }
 
+  parseTimeLocation(time: string, location: string): LessonTimeLocation[] {
+    const tl: LessonTimeLocation[] = [];
+    const tt = time.split(";");
+    const ll = location.split(";");
+    for (let i = 0; i < tt.length; i++) {
+      const time = tt[i].substring(0, 3);
+      const location = ll[i];
+      if (tl.find(val => val.time == time && val.location == location))
+        continue;
+      tl.push({ time, location });
+    }
+    return tl;
+  }
+
+  parseTimeLocationDay(time: string, location: string, day: number): string {
+    const tl = this.parseTimeLocation(time, location);
+    let result = "数据解析出错";
+    tl.forEach(x => {
+      if (x.time == dayName[day - 1]) {
+        result = x.location;
+      }
+    });
+    return result;
+  }
+
   get uniqueLessonData() {
     const result: Lesson[] = [];
     const keys: { [id: string]: boolean } = {};
@@ -91,6 +138,40 @@ export default class ClassBlock extends Vue {
       }
       return false;
     });
+  }
+
+  get simpleMode(): { [id: string]: boolean } {
+    const result: { [id: string]: boolean } = {};
+    this.courses.forEach(lesson => {
+      let isSimple = false;
+      for (let week = 1; week <= 16; week++) {
+        if (this.block - 1 >= 1) {
+          const id = idOf(week, this.day, this.block - 1);
+          if (this.mappingData[lesson.jxb_id][id]) isSimple = true;
+        }
+      }
+      result[lesson.jxb_id] = isSimple;
+    });
+    return result;
+  }
+
+  get conflicts(): { [id: string]: boolean } {
+    const conflicts: { [id: string]: boolean } = {};
+    for (let week = 1; week <= 16; week++) {
+      const id = idOf(week, this.day, this.block);
+      let course = "";
+      for (const key in this.mappingData) {
+        if (this.mappingData[key][id]) {
+          if (course != "") {
+            conflicts[key] = true;
+            conflicts[course] = true;
+          } else {
+            course = key;
+          }
+        }
+      }
+    }
+    return conflicts;
   }
 
   isWeekDotVisible(data: string) {

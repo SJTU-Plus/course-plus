@@ -69,3 +69,18 @@ export const idOf = (week: number, day: number, block: number) => {
 export interface ClassTableConfig {
   simpleMode: boolean;
 }
+
+export interface LessonTimeLocation {
+  time: string;
+  location: string;
+}
+
+export const dayName = [
+  "星期一",
+  "星期二",
+  "星期三",
+  "星期四",
+  "星期五",
+  "星期六",
+  "星期日"
+];

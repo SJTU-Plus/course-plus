@@ -3,7 +3,7 @@
     <table class="table classtable-table">
       <thead>
         <tr>
-          <th scope="col">#</th>
+          <th scope="col" class="classtable-first-col">#</th>
           <th scope="col" v-for="(n, lessonCol) in allCol" :key="lessonCol">
             {{ dayName[lessonCol] }}
           </th>
@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <tr v-for="lessonRow in 14" :key="lessonRow">
-          <th scope="row">{{ lessonRow }}</th>
+          <th scope="row" class="classtable-first-col">{{ lessonRow }}</th>
           <td v-for="lessonCol in allCol" :key="lessonCol">
             <ClassBlock
               :day="lessonCol"
@@ -30,22 +30,20 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Lesson, ClassTableMapping, idOf, ClassTableConfig } from "@/models";
+import {
+  Lesson,
+  ClassTableMapping,
+  idOf,
+  ClassTableConfig,
+  dayName
+} from "@/models";
 import ClassBlock from "./ClassBlock.vue";
 
 @Component({
   components: { ClassBlock }
 })
 export default class ClassTable extends Vue {
-  dayName = [
-    "星期一",
-    "星期二",
-    "星期三",
-    "星期四",
-    "星期五",
-    "星期六",
-    "星期日"
-  ];
+  dayName = dayName;
 
   @Prop() lessons!: Lesson[];
 
@@ -130,5 +128,9 @@ export default class ClassTable extends Vue {
 
 .classtable-table {
   table-layout: fixed;
+}
+
+.classtable-first-col {
+  width: 2rem !important;
 }
 </style>
