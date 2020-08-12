@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <div class="w-100">
     <div class="form-row">
-      <label class="col-form-label"
-        >星标课程 ({{ selectedScore }} / {{ totalScore }} 学分)</label
-      >
+      <div class="col-12">
+        <label class="col-form-label"
+          >星标课程 ({{ selectedScore }} / {{ totalScore }} 学分)</label
+        >
+      </div>
       <div class="col-12">
         <div class="row">
           <span

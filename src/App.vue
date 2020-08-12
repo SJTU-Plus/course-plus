@@ -74,8 +74,9 @@
                   v-on:change="saveSelectedCourse($event)"
                   :colorMapping="colorMapping"
                 ></StarredForm>
+
                 <div v-if="route == 'arrange'">
-                  <div class="form-row">
+                  <div class="form-row my-3">
                     <div class="col-12">
                       <div class="row">
                         <span class="form-check col-12">
@@ -412,7 +413,7 @@ export default class App extends Vue {
   }
 
   get colorMapping(): { [id: string]: string } {
-    const colorScale = chroma.scale("Spectral");
+    const colorScale = chroma.scale("Spectral").gamma(0.5);
     // const colorScale = chroma.scale(['yellow', 'navy']).mode('lch');
     const colors = colorScale.colors(this.uniqueStarredCourses.length);
     const result: { [id: string]: string } = {

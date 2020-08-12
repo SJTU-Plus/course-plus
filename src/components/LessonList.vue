@@ -25,7 +25,7 @@
               >
                 <span
                   v-bind:class="{
-                    'text-info': isStarred(lesson.jxb_id),
+                    'text-primary': isStarred(lesson.jxb_id),
                     'text-muted': !isStarred(lesson.jxb_id)
                   }"
                 >
