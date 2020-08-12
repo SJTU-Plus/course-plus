@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col" v-for="(n, lessonCol) in 7" :key="lessonCol">
+          <th scope="col" v-for="(n, lessonCol) in allCol" :key="lessonCol">
             {{ dayName[lessonCol] }}
           </th>
         </tr>
@@ -12,7 +12,7 @@
       <tbody>
         <tr v-for="lessonRow in 14" :key="lessonRow">
           <th scope="row">{{ lessonRow }}</th>
-          <td v-for="lessonCol in 7" :key="lessonCol">
+          <td v-for="lessonCol in allCol" :key="lessonCol">
             <ClassBlock
               :day="lessonCol"
               :block="lessonRow"
@@ -105,6 +105,16 @@ export default class ClassTable extends Vue {
     });
 
     return mm;
+  }
+
+  get allCol() {
+    let result = 5;
+    this.lessons.forEach(lesson => {
+      if (lesson.xqj > 5) {
+        result = 7;
+      }
+    });
+    return result;
   }
 }
 </script>
