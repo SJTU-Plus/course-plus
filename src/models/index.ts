@@ -59,3 +59,13 @@ export interface SearchFilter {
     keyword: string;
   };
 }
+
+export type ClassTableMapping = { [id: string]: boolean };
+
+export const idOf = (week: number, day: number, block: number) => {
+  return `${week}-${day}-${block}`;
+};
+
+export interface ClassTableConfig {
+  simpleMode: boolean;
+}

@@ -21,18 +21,19 @@
               <button
                 type="button"
                 class="btn btn-link btn-sm star-btn"
-                @click="star(lesson.row_id)"
+                @click="star(lesson.jxb_id)"
               >
                 <span
                   v-bind:class="{
-                    'text-info': isStarred(lesson.row_id),
-                    'text-muted': !isStarred(lesson.row_id)
+                    'text-info': isStarred(lesson.jxb_id),
+                    'text-muted': !isStarred(lesson.jxb_id)
                   }"
                 >
                   <StarIcon size="1.5x"></StarIcon>
+
+                  {{ lesson.kch }}
                 </span>
               </button>
-              {{ lesson.kch }}
             </th>
             <td class="yxmc">{{ lesson.kkxy }}</td>
             <td class="xm" v-html="b(lesson.jszc, ',')"></td>
@@ -94,7 +95,7 @@ export default class LessonList extends Vue {
 
   @Ref("self") readonly selfDiv!: HTMLDivElement;
 
-  @Model("change") starredCourses!: number[];
+  @Model("change") starredCourses!: string[];
 
   increasement = 20;
 
@@ -128,7 +129,7 @@ export default class LessonList extends Vue {
     this.selfDiv.scrollTop = 0;
   }
 
-  star(id: number) {
+  star(id: string) {
     if (this.starredCourses.includes(id)) {
       this.$emit(
         "change",
@@ -140,7 +141,7 @@ export default class LessonList extends Vue {
     }
   }
 
-  isStarred(id: number) {
+  isStarred(id: string) {
     return this.starredCourses.includes(id);
   }
 }
