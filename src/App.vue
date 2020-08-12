@@ -100,9 +100,9 @@
               </div>
             </form>
             <p class="text-muted mt-3 small">
-              免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。本网站所展示的数据更新于{{
-                selectedUpdatedAt
-              }},可能不是最新版本。具体开课情况以教务网为准。
+              免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。本网站所展示的数据更新于
+              <strong>{{ selectedUpdatedAt }}</strong> ，
+              可能不是最新版本。具体开课情况以教务网为准。
             </p>
           </div>
         </div>
@@ -136,6 +136,7 @@ import FilterForm from "./components/FilterForm.vue";
 import StarredForm from "./components/StarredForm.vue";
 import Loading from "./components/Loading.vue";
 import { fieldDict } from "./data";
+import { toChsDate } from "./utils";
 
 const dataURL = "/course-plus-data/";
 @Component({
@@ -215,9 +216,9 @@ export default class App extends Vue {
         this.selectedSemester = this.dataIndex[this.dataIndex.length - 1][
           "semester"
         ];
-        this.selectedUpdatedAt = this.dataIndex[this.dataIndex.length - 1][
-          "updated_at"
-        ];
+        this.selectedUpdatedAt = toChsDate(
+          this.dataIndex[this.dataIndex.length - 1]["updated_at"]
+        );
       });
   }
 
