@@ -35,7 +35,6 @@
         </div>
       </div>
     </div>
-    <p></p>
   </div>
 </template>
 

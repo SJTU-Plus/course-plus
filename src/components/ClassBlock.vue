@@ -10,12 +10,30 @@
       }"
       v-bind:style="{ 'background-color': colorMapping[weekPoints[week]] }"
     ></span>
+    <div v-if="!classTableConfig.simpleMode">
+      <div v-for="lesson in courses" :key="lesson.row_id" class="small my-1">
+        <span
+          class="week-dot"
+          v-if="colorMapping[lesson.jxb_id]"
+          v-bind:style="{
+            'background-color': colorMapping[lesson.jxb_id]
+          }"
+        ></span>
+        {{ lesson.kch }}
+        <br />
+        {{ lesson.kcmc }}
+        <br />
+        {{ lesson.jszc }}
+        <br />
+        {{ lesson.jxbmc }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Lesson, ClassTableMapping, idOf } from "@/models";
+import { Lesson, ClassTableMapping, idOf, ClassTableConfig } from "@/models";
 
 @Component
 export default class ClassBlock extends Vue {
@@ -28,6 +46,8 @@ export default class ClassBlock extends Vue {
   @Prop() private day!: number;
 
   @Prop() private block!: number;
+
+  @Prop() classTableConfig!: ClassTableConfig;
 
   get weekPoints() {
     const result: string[] = [];
@@ -47,6 +67,30 @@ export default class ClassBlock extends Vue {
       result.push(course);
     }
     return result;
+  }
+
+  get uniqueLessonData() {
+    const result: Lesson[] = [];
+    const keys: { [id: string]: boolean } = {};
+    this.lessonData.forEach(val => {
+      const key = val.jxb_id;
+      if (!(key in keys)) {
+        keys[key] = true;
+        result.push(val);
+      }
+    });
+    result.sort((a, b) => (a.kch < b.kch ? -1 : a.kch > b.kch ? 1 : 0));
+    return result;
+  }
+
+  get courses(): Lesson[] {
+    return this.uniqueLessonData.filter(lesson => {
+      for (let week = 1; week <= 16; week++) {
+        const id = idOf(week, this.day, this.block);
+        if (this.mappingData[lesson.jxb_id][id]) return true;
+      }
+      return false;
+    });
   }
 
   isWeekDotVisible(data: string) {

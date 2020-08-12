@@ -1,6 +1,6 @@
 <template>
   <div class="h-100 overflow-auto">
-    <table class="table">
+    <table class="table classtable-table">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -19,6 +19,7 @@
               :lessonData="lessons"
               :mappingData="allMapping"
               :colorMapping="colorMapping"
+              :classTableConfig="classTableConfig"
             ></ClassBlock>
           </td>
         </tr>
@@ -29,7 +30,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Lesson, ClassTableMapping, idOf } from "@/models";
+import { Lesson, ClassTableMapping, idOf, ClassTableConfig } from "@/models";
 import ClassBlock from "./ClassBlock.vue";
 
 @Component({
@@ -47,6 +48,8 @@ export default class ClassTable extends Vue {
   ];
 
   @Prop() lessons!: Lesson[];
+
+  @Prop() classTableConfig!: ClassTableConfig;
 
   @Prop() private colorMapping!: { [id: string]: string };
 
@@ -123,5 +126,9 @@ export default class ClassTable extends Vue {
 .classtable-row {
   min-height: 6.5vh;
   border-bottom: 0.1px dashed grey;
+}
+
+.classtable-table {
+  table-layout: fixed;
 }
 </style>

@@ -74,6 +74,28 @@
                   v-on:change="saveSelectedCourse($event)"
                   :colorMapping="colorMapping"
                 ></StarredForm>
+                <div v-if="route == 'arrange'">
+                  <div class="form-row">
+                    <div class="col-12">
+                      <div class="row">
+                        <span class="form-check col-12">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="classTableConfig.simpleMode"
+                            id="classTableConfig.simpleMode"
+                            v-model="classTableConfig.simpleMode"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="classTableConfig.simpleMode"
+                            >简洁模式</label
+                          >
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </form>
             <p class="text-muted mt-3 small">
@@ -93,6 +115,7 @@
             v-if="route == 'arrange'"
             :lessons="selectedArrangeCourse"
             :colorMapping="colorMapping"
+            :classTableConfig="classTableConfig"
           ></ClassTable>
         </div>
       </div>
@@ -102,7 +125,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { LessonIndex, Lesson, SearchFilter } from "./models";
+import { LessonIndex, Lesson, SearchFilter, ClassTableConfig } from "./models";
 import chroma from "chroma-js";
 import LessonList from "./components/LessonList.vue";
 import ClassTable from "./components/ClassTable.vue";
@@ -165,6 +188,10 @@ export default class App extends Vue {
       keywordType: "kcmc",
       keyword: ""
     }
+  };
+
+  classTableConfig: ClassTableConfig = {
+    simpleMode: false
   };
 
   // route = "arrange";
