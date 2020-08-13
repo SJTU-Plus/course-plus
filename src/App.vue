@@ -206,6 +206,8 @@ export default class App extends Vue {
 
   dataLoaded = false;
 
+  dataLoadLock = false;
+
   dataIndex: LessonIndex[] = [];
 
   dataRaw: Lesson[] = [];
@@ -373,6 +375,10 @@ export default class App extends Vue {
   }
 
   updateSrcData() {
+    if (this.dataLoadLock) return;
+    this.dataLoadLock = true;
+    setTimeout(() => (this.dataLoadLock = false), 100);
+
     this.dataLoaded = false;
     //先检查数据是否有效
     let foundFlag = false;
