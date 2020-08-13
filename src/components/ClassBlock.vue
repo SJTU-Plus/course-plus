@@ -23,10 +23,28 @@
             ></span>
           </div>
           <div class="col p-0">
-            <span v-bind:class="{ 'text-danger': conflicts[lesson.jxb_id] }">
-              <span class="mr-1">{{ lesson.kch }}</span>
-              <span>{{ lesson.kcmc }}</span>
-            </span>
+            <popper
+              trigger="hover"
+              :options="{
+                placement: 'right',
+                modifiers: { offset: { offset: '0,10px' } }
+              }"
+            >
+              <LessonDetail
+                :lesson="lesson"
+                :color="colorMapping[lesson.jxb_id]"
+                :lessonDetail="lessonDetail"
+              ></LessonDetail>
+
+              <span
+                slot="reference"
+                v-bind:class="{ 'text-danger': conflicts[lesson.jxb_id] }"
+              >
+                <span class="mr-1">{{ lesson.kch }}</span>
+                <span>{{ lesson.kcmc }}</span>
+              </span>
+            </popper>
+
             <span v-if="!simpleMode[lesson.jxb_id]">
               <br />
               <span class="mr-1">{{ lesson.jszc }}</span>
@@ -56,10 +74,15 @@ import {
   LessonTimeLocation,
   dayName
 } from "@/models";
+import { parseTimeLocation } from "@/utils";
+import LessonDetail from "@/components/LessonDetail.vue";
+import Popper from "vue-popperjs";
 
-@Component
+@Component({ components: { LessonDetail, Popper } })
 export default class ClassBlock extends Vue {
   @Prop() private lessonData!: Lesson[];
+
+  @Prop() private lessonDetail!: { [id: string]: LessonDetail };
 
   @Prop() private mappingData!: { [id: string]: ClassTableMapping };
 
@@ -92,24 +115,14 @@ export default class ClassBlock extends Vue {
   }
 
   parseTimeLocation(time: string, location: string): LessonTimeLocation[] {
-    const tl: LessonTimeLocation[] = [];
-    const tt = time.split(";");
-    const ll = location.split(";");
-    for (let i = 0; i < tt.length; i++) {
-      const time = tt[i].substring(0, 3);
-      const location = ll[i];
-      if (tl.find(val => val.time == time && val.location == location))
-        continue;
-      tl.push({ time, location });
-    }
-    return tl;
+    return parseTimeLocation(time, location);
   }
 
   parseTimeLocationDay(time: string, location: string, day: number): string {
     const tl = this.parseTimeLocation(time, location);
     let result = "数据解析出错";
     tl.forEach(x => {
-      if (x.time == dayName[day - 1]) {
+      if (x.time.substring(0, 3) == dayName[day - 1]) {
         result = x.location;
       }
     });

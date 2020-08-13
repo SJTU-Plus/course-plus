@@ -30,10 +30,30 @@
                   }"
                 >
                   <StarIcon size="1.5x"></StarIcon>
-
                   {{ lesson.kch }}
                 </span>
               </button>
+              <br />
+              <popper
+                trigger="hover"
+                :options="{
+                  placement: 'right',
+                  modifiers: { offset: { offset: '0,10px' } }
+                }"
+              >
+                <LessonDetail
+                  :lesson="lesson"
+                  :lessonDetail="lessonDetail"
+                ></LessonDetail>
+
+                <button
+                  type="button"
+                  class="btn btn-link btn-sm text-muted"
+                  slot="reference"
+                >
+                  <MessageSquareIcon size="1.5x"></MessageSquareIcon>&nbsp; 详情
+                </button>
+              </popper>
             </th>
             <td class="yxmc">{{ lesson.kkxy }}</td>
             <td class="xm" v-html="b(lesson.jszc, ',')"></td>
@@ -75,13 +95,15 @@ import {
 } from "vue-property-decorator";
 import VueObserveVisibility from "vue-observe-visibility";
 import { Lesson } from "@/models";
-import Loading from "./Loading.vue";
-import { StarIcon } from "vue-feather-icons";
+import Loading from "@/components/Loading.vue";
+import { StarIcon, MessageSquareIcon } from "vue-feather-icons";
+import Popper from "vue-popperjs";
+import LessonDetail from "@/components/LessonDetail.vue";
 
 Vue.use(VueObserveVisibility);
 
 @Component({
-  components: { Loading, StarIcon },
+  components: { Loading, StarIcon, Popper, MessageSquareIcon, LessonDetail },
   filters: {
     length(data: Lesson[]) {
       return data.length;
@@ -90,6 +112,8 @@ Vue.use(VueObserveVisibility);
 })
 export default class LessonList extends Vue {
   @Prop() private data!: Lesson[];
+
+  @Prop() private lessonDetail!: { [id: string]: LessonDetail };
 
   @Prop() private tableHeader!: string[];
 

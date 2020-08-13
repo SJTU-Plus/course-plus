@@ -123,12 +123,14 @@
           <LessonList
             v-if="route == 'search'"
             :data="dataFiltered"
+            :lessonDetail="lessonDetail"
             :tableHeader="tableHeader"
             v-bind:starredCourses="starredCourses"
             @change="saveStarredCourse($event)"
           ></LessonList>
           <ClassTable
             v-if="route == 'arrange'"
+            :lessonDetail="lessonDetail"
             :lessons="selectedArrangeCourse"
             :colorMapping="colorMapping"
             :classTableConfig="classTableConfig"
@@ -141,7 +143,13 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { LessonIndex, Lesson, SearchFilter, ClassTableConfig } from "./models";
+import {
+  LessonIndex,
+  Lesson,
+  SearchFilter,
+  ClassTableConfig,
+  LessonDetail
+} from "./models";
 import chroma from "chroma-js";
 import LessonList from "./components/LessonList.vue";
 import ClassTable from "./components/ClassTable.vue";
@@ -226,6 +234,8 @@ export default class App extends Vue {
 
   selectedStarredCourses: string[] = [];
 
+  lessonDetail: { [id: string]: LessonDetail } = {};
+
   created() {
     fetch(`${dataURL}lessionData_index.json`)
       .then(res => res.json())
@@ -238,6 +248,20 @@ export default class App extends Vue {
         this.selectedUpdatedAt = toChsDate(
           this.dataIndex[this.dataIndex.length - 1]["updated_at"]
         );
+      });
+    fetch(`${dataURL}lesson_description_2019.json`)
+      .then(res => res.json())
+      .then(data => {
+        const lessonDetail: { [id: string]: LessonDetail } = {};
+        for (const key in data) {
+          lessonDetail[key] = {
+            profile: {
+              chineseIntro: data[key]["profile"]["中文课程简介"],
+              englishIntro: data[key]["profile"]["英文课程简介"]
+            }
+          };
+        }
+        this.lessonDetail = lessonDetail;
       });
   }
 
