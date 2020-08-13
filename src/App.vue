@@ -106,7 +106,7 @@
               可能不是最新版本。具体开课情况以教务网为准。
             </p>
             <div class="row">
-              <div class="col  d-flex d-row align-items-center">
+              <div class="col d-flex d-row align-items-center">
                 <p class="text-muted my-3 small">
                   本项目由
                   <a href="https://sjtu-plus.github.io/">SJTU-Plus</a>
