@@ -108,7 +108,9 @@
             <div class="row">
               <div class="col  d-flex d-row align-items-center">
                 <p class="text-muted my-3 small">
-                  本项目由 <a href="https://sjtu-plus.github.io/">SJTU-Plus</a> 团队开发。
+                  本项目由
+                  <a href="https://sjtu-plus.github.io/">SJTU-Plus</a>
+                  团队开发。
                 </p>
               </div>
               <div class="col-auto m-0 p-0 d-flex d-row align-items-center">
