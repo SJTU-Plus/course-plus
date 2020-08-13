@@ -23,10 +23,27 @@
             ></span>
           </div>
           <div class="col p-0">
-            <span v-bind:class="{ 'text-danger': conflicts[lesson.jxb_id] }">
-              <span class="mr-1">{{ lesson.kch }}</span>
-              <span>{{ lesson.kcmc }}</span>
-            </span>
+            <popper
+              trigger="hover"
+              :options="{
+                placement: 'right',
+                modifiers: { offset: { offset: '0,10px' } }
+              }"
+            >
+              <LessonDetail
+                :lesson="lesson"
+                :color="colorMapping[lesson.jxb_id]"
+              ></LessonDetail>
+
+              <span
+                slot="reference"
+                v-bind:class="{ 'text-danger': conflicts[lesson.jxb_id] }"
+              >
+                <span class="mr-1">{{ lesson.kch }}</span>
+                <span>{{ lesson.kcmc }}</span>
+              </span>
+            </popper>
+
             <span v-if="!simpleMode[lesson.jxb_id]">
               <br />
               <span class="mr-1">{{ lesson.jszc }}</span>
@@ -57,8 +74,10 @@ import {
   dayName
 } from "@/models";
 import { parseTimeLocation } from "@/utils";
+import LessonDetail from "@/components/LessonDetail.vue";
+import Popper from "vue-popperjs";
 
-@Component
+@Component({ components: { LessonDetail, Popper } })
 export default class ClassBlock extends Vue {
   @Prop() private lessonData!: Lesson[];
 

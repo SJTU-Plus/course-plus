@@ -1,7 +1,14 @@
 <template>
   <div class="card lesson-detail-card shadow-sm font-weight-normal">
     <div class="card-body">
-      <h5 class="card-title">{{ lesson.kch }} {{ lesson.kcmc }}</h5>
+      <h5 class="card-title">
+        <span
+          class="lesson-dot"
+          v-if="color"
+          v-bind:style="{ 'background-color': color }"
+        ></span
+        >{{ lesson.kch }} {{ lesson.kcmc }}
+      </h5>
       <h6 class="card-subtitle mb-2 text-muted">
         <span class="mr-1">{{ lesson.jszc }} {{ lesson.kkxy }}</span>
       </h6>
@@ -56,6 +63,8 @@ import { parseTimeLocation } from "@/utils";
 export default class LessonDetail extends Vue {
   @Prop() private lesson!: Lesson;
 
+  @Prop() private color!: string;
+
   parseTimeLocation(time: string, location: string): LessonTimeLocation[] {
     return parseTimeLocation(time, location);
   }
@@ -69,5 +78,14 @@ export default class LessonDetail extends Vue {
 <style scoped lang="scss">
 .lesson-detail-card {
   width: 25rem;
+  z-index: 999;
+}
+
+.lesson-dot {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  display: inline-block;
 }
 </style>

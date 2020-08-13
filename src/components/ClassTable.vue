@@ -37,7 +37,7 @@ import {
   ClassTableConfig,
   dayName
 } from "@/models";
-import ClassBlock from "./ClassBlock.vue";
+import ClassBlock from "@/components/ClassBlock.vue";
 
 @Component({
   components: { ClassBlock }

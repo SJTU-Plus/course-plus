@@ -96,7 +96,6 @@ import Loading from "@/components/Loading.vue";
 import { StarIcon, MessageSquareIcon } from "vue-feather-icons";
 import Popper from "vue-popperjs";
 import LessonDetail from "@/components/LessonDetail.vue";
-import "vue-popperjs/dist/vue-popper.css";
 
 Vue.use(VueObserveVisibility);
 
