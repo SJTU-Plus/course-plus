@@ -99,15 +99,22 @@
                 </div>
               </div>
             </form>
-            <p class="text-muted mt-3 small">
+
+            <p class="text-muted my-3 small">
               免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。
               本网站所展示的数据更新于 {{ selectedUpdatedAt }}，
               可能不是最新版本。具体开课情况以教务网为准。
             </p>
-            <p class="text-muted mt-3 small">
-              本项目由 SJTU-Plus 团队开发，托管于
-              <a href="https://github.com/SJTU-Plus/course-plus">GitHub</a>。
-            </p>
+            <div class="row">
+              <div class="col  d-flex d-row align-items-center">
+                <p class="text-muted my-3 small">
+                  本项目由 SJTU-Plus 团队开发。
+                </p>
+              </div>
+              <div class="col-auto m-0 p-0 d-flex d-row align-items-center">
+                <gh-btns-star slug="sjtu-plus/course-plus" show-count />
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-9 h-100">
@@ -144,7 +151,13 @@ import { toChsDate } from "./utils";
 
 const dataURL = "/course-plus-data/";
 @Component({
-  components: { LessonList, Loading, FilterForm, StarredForm, ClassTable },
+  components: {
+    LessonList,
+    Loading,
+    FilterForm,
+    StarredForm,
+    ClassTable
+  },
   filters: {
     semesterCode2name(semesterCode: string) {
       switch (semesterCode) {
