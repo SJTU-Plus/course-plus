@@ -85,3 +85,10 @@ export const dayName = [
   "星期六",
   "星期日"
 ];
+
+export interface LessonDetail {
+  profile: {
+    englishIntro: string;
+    chineseIntro: string;
+  };
+}

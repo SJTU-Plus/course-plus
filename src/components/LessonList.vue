@@ -41,7 +41,10 @@
                   modifiers: { offset: { offset: '0,10px' } }
                 }"
               >
-                <LessonDetail :lesson="lesson"></LessonDetail>
+                <LessonDetail
+                  :lesson="lesson"
+                  :lessonDetail="lessonDetail"
+                ></LessonDetail>
 
                 <button
                   type="button"
@@ -109,6 +112,8 @@ Vue.use(VueObserveVisibility);
 })
 export default class LessonList extends Vue {
   @Prop() private data!: Lesson[];
+
+  @Prop() private lessonDetail!: { [id: string]: LessonDetail };
 
   @Prop() private tableHeader!: string[];
 

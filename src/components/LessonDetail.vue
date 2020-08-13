@@ -6,16 +6,16 @@
           class="lesson-dot"
           v-if="color"
           v-bind:style="{ 'background-color': color }"
-        ></span
-        >{{ lesson.kch }} {{ lesson.kcmc }}
+        ></span>
+        {{ lesson.kch }} {{ lesson.kcmc }}
       </h5>
       <h6 class="card-subtitle mb-2 text-muted">
         <span class="mr-1">{{ lesson.jszc }} {{ lesson.kkxy }}</span>
       </h6>
 
       <p class="card-text">
-        <span class="mr-1">{{ lesson.kklx }}</span
-        ><span class="mr-1">{{ lesson.zhxs }}</span>
+        <span class="mr-1">{{ lesson.kklx }}</span>
+        <span class="mr-1">{{ lesson.zhxs }}</span>
         <span class="mr-1">{{ lesson.rwzxs }} 学时</span>
         <span class="mr-1">{{ lesson.kcxzmc }}</span>
       </p>
@@ -43,10 +43,20 @@
           </div>
         </li>
       </ul>
-
-      <p class="card-text text-muted">
-        <span class="mr-1">{{ lesson.jxbmc }}</span
-        ><br />
+      <Loading :ready="lessonDetail"></Loading>
+      <p v-if="lessonDetail">
+        {{
+          (((lessonDetail || {})[lesson.kch] || {}).profile || {}).chineseIntro
+        }}
+      </p>
+      <p v-if="lessonDetail">
+        {{
+          (((lessonDetail || {})[lesson.kch] || {}).profile || {}).englishIntro
+        }}
+      </p>
+      <p class="card-text text-muted pb-3">
+        <span class="mr-1">{{ lesson.jxbmc }}</span>
+        <br />
         <span class="mr-1">{{ lesson.nj }} 年级,</span>
         <span class="mr-1">{{ lesson.xn }} 学年 {{ lesson.xq }} 学期</span>
       </p>
@@ -56,14 +66,21 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Lesson, LessonTimeLocation } from "@/models";
+import {
+  Lesson,
+  LessonTimeLocation,
+  LessonDetail as LessonDetailModel
+} from "@/models";
 import { parseTimeLocation } from "@/utils";
+import Loading from "@/components/Loading.vue";
 
-@Component
+@Component({ components: { Loading } })
 export default class LessonDetail extends Vue {
   @Prop() private lesson!: Lesson;
 
   @Prop() private color!: string;
+
+  @Prop() private lessonDetail!: { [id: string]: LessonDetailModel };
 
   parseTimeLocation(time: string, location: string): LessonTimeLocation[] {
     return parseTimeLocation(time, location);
@@ -78,6 +95,8 @@ export default class LessonDetail extends Vue {
 <style scoped lang="scss">
 .lesson-detail-card {
   width: 25rem;
+  max-height: 40rem;
+  overflow-y: auto;
   z-index: 999;
 }
 

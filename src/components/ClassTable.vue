@@ -20,6 +20,7 @@
               :mappingData="allMapping"
               :colorMapping="colorMapping"
               :classTableConfig="classTableConfig"
+              :lessonDetail="lessonDetail"
             ></ClassBlock>
           </td>
         </tr>
@@ -35,7 +36,8 @@ import {
   ClassTableMapping,
   idOf,
   ClassTableConfig,
-  dayName
+  dayName,
+  LessonDetail
 } from "@/models";
 import ClassBlock from "@/components/ClassBlock.vue";
 
@@ -46,6 +48,8 @@ export default class ClassTable extends Vue {
   dayName = dayName;
 
   @Prop() lessons!: Lesson[];
+
+  @Prop() private lessonDetail!: { [id: string]: LessonDetail };
 
   @Prop() classTableConfig!: ClassTableConfig;
 

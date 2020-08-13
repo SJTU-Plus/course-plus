@@ -33,6 +33,7 @@
               <LessonDetail
                 :lesson="lesson"
                 :color="colorMapping[lesson.jxb_id]"
+                :lessonDetail="lessonDetail"
               ></LessonDetail>
 
               <span
@@ -80,6 +81,8 @@ import Popper from "vue-popperjs";
 @Component({ components: { LessonDetail, Popper } })
 export default class ClassBlock extends Vue {
   @Prop() private lessonData!: Lesson[];
+
+  @Prop() private lessonDetail!: { [id: string]: LessonDetail };
 
   @Prop() private mappingData!: { [id: string]: ClassTableMapping };
 
