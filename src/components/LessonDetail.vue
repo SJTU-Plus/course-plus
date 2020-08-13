@@ -20,7 +20,7 @@
         <span class="mr-1">{{ lesson.kcxzmc }}</span>
       </p>
       <p class="card-text">备注：{{ lesson.xkbz }}</p>
-      <span class="card-text">教学班</span>
+      <span class="card-text">班级组成</span>
       <ul class="list-group list-group-flush border-top border-bottom mb-3">
         <li
           class="list-group-item py-1"
