@@ -18,6 +18,7 @@
     "vue-feather-icons": "^5.1.0",
     "vue-github-buttons": "^3.1.0",
     "vue-observe-visibility": "^0.4.6",
+    "vue-popperjs": "^2.3.0",
     "vue-property-decorator": "^8.4.2"
   },
   "devDependencies": {

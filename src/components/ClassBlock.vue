@@ -56,6 +56,7 @@ import {
   LessonTimeLocation,
   dayName
 } from "@/models";
+import { parseTimeLocation } from "@/utils";
 
 @Component
 export default class ClassBlock extends Vue {
@@ -92,24 +93,14 @@ export default class ClassBlock extends Vue {
   }
 
   parseTimeLocation(time: string, location: string): LessonTimeLocation[] {
-    const tl: LessonTimeLocation[] = [];
-    const tt = time.split(";");
-    const ll = location.split(";");
-    for (let i = 0; i < tt.length; i++) {
-      const time = tt[i].substring(0, 3);
-      const location = ll[i];
-      if (tl.find(val => val.time == time && val.location == location))
-        continue;
-      tl.push({ time, location });
-    }
-    return tl;
+    return parseTimeLocation(time, location);
   }
 
   parseTimeLocationDay(time: string, location: string, day: number): string {
     const tl = this.parseTimeLocation(time, location);
     let result = "数据解析出错";
     tl.forEach(x => {
-      if (x.time == dayName[day - 1]) {
+      if (x.time.substring(0, 3) == dayName[day - 1]) {
         result = x.location;
       }
     });
