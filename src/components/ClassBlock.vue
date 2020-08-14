@@ -11,8 +11,12 @@
       v-bind:style="{ 'background-color': colorMapping[weekPoints[week]] }"
     ></span>
     <div v-if="!classTableConfig.simpleMode">
-      <div v-for="lesson in courses" :key="lesson.row_id" class="small my-2">
-        <div class="row">
+      <div
+        v-for="lesson in shownCourses"
+        :key="lesson.row_id"
+        class="small my-2"
+      >
+        <div class="row mr-1">
           <div class="col-auto p-0">
             <span
               class="week-dot mr-1"
@@ -45,7 +49,7 @@
               </span>
             </popper>
 
-            <span v-if="!simpleMode[lesson.jxb_id]">
+            <span>
               <br />
               <span class="mr-1">{{ lesson.jszc }}</span>
               <span>{{ lesson.xf }} 学分</span>
@@ -151,6 +155,10 @@ export default class ClassBlock extends Vue {
       }
       return false;
     });
+  }
+
+  get shownCourses(): Lesson[] {
+    return this.courses.filter(lesson => !this.simpleMode[lesson.jxb_id]);
   }
 
   get simpleMode(): { [id: string]: boolean } {
