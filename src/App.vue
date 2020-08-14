@@ -105,6 +105,9 @@
               本网站所展示的数据更新于 {{ selectedUpdatedAt }}，
               可能不是最新版本。具体开课情况以教务网为准。
             </p>
+            <p class="text-muted my-3 small">
+              隐私政策：访问本网站，即代表您同意本网站使用“站长统计”收集您的访问信息。根据相关法律法规，本站不对欧盟用户提供服务。
+            </p>
             <div class="row">
               <div class="col d-flex d-row align-items-center">
                 <p class="text-muted my-3 small">
