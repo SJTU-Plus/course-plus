@@ -11,8 +11,8 @@
       </thead>
       <tbody>
         <tr v-for="lessonRow in 14" :key="lessonRow">
-          <th scope="row" class="classtable-first-col">{{ lessonRow }}</th>
-          <td v-for="lessonCol in allCol" :key="lessonCol">
+          <th scope="row" class="classtable-first-col p-1">{{ lessonRow }}</th>
+          <td v-for="lessonCol in allCol" :key="lessonCol" class="p-1">
             <ClassBlock
               :day="lessonCol"
               :block="lessonRow"
