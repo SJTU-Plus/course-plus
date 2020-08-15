@@ -125,7 +125,7 @@
         <div class="col-9 h-100">
           <LessonList
             v-if="route == 'search'"
-            :data="dataFiltered"
+            :data="uniqueLessons(dataFiltered)"
             :lessonDetail="lessonDetail"
             :tableHeader="tableHeader"
             v-bind:starredCourses="starredCourses"
@@ -160,7 +160,7 @@ import FilterForm from "./components/FilterForm.vue";
 import StarredForm from "./components/StarredForm.vue";
 import Loading from "./components/Loading.vue";
 import { fieldDict } from "./data";
-import { toChsDate } from "./utils";
+import { toChsDate, uniqueLessons } from "./utils";
 
 const dataURL = "/course-plus-data/";
 @Component({
@@ -201,8 +201,7 @@ export default class App extends Vue {
     "教师姓名",
     "课程",
     "学时/学分",
-    "上课时间",
-    "上课地点",
+    "上课时间地点",
     "备注",
     "年级"
   ];
@@ -240,6 +239,8 @@ export default class App extends Vue {
   selectedStarredCourses: string[] = [];
 
   lessonDetail: { [id: string]: LessonDetail } = {};
+
+  uniqueLessons = uniqueLessons;
 
   created() {
     fetch(`${dataURL}lessionData_index.json`)
@@ -459,17 +460,7 @@ export default class App extends Vue {
   }
 
   get uniqueStarredCourses() {
-    const result: Lesson[] = [];
-    const keys: { [id: string]: boolean } = {};
-    this.starredAllCourses.forEach(val => {
-      const key = val.jxb_id;
-      if (!(key in keys)) {
-        keys[key] = true;
-        result.push(val);
-      }
-    });
-    result.sort((a, b) => (a.kch < b.kch ? -1 : a.kch > b.kch ? 1 : 0));
-    return result;
+    return uniqueLessons(this.starredAllCourses);
   }
 
   get colorMapping(): { [id: string]: string } {

@@ -59,8 +59,19 @@
             <td class="xm" v-html="b(lesson.jszc, ',')"></td>
             <td class="kcmc">{{ lesson.kcmc }}</td>
             <td class="xsxf">{{ lesson.rwzxs }} / {{ lesson.xf }}</td>
-            <td class="sksj" v-html="b(lesson.sksj, ';')"></td>
-            <td class="jxdd" v-html="b(lesson.jxdd, ';')"></td>
+            <td class="sksj">
+              <ul class="list-unstyled">
+                <li
+                  v-for="(data, idx) in parseTimeLocation(
+                    lesson.sksj,
+                    lesson.jxdd
+                  )"
+                  :key="idx"
+                >
+                  {{ data.time }} {{ data.location }}
+                </li>
+              </ul>
+            </td>
             <td class="bz">{{ lesson.xkbz }}</td>
             <td class="nj">{{ lesson.nj }}</td>
           </tr>
@@ -99,6 +110,7 @@ import Loading from "@/components/Loading.vue";
 import { StarIcon, MessageSquareIcon } from "vue-feather-icons";
 import Popper from "vue-popperjs";
 import LessonDetail from "@/components/LessonDetail.vue";
+import { parseTimeLocation } from "@/utils";
 
 Vue.use(VueObserveVisibility);
 
@@ -124,6 +136,8 @@ export default class LessonList extends Vue {
   increasement = 20;
 
   pagedSize = 0;
+
+  parseTimeLocation = parseTimeLocation;
 
   b(s: string, sep: string) {
     if (!s) return "";
