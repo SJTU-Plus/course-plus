@@ -27,7 +27,7 @@
         <input
           type="text"
           class="form-control"
-          placeholder="不限时间"
+          placeholder="不限"
           id="inputTime"
           v-model="formData.scheduleKey"
         />
@@ -37,7 +37,7 @@
         <input
           type="text"
           class="form-control"
-          placeholder="不限教师"
+          placeholder="不限"
           id="inputLecturer"
           v-model="formData.lecturerKey"
         />
@@ -48,9 +48,18 @@
           type="text"
           id="inputPlace"
           class="form-control"
-          placeholder="不限地点"
+          placeholder="不限"
           v-model="formData.placeKey"
         />
+      </div>
+      <div class="col-12 mb-3">
+        <label for="inputComposition">教学组成</label>
+        <autocomplete
+          ref="composition"
+          :search="search"
+          placeholder="不限"
+          @submit="onSubmit"
+        ></autocomplete>
       </div>
     </div>
     <div class="form-row">
@@ -72,9 +81,9 @@
             />
             <label class="form-check-label" :for="nj">
               {{ nj }}
-              <span class="badge badge-pill badge-secondary">
-                {{ filterDataLength(dataAfterKeyword, "nj", nj) }}
-              </span>
+              <span class="badge badge-pill badge-secondary">{{
+                filterDataLength(dataAfterKeyword, "nj", nj)
+              }}</span>
             </label>
           </span>
         </div>
@@ -96,9 +105,9 @@
             />
             <label class="form-check-label" :for="lx">
               {{ lx }}
-              <span class="badge badge-pill badge-secondary">
-                {{ filterDataLength(dataAfterKeyword, "kcxzmc", lx) }}
-              </span>
+              <span class="badge badge-pill badge-secondary">{{
+                filterDataLength(dataAfterKeyword, "kcxzmc", lx)
+              }}</span>
             </label>
           </span>
         </div>
@@ -120,9 +129,9 @@
             />
             <label class="form-check-label" :for="yx">
               {{ yx }}
-              <span class="badge badge-pill badge-secondary">
-                {{ filterDataLength(dataAfterKeyword, "kkxy", yx) }}
-              </span>
+              <span class="badge badge-pill badge-secondary">{{
+                filterDataLength(dataAfterKeyword, "kkxy", yx)
+              }}</span>
             </label>
           </div>
         </div>
@@ -132,15 +141,29 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Model, Prop } from "vue-property-decorator";
+import { Component, Vue, Model, Prop, Ref } from "vue-property-decorator";
 import { Lesson, SearchFilter } from "@/models";
 import { cmpChs } from "@/utils";
+import Autocomplete from "@trevoreyre/autocomplete-vue";
 
-@Component
+@Component({
+  components: { Autocomplete }
+})
 export default class FilterForm extends Vue {
   @Model("change") formData!: SearchFilter;
 
   @Prop() dataAfterKeyword!: Lesson[];
+
+  // eslint-disable-next-line
+  @Ref("composition") compositionField: any;
+
+  mounted() {
+    this.compositionField.setValue(this.formData.composition);
+  }
+
+  onSubmit(data: string) {
+    this.formData.composition = data || "";
+  }
 
   concatUnique<T>(a: T[], b: T[]): T[] {
     const vals: Set<T> = new Set();
@@ -195,6 +218,22 @@ export default class FilterForm extends Vue {
       const lessonAny = lesson as any;
       return lessonAny[field] == value;
     }).length;
+  }
+
+  search(input: string) {
+    if (input.length == 0) {
+      return [];
+    } else {
+      const result = new Set();
+      this.dataAfterKeyword.forEach(lesson => {
+        lesson.jxbzc.split(";").forEach(d => {
+          if (d.toLowerCase().includes(input.toLowerCase())) {
+            result.add(d);
+          }
+        });
+      });
+      return [...result];
+    }
   }
 }
 </script>

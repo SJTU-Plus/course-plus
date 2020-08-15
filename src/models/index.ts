@@ -59,6 +59,7 @@ export interface SearchFilter {
     keywordType: string;
     keyword: string;
   };
+  composition: string;
 }
 
 export type ClassTableMapping = { [id: string]: boolean };
