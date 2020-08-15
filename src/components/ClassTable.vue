@@ -61,7 +61,7 @@ export default class ClassTable extends Vue {
     while (data > 0) {
       if (data % 2 == 1) result.push(i);
       i += 1;
-      data = Math.floor(data / 2);
+      data = data >> 1;
     }
     return result;
   }
