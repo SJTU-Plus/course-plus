@@ -224,7 +224,8 @@ export default class App extends Vue {
     keyword: {
       keywordType: "kcmc",
       keyword: ""
-    }
+    },
+    composition: ""
   };
 
   classTableConfig: ClassTableConfig = {
@@ -344,22 +345,30 @@ export default class App extends Vue {
     const checkedNj = this.formData.checkedNj;
     const checkedLx = this.formData.checkedLx;
     const checkedYx = this.formData.checkedYx;
+    const composition = this.formData.composition;
 
     if (checkedNj.length) {
-      filteringData = filteringData.filter((lesson: Lesson) => {
-        return checkedNj.find(x => x == lesson.nj);
-      });
+      filteringData = filteringData.filter((lesson: Lesson) =>
+        checkedNj.find(x => x == lesson.nj)
+      );
     }
 
     if (checkedLx.length) {
-      filteringData = filteringData.filter((lesson: Lesson) => {
-        return checkedLx.find(x => x == lesson.kcxzmc);
-      });
+      filteringData = filteringData.filter((lesson: Lesson) =>
+        checkedLx.find(x => x == lesson.kcxzmc)
+      );
     }
+
     if (checkedYx.length) {
-      filteringData = filteringData.filter((lesson: Lesson) => {
-        return checkedYx.find(x => x == lesson.kkxy);
-      });
+      filteringData = filteringData.filter((lesson: Lesson) =>
+        checkedYx.find(x => x == lesson.kkxy)
+      );
+    }
+
+    if (composition.length) {
+      filteringData = filteringData.filter((lesson: Lesson) =>
+        lesson.jxbzc.split(";").some(x => x == composition)
+      );
     }
     return filteringData;
   }
