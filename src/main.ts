@@ -4,6 +4,7 @@ import App from "./App.vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "vue-popperjs/dist/vue-popper.css";
 import "vue-github-buttons/dist/vue-github-buttons.css"; // Stylesheet
+import "@trevoreyre/autocomplete-vue/dist/style.css";
 import "@/assets/main.scss";
 
 import VueGitHubButtons from "vue-github-buttons";

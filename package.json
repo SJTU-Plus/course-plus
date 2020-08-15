@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@trevoreyre/autocomplete-vue": "^2.2.0",
     "@types/chroma-js": "^2.0.0",
     "bootstrap": "^4.5.0",
     "chroma-js": "^2.1.0",
