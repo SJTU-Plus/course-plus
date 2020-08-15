@@ -1,4 +1,4 @@
-import { LessonTimeLocation } from "./models";
+import { LessonTimeLocation, Lesson } from "./models";
 
 export function cmpChs(a: string, b: string) {
   return a.localeCompare(b, "zh-cn");
@@ -28,4 +28,18 @@ export function parseTimeLocation(
     tl.push({ time, location });
   }
   return tl;
+}
+
+export function uniqueLessons(lessons: Lesson[]): Lesson[] {
+  const keys: { [id: string]: boolean } = {};
+  const result: Lesson[] = [];
+  lessons.forEach(val => {
+    const key = val.jxb_id;
+    if (!(key in keys)) {
+      keys[key] = true;
+      result.push(val);
+    }
+  });
+  result.sort((a, b) => (a.kch < b.kch ? -1 : a.kch > b.kch ? 1 : 0));
+  return result;
 }

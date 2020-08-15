@@ -55,44 +55,21 @@ export default class ClassTable extends Vue {
 
   @Prop() private colorMapping!: { [id: string]: string };
 
-  parseWeek(data: string): number[] {
-    const res = data.match(/^(\d+)-(\d+)周(\((单|双)\))?$/);
-    const result: number[] = [];
-    if (res) {
-      const begin = parseInt(res[1]);
-      const end = parseInt(res[2]);
-      const step = res[3] ? 2 : 1;
-      for (let i = begin; i <= end; i += step) {
-        result.push(i);
-      }
-    } else {
-      data.split(",").forEach(d => {
-        const res = d.match(/^(\d+)周$/);
-        if (res) {
-          result.push(parseInt(res[1]));
-        }
-      });
-    }
-    return result;
-  }
-
-  parseBlock(data: string) {
-    const res = data.match(/^(\d+)-(\d+)节$/);
-    const result: number[] = [];
-    if (res) {
-      const begin = parseInt(res[1]);
-      const end = parseInt(res[2]);
-      for (let i = begin; i <= end; i += 1) {
-        result.push(i);
-      }
+  parseBin(data: number): number[] {
+    const result = [];
+    let i = 1;
+    while (data > 0) {
+      if (data % 2 == 1) result.push(i);
+      i += 1;
+      data = data >> 1;
     }
     return result;
   }
 
   mappingOf(course: Lesson): ClassTableMapping {
     const mapping: ClassTableMapping = {};
-    this.parseWeek(course.qsjsz).forEach(week => {
-      this.parseBlock(course.skjc).forEach(block => {
+    this.parseBin(course.zcd).forEach(week => {
+      this.parseBin(course.cdjc).forEach(block => {
         mapping[idOf(week, course.xqj, block)] = true;
       });
     });
