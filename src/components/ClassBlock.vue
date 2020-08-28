@@ -75,15 +75,16 @@ import {
   ClassTableMapping,
   idOf,
   ClassTableConfig,
-  LessonTimeLocation,
-  dayName
+  parseTimeLocationDay
 } from "@/models";
-import { parseTimeLocation } from "@/utils";
+
 import LessonDetail from "@/components/LessonDetail.vue";
 import Popper from "vue-popperjs";
 
 @Component({ components: { LessonDetail, Popper } })
 export default class ClassBlock extends Vue {
+  parseTimeLocationDay = parseTimeLocationDay;
+
   @Prop() private lessonData!: Lesson[];
 
   @Prop() private lessonDetail!: { [id: string]: LessonDetail };
@@ -115,21 +116,6 @@ export default class ClassBlock extends Vue {
       }
       result.push(course);
     }
-    return result;
-  }
-
-  parseTimeLocation(time: string, location: string): LessonTimeLocation[] {
-    return parseTimeLocation(time, location);
-  }
-
-  parseTimeLocationDay(time: string, location: string, day: number): string {
-    const tl = this.parseTimeLocation(time, location);
-    let result = "数据解析出错";
-    tl.forEach(x => {
-      if (x.time.substring(0, 3) == dayName[day - 1]) {
-        result = x.location;
-      }
-    });
     return result;
   }
 
