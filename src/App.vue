@@ -114,7 +114,7 @@
                             class="btn btn-outline-primary"
                             @click="downloadAsICS"
                           >
-                            导出为 ics 文件
+                            导出到 iCalendar
                           </button>
                         </div>
                       </div>
