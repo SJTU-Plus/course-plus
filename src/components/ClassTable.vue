@@ -34,10 +34,10 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import {
   Lesson,
   ClassTableMapping,
-  idOf,
   ClassTableConfig,
-  dayName,
-  LessonDetail
+  LessonDetail,
+  mappingOf,
+  dayName
 } from "@/models";
 import ClassBlock from "@/components/ClassBlock.vue";
 
@@ -45,6 +45,8 @@ import ClassBlock from "@/components/ClassBlock.vue";
   components: { ClassBlock }
 })
 export default class ClassTable extends Vue {
+  mappingOf = mappingOf;
+
   dayName = dayName;
 
   @Prop() lessons!: Lesson[];
@@ -54,27 +56,6 @@ export default class ClassTable extends Vue {
   @Prop() classTableConfig!: ClassTableConfig;
 
   @Prop() private colorMapping!: { [id: string]: string };
-
-  parseBin(data: number): number[] {
-    const result = [];
-    let i = 1;
-    while (data > 0) {
-      if (data % 2 == 1) result.push(i);
-      i += 1;
-      data = data >> 1;
-    }
-    return result;
-  }
-
-  mappingOf(course: Lesson): ClassTableMapping {
-    const mapping: ClassTableMapping = {};
-    this.parseBin(course.zcd).forEach(week => {
-      this.parseBin(course.cdjc).forEach(block => {
-        mapping[idOf(week, course.xqj, block)] = true;
-      });
-    });
-    return mapping;
-  }
 
   get allMapping() {
     const mm: { [id: string]: ClassTableMapping } = {};

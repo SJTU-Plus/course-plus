@@ -96,6 +96,30 @@
                       </div>
                     </div>
                   </div>
+                  <div class="form-row my-3">
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="form-group col-12">
+                          <label for="firstDayDate">本学期第一天</label>
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="firstDayDate"
+                            v-model="firstDayDate"
+                          />
+                        </div>
+                        <div class="col-12">
+                          <button
+                            type="button"
+                            class="btn btn-outline-primary"
+                            @click="downloadAsICS"
+                          >
+                            导出到 iCalendar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
@@ -151,7 +175,8 @@ import {
   Lesson,
   SearchFilter,
   ClassTableConfig,
-  LessonDetail
+  LessonDetail,
+  generateICS
 } from "./models";
 import chroma from "chroma-js";
 import LessonList from "./components/LessonList.vue";
@@ -160,7 +185,7 @@ import FilterForm from "./components/FilterForm.vue";
 import StarredForm from "./components/StarredForm.vue";
 import Loading from "./components/Loading.vue";
 import { fieldDict } from "./data";
-import { toChsDate, uniqueLessons } from "./utils";
+import { toChsDate, uniqueLessons, downloadFile } from "./utils";
 
 const dataURL = "/course-plus-data/";
 @Component({
@@ -242,6 +267,8 @@ export default class App extends Vue {
   lessonDetail: { [id: string]: LessonDetail } = {};
 
   uniqueLessons = uniqueLessons;
+
+  firstDayDate = "2020-09-07";
 
   created() {
     fetch(`${dataURL}lessionData_index.json`)
@@ -484,6 +511,13 @@ export default class App extends Vue {
       (val, idx) => (result[val.jxb_id] = colors[idx])
     );
     return result;
+  }
+
+  downloadAsICS() {
+    downloadFile(
+      `classtable-${this.selectedYear}-${this.selectedSemester}.ics`,
+      generateICS(this.selectedArrangeCourse, new Date(this.firstDayDate))
+    );
   }
 }
 </script>

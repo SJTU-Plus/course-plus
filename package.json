@@ -14,6 +14,7 @@
     "chroma-js": "^2.1.0",
     "core-js": "^3.6.5",
     "feather-icons": "^4.28.0",
+    "ics": "^2.24.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-feather-icons": "^5.1.0",

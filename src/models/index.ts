@@ -1,3 +1,6 @@
+import { createEvents, EventAttributes } from "ics";
+import { parseTimeLocation } from "@/utils";
+
 export interface LessonIndex {
   year: string;
   semester: string;
@@ -92,4 +95,101 @@ export interface LessonDetail {
     englishIntro: string;
     chineseIntro: string;
   };
+}
+
+export function parseBin(data: number): number[] {
+  const result = [];
+  let i = 1;
+  while (data > 0) {
+    if (data % 2 == 1) result.push(i);
+    i += 1;
+    data = data >> 1;
+  }
+  return result;
+}
+
+export function mappingOf(course: Lesson): ClassTableMapping {
+  const mapping: ClassTableMapping = {};
+  parseBin(course.zcd).forEach(week => {
+    parseBin(course.cdjc).forEach(block => {
+      mapping[idOf(week, course.xqj, block)] = true;
+    });
+  });
+  return mapping;
+}
+
+function addDays(date: Date, days: number): Date {
+  const nDate = new Date(date.valueOf());
+  nDate.setDate(nDate.getDate() + days);
+  return nDate;
+}
+
+const timeAt = [
+  "8:00",
+  "8:55",
+  "10:00",
+  "10:55",
+  "12:00",
+  "12:55",
+  "14:00",
+  "14:55",
+  "16:00",
+  "16:55",
+  "18:00",
+  "18:55",
+  "19:35",
+  "20:15"
+].map(x => {
+  const [hour, minute] = x.split(":");
+  return parseInt(hour) * 60 + parseInt(minute);
+});
+
+export function parseTimeLocationDay(
+  time: string,
+  location: string,
+  day: number
+): string {
+  const tl = parseTimeLocation(time, location);
+  let result = "数据解析出错";
+  tl.forEach(x => {
+    if (x.time.substring(0, 3) == dayName[day - 1]) {
+      result = x.location;
+    }
+  });
+  return result;
+}
+
+export function generateICS(lessons: Lesson[], begin: Date): string {
+  const events: EventAttributes[] = [];
+  lessons.forEach(lesson => {
+    parseBin(lesson.zcd).forEach(week => {
+      const blocks = parseBin(lesson.cdjc);
+      const start = Math.min(...blocks) - 1;
+      const end = Math.max(...blocks) - 1;
+      const time = addDays(begin, (week - 1) * 7 + lesson.xqj - 1);
+      const startAt = timeAt[start];
+      const endAt = timeAt[end] + 45;
+      const duration = endAt - startAt;
+      const event: EventAttributes = {
+        start: [
+          time.getFullYear(),
+          time.getMonth() + 1,
+          time.getDate(),
+          Math.floor(startAt / 60),
+          startAt % 60
+        ],
+        duration: { hours: Math.floor(duration / 60), minutes: duration % 60 },
+        title: `${lesson.kch} ${lesson.kcmc}`,
+        description: `${lesson.jszc}, ${lesson.xf} 学分, 第 ${week} 周`,
+        location: parseTimeLocationDay(lesson.sksj, lesson.jxdd, lesson.xqj)
+      };
+      events.push(event);
+    });
+  });
+  const { error, value } = createEvents(events);
+  if (error) {
+    alert(error);
+  }
+  if (value) return value;
+  else return "";
 }

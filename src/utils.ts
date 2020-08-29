@@ -43,3 +43,11 @@ export function uniqueLessons(lessons: Lesson[]): Lesson[] {
   result.sort((a, b) => (a.kch < b.kch ? -1 : a.kch > b.kch ? 1 : 0));
   return result;
 }
+
+export function downloadFile(filename: string, data: string) {
+  const link = document.createElement("a");
+  link.download = filename;
+  const blob = new Blob([data], { type: "text/plain" });
+  link.href = window.URL.createObjectURL(blob);
+  link.click();
+}
