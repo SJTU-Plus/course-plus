@@ -162,9 +162,11 @@ export default class LessonList extends Vue {
   }
 
   @Watch("data")
-  onDataChanged() {
-    this.pagedSize = this.increasement;
-    this.selfDiv.scrollTop = 0;
+  onDataChanged(oldData: Lesson[], newData: Lesson[]) {
+    if (oldData.length != newData.length) {
+      this.pagedSize = this.increasement;
+      this.selfDiv.scrollTop = 0;
+    }
   }
 
   star(id: string) {
