@@ -94,8 +94,20 @@
                           >
                         </span>
                       </div>
+                      <div class="row my-3">
+                        <span class="form-check col-12">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-outline-warning"
+                            @click="saveStarredCourse([])"
+                          >
+                            清除所有星标课程
+                          </button>
+                        </span>
+                      </div>
                     </div>
                   </div>
+                  <hr />
                   <div class="form-row my-3">
                     <div class="col-12">
                       <div class="row">
@@ -111,7 +123,7 @@
                         <div class="col-12">
                           <button
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-sm btn-outline-primary"
                             @click="downloadAsICS"
                           >
                             导出到 iCalendar
@@ -472,6 +484,9 @@ export default class App extends Vue {
     localStorage.setItem(
       `starred-${this.semesterID}`,
       JSON.stringify(this.starredCourses)
+    );
+    this.selectedStarredCourses = this.selectedStarredCourses.filter(x =>
+      data.includes(x)
     );
   }
 

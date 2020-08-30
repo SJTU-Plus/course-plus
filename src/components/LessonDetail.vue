@@ -10,7 +10,11 @@
         {{ lesson.kch }} {{ lesson.kcmc }}
       </h5>
       <h6 class="card-subtitle mb-2 text-muted">
-        <span class="mr-1">{{ lesson.jszc }} {{ lesson.kkxy }}</span>
+        <span>{{ lesson.jszc }}</span>
+        <span v-if="lesson.jszc != lesson.zjs"
+          >(上课教师: {{ lesson.zjs }})</span
+        >
+        <span class="ml-1">{{ lesson.kkxy }}</span>
       </h6>
 
       <p class="card-text">
