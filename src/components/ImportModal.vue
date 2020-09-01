@@ -2,7 +2,6 @@
   <div class="import-modal-mask">
     <div class="import-modal-wrapper">
       <div class="import-modal-container">
-
         <div class="import-modal-header">
           <h3>
             导入您的课程
@@ -10,22 +9,36 @@
         </div>
 
         <div class="import-modal-body">
-          <p>1. 访问 <a href="https://i.sjtu.edu.cn">https://i.sjtu.edu.cn</a></p>
-          <p>2. 信息查询 - 学生课表查询</p>
-          <p>3. 在 开发者工具 - 网络 中，找到形似 http://kbcx.sjtu.edu.cn/kbcx/xskbcx_cxXsKb.html 的请求。</p>
-          <p>4. 右键 复制 - 复制响应，并粘贴到下方文本框中。</p>
-          <textarea
-              class="form-control"
-              v-model="inputJsonData"
-          />
+          <p>
+            1. 访问 <a href="https://i.sjtu.edu.cn">https://i.sjtu.edu.cn</a>
+          </p>
+          <p>
+            2. 信息查询 - 学生课表查询
+          </p>
+          <p>
+            3. 在 开发者工具 - 网络 中，找到形似
+            http://kbcx.sjtu.edu.cn/kbcx/xskbcx_cxXsKb.html 的请求。
+          </p>
+          <p>
+            4. 右键 复制 - 复制响应，并粘贴到下方文本框中。
+          </p>
+          <textarea class="form-control" v-model="inputJsonData" />
         </div>
 
         <div class="import-modal-footer">
           <slot name="footer">
-            <button type="button" class="btn btn-sm btn-outline-secondary import-button" @click="$emit('cancel')">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary import-button"
+              @click="$emit('cancel')"
+            >
               取消
             </button>
-            <button type="button" class="btn btn-sm btn-outline-primary import-button" @click="$emit('confirm')">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary import-button"
+              @click="$emit('confirm')"
+            >
               导入
             </button>
           </slot>
@@ -39,8 +52,7 @@
 import { Component, Vue, PropSync } from "vue-property-decorator";
 @Component
 export default class ImportModal extends Vue {
-  @PropSync("jsonData", {type: String}) private inputJsonData!: string;
-
+  @PropSync("jsonData", { type: String }) private inputJsonData!: string;
 }
 </script>
 
@@ -64,7 +76,7 @@ export default class ImportModal extends Vue {
 
 .import-modal-container {
   width: 600px;
-  margin: 0px auto;
+  margin: 0 auto;
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;

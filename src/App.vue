@@ -58,7 +58,11 @@
                     >
                   </select>
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-primary" @click="showImportModal=true;">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary"
+                  @click="showImportModal = true"
+                >
                   从课表导入课程
                 </button>
                 <div class="col-12 mb-3">
@@ -183,7 +187,10 @@
     <import-modal
       v-if="showImportModal"
       :json-data="importJsonData"
-      @confirm="importCourses(); showImportModal = false;"
+      @confirm="
+        importCourses();
+        showImportModal = false;
+      "
       @cancel="showImportModal = false"
       @update:jsonData="updateJsonData"
     />
@@ -557,7 +564,9 @@ export default class App extends Vue {
 
   importCourses() {
     const importData = JSON.parse(this.importJsonData);
-    const courseIds = importData.kbList.map((item: { jxb_id: string; })=>item.jxb_id);
+    const courseIds = importData.kbList.map(
+      (item: { jxb_id: string }) => item.jxb_id
+    );
     console.log(courseIds);
     this.saveStarredCourse(this.starredCourses.concat(courseIds));
   }
