@@ -58,6 +58,9 @@
                     >
                   </select>
                 </div>
+                <button type="button" class="btn btn-sm btn-outline-primary" @click="showImportModal=true;">
+                  从课表导入课程
+                </button>
                 <div class="col-12 mb-3">
                   <Loading :ready="dataLoaded"></Loading>
                   <hr />
@@ -177,6 +180,13 @@
         </div>
       </div>
     </div>
+    <import-modal
+      v-if="showImportModal"
+      :json-data="importJsonData"
+      @confirm="importCourses(); showImportModal = false;"
+      @cancel="showImportModal = false"
+      @update:jsonData="updateJsonData"
+    />
   </div>
 </template>
 
@@ -196,12 +206,14 @@ import ClassTable from "./components/ClassTable.vue";
 import FilterForm from "./components/FilterForm.vue";
 import StarredForm from "./components/StarredForm.vue";
 import Loading from "./components/Loading.vue";
+import ImportModal from "@/components/ImportModal.vue";
 import { fieldDict } from "./data";
 import { toChsDate, uniqueLessons, downloadFile } from "./utils";
 
 const dataURL = "/course-plus-data/";
 @Component({
   components: {
+    ImportModal,
     LessonList,
     Loading,
     FilterForm,
@@ -242,6 +254,10 @@ export default class App extends Vue {
     "备注",
     "年级"
   ];
+
+  showImportModal = false;
+
+  importJsonData = "";
 
   dataLoaded = false;
 
@@ -533,6 +549,17 @@ export default class App extends Vue {
       `classtable-${this.selectedYear}-${this.selectedSemester}.ics`,
       generateICS(this.selectedArrangeCourse, new Date(this.firstDayDate))
     );
+  }
+
+  updateJsonData(value: string) {
+    this.importJsonData = value;
+  }
+
+  importCourses() {
+    const importData = JSON.parse(this.importJsonData);
+    const courseIds = importData.kbList.map((item: { jxb_id: string; })=>item.jxb_id);
+    console.log(courseIds);
+    this.saveStarredCourse(this.starredCourses.concat(courseIds));
   }
 }
 </script>
