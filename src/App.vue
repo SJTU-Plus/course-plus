@@ -58,13 +58,6 @@
                     >
                   </select>
                 </div>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-primary"
-                  @click="showImportModal = true"
-                >
-                  从课表导入课程
-                </button>
                 <div class="col-12 mb-3">
                   <Loading :ready="dataLoaded"></Loading>
                   <hr />
@@ -102,7 +95,7 @@
                         </span>
                       </div>
                       <div class="row my-3">
-                        <span class="form-check col-12">
+                        <div class="col-12 my-1">
                           <button
                             type="button"
                             class="btn btn-sm btn-outline-warning"
@@ -110,7 +103,16 @@
                           >
                             清除所有星标课程
                           </button>
-                        </span>
+                        </div>
+                        <div class="col-12 my-1">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-outline-secondary"
+                            @click="showImportModal = true"
+                          >
+                            从教学信息服务网导入课程
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
