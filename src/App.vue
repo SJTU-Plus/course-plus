@@ -308,7 +308,7 @@ export default class App extends Vue {
   firstDayDate = "2020-09-07";
 
   created() {
-    fetch(`${dataURL}lessionData_index.json`)
+    fetch(`${dataURL}lessonData_index.json`)
       .then(res => res.json())
       .then(data => {
         this.dataIndex = data;
@@ -468,7 +468,7 @@ export default class App extends Vue {
     //再获取数据
     if (foundFlag) {
       fetch(
-        `${dataURL}lessionData_${this.selectedYear}_${this.selectedSemester}.json`
+        `${dataURL}lessonData_${this.selectedYear}_${this.selectedSemester}.json`
       )
         .then(res => res.json())
         .then(data => {
