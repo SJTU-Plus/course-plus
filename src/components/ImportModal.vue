@@ -9,26 +9,30 @@
         </div>
 
         <div class="import-modal-body">
-          <p>
-            1. 右键点击
-            <a :href="importBookmark" target="_blank">此链接</a>
-            ，将其添加到书签列表。
-          </p>
-          <p>
-            2. 访问
-            <a href="https://i.sjtu.edu.cn" target="_blank"
-              >https://i.sjtu.edu.cn</a
-            >。
-          </p>
-          <p>
-            3. 进入 信息查询-学生课表查询
-          </p>
-          <p>
-            4. 点击刚刚保存的书签，您的课表信息被复制到剪贴板。
-          </p>
-          <p>
-            5. 将其粘贴到下方文本框中。
-          </p>
+          <p>步骤如下：</p>
+          <ol>
+            <li>
+              将链接直接拖拽至书签栏或在右键菜单选择保存至书签栏：
+              <a :href="importBookmark" target="_blank">
+                读取iSJTU页面上的课表
+              </a>
+              ，本链接包含JavaScript代码，能够运行于教学信息服务网页面上。
+            </li>
+            <li>
+              访问
+              <a href="https://i.sjtu.edu.cn" target="_blank">
+                https://i.sjtu.edu.cn
+              </a>
+              ，并进入 信息查询-学生课表查询
+            </li>
+            <li>
+              点击刚刚保存的书签，您的课表信息将被复制到剪贴板。
+            </li>
+            <li>
+              将其粘贴到下方文本框中，本页面能够智能读取课表信息。
+            </li>
+          </ol>
+
           <textarea class="form-control" v-model="inputJsonData" />
         </div>
 
