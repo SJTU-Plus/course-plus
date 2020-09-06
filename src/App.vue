@@ -156,7 +156,10 @@
             <div class="row">
               <div class="col d-flex d-row align-items-center">
                 <p class="text-muted my-3 small">
-                  本项目由
+                  <a href="https://github.com/SJTU-Plus/course-plus">
+                    本项目
+                  </a>
+                  由
                   <a href="https://sjtu-plus.github.io/">SJTU-Plus</a>
                   团队开发。
                 </p>
