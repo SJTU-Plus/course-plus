@@ -14,10 +14,11 @@
         <span v-if="lesson.jszc != lesson.zjs"
           >(上课教师: {{ lesson.zjs }})</span
         >
-        <span class="ml-1">{{ lesson.kkxy }}</span>
       </h6>
 
       <p class="card-text">
+        <span class="mr-1">{{ lesson.kkxy }}</span>
+        <span class="mr-1">{{ lesson.skyy }}</span>
         <span class="mr-1">{{ lesson.kklx }}</span>
         <span class="mr-1">{{ lesson.zhxs }}</span>
         <span class="mr-1">{{ lesson.rwzxs }} 学时</span>
