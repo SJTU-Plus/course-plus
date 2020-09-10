@@ -375,11 +375,9 @@ export default class App extends Vue {
           // eslint-disable-next-line
           const lessonAny = lesson as any;
           if (lessonAny[keywordType]) {
-            return (
-              lessonAny[keywordType]
-                .toLowerCase()
-                .search(keyword.toLowerCase()) > -1
-            );
+            return lessonAny[keywordType]
+              .toLowerCase()
+              .includes(keyword.toLowerCase());
           } else {
             return false;
           }
@@ -389,19 +387,19 @@ export default class App extends Vue {
       }
 
       if (scheduleKey) {
-        filteringData = filteringData.filter((lesson: Lesson) => {
-          return lesson.sksj.search(scheduleKey) > -1;
-        });
+        filteringData = filteringData.filter((lesson: Lesson) =>
+          lesson.sksj.includes(scheduleKey)
+        );
       }
       if (lecturerKey) {
-        filteringData = filteringData.filter((lesson: Lesson) => {
-          return lesson.jsxx.search(lecturerKey) > -1;
-        });
+        filteringData = filteringData.filter((lesson: Lesson) =>
+          lesson.jsxx.includes(lecturerKey)
+        );
       }
       if (placeKey) {
-        filteringData = filteringData.filter((lesson: Lesson) => {
-          return (lesson.jxdd ? lesson.jxdd : "").search(placeKey) > -1;
-        });
+        filteringData = filteringData.filter((lesson: Lesson) =>
+          (lesson.jxdd ? lesson.jxdd : "").includes(placeKey)
+        );
       }
       return filteringData;
     }
