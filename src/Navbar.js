@@ -48,7 +48,7 @@ export default () => {
       path: link.match,
     })
   }))
-  const linksComponent = match_links.map(link => <li className={`nav-item${link.match ? " active" : ""}`}>
+  const linksComponent = match_links.map(link => <li key={link.path} className={`nav-item${link.match ? " active" : ""}`}>
     <Link to={`/${semester}${link.path}`} className="nav-link">{link.text}</Link>
   </li>)
 
