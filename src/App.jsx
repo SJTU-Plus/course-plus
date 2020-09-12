@@ -1,5 +1,7 @@
 import './App.scss'
 
+import chroma from 'chroma-js'
+import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import {
   HashRouter as Router,
@@ -29,8 +31,20 @@ function App () {
       composition: ''
     })
 
-  const [starLesson, SetStarLesson] = useState([])
-  const [selectedLesson, setSelectedLesson] = useState([])
+  const [starLesson, setStarLesson] = useState(new Set(['(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1', '(2020-2021-1)-CS433-1']))
+  const [selectedLesson, setSelectedLesson] = useState(new Set('(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1'))
+
+  const colorize = (starLesson) => {
+    const colorScale = chroma.scale('Spectral').gamma(0.5)
+    // const colorScale = chroma.scale(['yellow', 'navy']).mode('lch');
+    const starLessonArray = [...starLesson]
+    const colors = colorScale.colors(starLessonArray.length)
+    const result = {}
+    sortedBy(starLessonArray).forEach(
+      (val, idx) => (result[val] = colors[idx])
+    )
+    return result
+  }
 
   return (
     <Router>
@@ -49,14 +63,21 @@ function App () {
               </Switch>
 
               <div className='container'>
-                <SemesterNav />
-                <hr />
+                <Switch>
+                  <Route exact path='/'>
+                    <SemesterNav />
+                  </Route>
+                  <Route path='/:semester/:path'>
+                    <SemesterNav />
+                    <hr />
+                  </Route>
+                </Switch>
                 <Switch>
                   <Route path='/:semester/browse'>
                     <FilterForm state={filterFormState} setState={setFilterFormState} />
                   </Route>
                   <Route path='/:semester/plan'>
-                    <PlanForm starLesson={starLesson} state={selectedLesson} setState={setSelectedLesson} />
+                    <PlanForm starLesson={starLesson} state={selectedLesson} setState={setSelectedLesson} colorMapping={colorize(starLesson)} />
                   </Route>
                 </Switch>
 
@@ -89,7 +110,7 @@ function App () {
                   <LessonList filterData={filterFormState} />
                 </Route>
                 <Route path='/:semester/plan'>
-                  <ClassTable selectedLesson={selectedLesson} />
+                  <ClassTable selectedLesson={selectedLesson} colorMapping={colorize(starLesson)} />
                 </Route>
               </Switch>
             </div>

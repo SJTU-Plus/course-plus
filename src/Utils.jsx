@@ -30,6 +30,21 @@ export function parseTimeLocation (
   return tl
 }
 
+export function parseTimeLocationDay (
+  time,
+  location,
+  day
+) {
+  const tl = parseTimeLocation(time, location)
+  let result = '数据解析出错'
+  tl.forEach(x => {
+    if (x.time.substring(0, 3) === dayName[day - 1]) {
+      result = x.location
+    }
+  })
+  return result
+}
+
 export function TimeLocation (props) {
   const result = parseTimeLocation(props.time, props.location)
   return (<ul className='list-unstyled'>
@@ -41,4 +56,29 @@ export function TimeLocation (props) {
 
 export function useLessonData (semester) {
   return useSWR(`/course-plus-data/lessonData_${semester}.json`, lessonFetcher)
+}
+
+export const dayName = [
+  '星期一',
+  '星期二',
+  '星期三',
+  '星期四',
+  '星期五',
+  '星期六',
+  '星期日'
+]
+
+export function parseBin (data) {
+  const result = []
+  let i = 1
+  while (data > 0) {
+    if (data % 2 === 1) result.push(i)
+    i += 1
+    data = data >> 1
+  }
+  return result
+}
+
+export function checkBin (data, bit) {
+  return (data & (1 << bit)) !== 0
 }

@@ -29,6 +29,7 @@
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
     "bootstrap-icons": "^1.0.0",
+    "chroma-js": "^2.1.0",
     "ics": "^2.24.0",
     "lodash": "^4.17.20",
     "query-string": "^6.13.1",
