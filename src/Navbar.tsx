@@ -21,16 +21,7 @@ function CoursePlusSvg () {
         <stop offset='100%' stopColor='#514A9D' />
       </linearGradient>
     </defs>
-    <path
-      fillRule='evenodd'
-      fill='url(#gradient)'
-      d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z'
-    />
-    <path
-      fillRule='evenodd'
-      fill='url(#gradient)'
-      d='M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z'
-    />
+    <path fillRule='evenodd' fill='url(#gradient)' d='M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zM8.5 8.5a.5.5 0 0 0-1 0V10H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V11H10a.5.5 0 0 0 0-1H8.5V8.5z' />
   </svg>
 }
 
@@ -54,7 +45,7 @@ export default () => {
 
   return (
     <nav className='navbar navbar-light navbar-expand course-navbar mb-3'>
-      <span className='navbar-brand mb-0'><CoursePlusSvg/> Course+</span>
+      <span className='navbar-brand mb-0'><CoursePlusSvg /> Course+</span>
       <div className='collapse navbar-collapse'>
         <ul className='navbar-nav ml-auto'>
           {semester ? linksComponent : null}

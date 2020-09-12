@@ -1,6 +1,6 @@
 import './App.scss'
 
-import React from 'react'
+import React, { useReducer, useState } from 'react'
 import {
   HashRouter as Router,
   Route,
@@ -8,12 +8,30 @@ import {
 } from 'react-router-dom'
 import { QueryParamProvider } from 'use-query-params'
 
+import ClassTable from './ClassTable'
 import FilterForm from './FilterForm'
 import LessonList from './LessonList'
 import Navbar from './Navbar'
+import PlanForm from './PlanForm'
 import SemesterNav from './SemesterNav'
 
 function App () {
+  const [filterFormState, setFilterFormState] = useReducer(
+    (state, newState) => ({ ...state, ...newState }), {
+      checkedNj: new Set(),
+      checkedLx: new Set(),
+      checkedYx: new Set(),
+      scheduleKey: '',
+      lecturerKey: '',
+      placeKey: '',
+      keywordz: 'kcmc',
+      keyword: '',
+      composition: ''
+    })
+
+  const [starLesson, SetStarLesson] = useState([])
+  const [selectedLesson, setSelectedLesson] = useState([])
+
   return (
     <Router>
       <QueryParamProvider ReactRouterRoute={Route}>
@@ -32,10 +50,13 @@ function App () {
 
               <div className='container'>
                 <SemesterNav />
+                <hr />
                 <Switch>
                   <Route path='/:semester/browse'>
-                    <FilterForm />
-
+                    <FilterForm state={filterFormState} setState={setFilterFormState} />
+                  </Route>
+                  <Route path='/:semester/plan'>
+                    <PlanForm starLesson={starLesson} state={selectedLesson} setState={setSelectedLesson} />
                   </Route>
                 </Switch>
 
@@ -65,7 +86,10 @@ function App () {
             <div className='col-9 h-100 overflow-auto'>
               <Switch>
                 <Route path='/:semester/browse'>
-                  <LessonList />
+                  <LessonList filterData={filterFormState} />
+                </Route>
+                <Route path='/:semester/plan'>
+                  <ClassTable selectedLesson={selectedLesson} />
                 </Route>
               </Switch>
             </div>

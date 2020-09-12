@@ -1,8 +1,7 @@
 import React from 'react'
 import useSWR from 'swr'
-import { useQueryParam } from 'use-query-params'
 
-import fetcher from './SWRFetcher'
+import { lessonFetcher } from './SWRFetcher'
 
 export function BreakLine (props) {
   const result = props.data.split(props.sep)
@@ -41,14 +40,5 @@ export function TimeLocation (props) {
 }
 
 export function useLessonData (semester) {
-  return useSWR(`/course-plus-data/lessonData_${semester}.json`, fetcher)
-}
-
-export function useQueryParamReplace (key, config) {
-  const [query, setQuery] = useQueryParam(key, config)
-
-  const setQueryReplace = (newQuery, updateType = 'replaceIn') =>
-    setQuery(newQuery, updateType)
-
-  return [query, setQueryReplace]
+  return useSWR(`/course-plus-data/lessonData_${semester}.json`, lessonFetcher)
 }
