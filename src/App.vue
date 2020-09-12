@@ -4,18 +4,42 @@
       <div class="row h-100">
         <div class="col-3 h-100 bg-light overflow-auto">
           <nav class="navbar navbar-light mb-3">
-            <span class="navbar-brand mb-0" v-if="route == 'search'"
-              >SJTU 学期开课表 · 搜索</span
-            >
+            <span class="navbar-brand mb-0">
+              <svg
+                width="1.25rem"
+                height="1.25rem"
+                viewBox="0 0 16 16"
+                class="bi bi-calendar-plus mr-1"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <linearGradient id="gradient" gradientTransform="rotate(45)">
+                    >
+                    <stop offset="0%" stop-color="#24C6DC" />
+                    <stop offset="100%" stop-color="#514A9D" />
+                  </linearGradient>
+                </defs>
+                <path
+                  fill-rule="evenodd"
+                  fill="url(#gradient)"
+                  d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  fill="url(#gradient)"
+                  d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
+                />
+              </svg>
+              Course+ / <span v-if="route == 'arrange'">排课</span>
+              <span v-if="route == 'search'">搜索</span>
+            </span>
             <a
               class="small text-muted"
               v-if="route == 'search'"
               @click="route = 'arrange'"
               href="javascript:"
               >切换到排课</a
-            >
-            <span class="navbar-brand mb-0" v-if="route == 'arrange'"
-              >SJTU 学期开课表 · 排课</span
             >
             <a
               class="small text-muted"
@@ -156,9 +180,7 @@
             <div class="row">
               <div class="col d-flex d-row align-items-center">
                 <p class="text-muted my-3 small">
-                  <a href="https://github.com/SJTU-Plus/course-plus">
-                    本项目
-                  </a>
+                  <a href="https://github.com/SJTU-Plus/course-plus">本项目</a>
                   由
                   <a href="https://sjtu-plus.github.io/">SJTU-Plus</a>
                   团队开发。
