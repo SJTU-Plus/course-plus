@@ -1,0 +1,11 @@
+@import "bootstrap/scss/bootstrap";
+
+.course-navbar {
+  ul {
+    li.active {
+      a {
+        border-bottom: 1px solid theme-color("dark");
+      }
+    }
+  }
+}
