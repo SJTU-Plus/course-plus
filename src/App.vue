@@ -243,8 +243,9 @@ import Loading from "./components/Loading.vue";
 import ImportModal from "@/components/ImportModal.vue";
 import { fieldDict } from "./data";
 import { toChsDate, uniqueLessons, downloadFile } from "./utils";
+import pako from "pako";
 
-const dataURL = "/course-plus-data/";
+const dataURL = "/course-plus-data/zipped/";
 @Component({
   components: {
     ImportModal,
@@ -335,6 +336,7 @@ export default class App extends Vue {
   created() {
     fetch(`${dataURL}lessonData_index.json`)
       .then(res => res.json())
+      .then(res => JSON.parse(pako.inflate(atob(res.data), { to: "string" })))
       .then(data => {
         this.dataIndex = data;
         this.selectedYear = this.dataIndex[this.dataIndex.length - 1]["year"];
@@ -347,6 +349,7 @@ export default class App extends Vue {
       });
     fetch(`${dataURL}lesson_description_2019.json`)
       .then(res => res.json())
+      .then(res => JSON.parse(pako.inflate(atob(res.data), { to: "string" })))
       .then(data => {
         const lessonDetail: { [id: string]: LessonDetail } = {};
         for (const key in data) {
@@ -494,6 +497,7 @@ export default class App extends Vue {
         `${dataURL}lessonData_${this.selectedYear}_${this.selectedSemester}.json`
       )
         .then(res => res.json())
+        .then(res => JSON.parse(pako.inflate(atob(res.data), { to: "string" })))
         .then(data => {
           // eslint-disable-next-line
           data.forEach((item: any) => {
