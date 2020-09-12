@@ -2,13 +2,12 @@ import './App.scss'
 
 import chroma from 'chroma-js'
 import sortedBy from 'lodash/sortBy'
-import React, { useReducer, useState } from 'react'
+import React, { useReducer } from 'react'
 import {
   HashRouter as Router,
   Route,
   Switch
 } from 'react-router-dom'
-import { QueryParamProvider } from 'use-query-params'
 
 import ClassTable from './ClassTable'
 import FilterForm from './FilterForm'
@@ -16,6 +15,7 @@ import LessonList from './LessonList'
 import Navbar from './Navbar'
 import PlanForm from './PlanForm'
 import SemesterNav from './SemesterNav'
+import { useLocalStorageSet } from './Utils'
 
 function App () {
   const [filterFormState, setFilterFormState] = useReducer(
@@ -26,13 +26,13 @@ function App () {
       scheduleKey: '',
       lecturerKey: '',
       placeKey: '',
-      keywordz: 'kcmc',
+      keywordType: 'kcmc',
       keyword: '',
       composition: ''
     })
 
-  const [starLesson, setStarLesson] = useState(new Set(['(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1', '(2020-2021-1)-CS433-1']))
-  const [selectedLesson, setSelectedLesson] = useState(new Set('(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1'))
+  const [starLesson, setStarLesson] = useLocalStorageSet('starLesson', new Set(['(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1', '(2020-2021-1)-CS433-1']))
+  const [selectedLesson, setSelectedLesson] = useLocalStorageSet('selectedLesson', new Set(['(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1']))
 
   const colorize = (starLesson) => {
     const colorScale = chroma.scale('Spectral').gamma(0.5)
@@ -48,75 +48,73 @@ function App () {
 
   return (
     <Router>
-      <QueryParamProvider ReactRouterRoute={Route}>
-        <div className='container-fluid h-100'>
-          <div className='row h-100'>
-            <div className='col-3 h-100 bg-light overflow-auto'>
+      <div className='container-fluid h-100'>
+        <div className='row h-100'>
+          <div className='col-3 h-100 bg-light overflow-auto'>
 
+            <Switch>
+              <Route exact path='/'>
+                <Navbar />
+              </Route>
+              <Route path='/:semester'>
+                <Navbar />
+              </Route>
+            </Switch>
+
+            <div className='container'>
               <Switch>
                 <Route exact path='/'>
-                  <Navbar />
+                  <SemesterNav />
                 </Route>
-                <Route path='/:semester'>
-                  <Navbar />
+                <Route path='/:semester/:path'>
+                  <SemesterNav />
+                  <hr />
+                </Route>
+              </Switch>
+              <Switch>
+                <Route path='/:semester/browse'>
+                  <FilterForm state={filterFormState} setState={setFilterFormState} />
+                </Route>
+                <Route path='/:semester/plan'>
+                  <PlanForm starLesson={starLesson} state={selectedLesson} setState={setSelectedLesson} colorMapping={colorize(starLesson)} />
                 </Route>
               </Switch>
 
-              <div className='container'>
-                <Switch>
-                  <Route exact path='/'>
-                    <SemesterNav />
-                  </Route>
-                  <Route path='/:semester/:path'>
-                    <SemesterNav />
-                    <hr />
-                  </Route>
-                </Switch>
-                <Switch>
-                  <Route path='/:semester/browse'>
-                    <FilterForm state={filterFormState} setState={setFilterFormState} />
-                  </Route>
-                  <Route path='/:semester/plan'>
-                    <PlanForm starLesson={starLesson} state={selectedLesson} setState={setSelectedLesson} colorMapping={colorize(starLesson)} />
-                  </Route>
-                </Switch>
-
-                <p className='text-muted my-3 small'>
-                  免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。具体开课情况以教务网为准。
-                </p>
-                <p className='text-muted my-3 small'>
-                  隐私政策：访问本网站，即代表您同意本网站使用“站长统计”收集您的访问信息。根据相关法律法规，本站不对欧盟用户提供服务。
-                </p>
-                <div className='row'>
-                  <div className='col d-flex d-row align-items-center'>
-                    <p className='text-muted my-3 small'>
-                      <a href='https://github.com/SJTU-Plus/course-plus'>
-                        本项目
-                      </a>
+              <p className='text-muted my-3 small'>
+                免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。具体开课情况以教务网为准。
+              </p>
+              <p className='text-muted my-3 small'>
+                隐私政策：访问本网站，即代表您同意本网站使用“站长统计”收集您的访问信息。根据相关法律法规，本站不对欧盟用户提供服务。
+              </p>
+              <div className='row'>
+                <div className='col d-flex d-row align-items-center'>
+                  <p className='text-muted my-3 small'>
+                    <a href='https://github.com/SJTU-Plus/course-plus'>
+                      本项目
+                    </a>
                       由
-                      <a href='https://sjtu-plus.github.io/'>SJTU-Plus</a>
+                    <a href='https://sjtu-plus.github.io/'>SJTU-Plus</a>
                       团队开发。
-                    </p>
-                  </div>
-                  <div className='col-auto m-0 p-0 d-flex d-row align-items-center'>
-                    {/* <gh-btns-star slug="sjtu-plus/course-plus" show-count /> */}
-                  </div>
+                  </p>
+                </div>
+                <div className='col-auto m-0 p-0 d-flex d-row align-items-center'>
+                  {/* <gh-btns-star slug="sjtu-plus/course-plus" show-count /> */}
                 </div>
               </div>
             </div>
-            <div className='col-9 h-100 overflow-auto'>
-              <Switch>
-                <Route path='/:semester/browse'>
-                  <LessonList filterData={filterFormState} />
-                </Route>
-                <Route path='/:semester/plan'>
-                  <ClassTable selectedLesson={selectedLesson} colorMapping={colorize(starLesson)} />
-                </Route>
-              </Switch>
-            </div>
+          </div>
+          <div className='col-9 h-100 overflow-auto'>
+            <Switch>
+              <Route path='/:semester/browse'>
+                <LessonList filterData={filterFormState} />
+              </Route>
+              <Route path='/:semester/plan'>
+                <ClassTable selectedLesson={selectedLesson} colorMapping={colorize(starLesson)} />
+              </Route>
+            </Switch>
           </div>
         </div>
-      </QueryParamProvider>
+      </div>
     </Router>
   )
 }

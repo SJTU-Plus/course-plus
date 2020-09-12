@@ -11,7 +11,7 @@ import {
   withRouter
 } from 'react-router-dom'
 
-import { useLessonData } from './Utils'
+import { filterKeyword, useLessonData } from './Utils'
 
 export default withRouter(({ history, state, setState }) => {
   const { semester } = useParams()
@@ -33,10 +33,13 @@ export default withRouter(({ history, state, setState }) => {
     }
     setState({ [name]: set })
   }
-  const dataNj = countBy(flatMap(lessons, lesson => lesson.nj.split(',')))
-  const dataLx = countBy(lessons, 'kcxzmc')
-  const dataYx = countBy(lessons, 'kkxy')
+
   if (lessons) {
+    const lessonFiltered = filterKeyword(lessons, state)
+    const dataNj = countBy(flatMap(lessonFiltered, lesson => lesson.nj.split(',')))
+    const dataLx = countBy(lessonFiltered, 'kcxzmc')
+    const dataYx = countBy(lessonFiltered, 'kkxy')
+
     return (
       <div>
         <Form.Row>

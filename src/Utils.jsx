@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useSWR from 'swr'
 
 import { lessonFetcher } from './SWRFetcher'
@@ -81,4 +81,81 @@ export function parseBin (data) {
 
 export function checkBin (data, bit) {
   return (data & (1 << bit)) !== 0
+}
+
+export function useLocalStorageSet (key, initialValue) {
+  // State to store our value
+  // Pass initial state function to useState so logic is only executed once
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      // Get from local storage by key
+      const item = window.localStorage.getItem(key)
+      // Parse stored json or if none return initialValue
+      return item ? new Set(JSON.parse(item)) : initialValue
+    } catch (error) {
+      // If error also return initialValue
+      console.log(error)
+      return initialValue
+    }
+  })
+
+  // Return a wrapped version of useState's setter function that ...
+  // ... persists the new value to localStorage.
+  const setValue = value => {
+    try {
+      // Allow value to be a function so we have same API as useState
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value
+      // Save state
+      setStoredValue(valueToStore)
+      // Save to local storage
+      window.localStorage.setItem(key, JSON.stringify([...valueToStore]))
+    } catch (error) {
+      // A more advanced implementation would handle the error case
+      console.log(error)
+    }
+  }
+
+  return [storedValue, setValue]
+}
+
+export function filterKeyword (dataRaw, filterForm) {
+  let filteringData = dataRaw
+  const keyword = filterForm.keyword
+  const keywordType = filterForm.keywordType
+  const scheduleKey = filterForm.scheduleKey
+  const lecturerKey = filterForm.lecturerKey
+  const placeKey = filterForm.placeKey
+  if (keyword) {
+    filteringData = filteringData.filter(lesson => {
+      if (lesson[keywordType]) {
+        return lesson[keywordType]
+          .toLowerCase()
+          .includes(keyword.toLowerCase())
+      } else {
+        return false
+      }
+    })
+  }
+  if (scheduleKey) {
+    filteringData = filteringData.filter(lesson =>
+      lesson.sksj.includes(scheduleKey)
+    )
+  }
+  if (lecturerKey) {
+    filteringData = filteringData.filter(lesson =>
+      lesson.jsxx.includes(lecturerKey)
+    )
+  }
+  if (placeKey) {
+    filteringData = filteringData.filter(lesson =>
+      (lesson.jxdd || '').includes(placeKey)
+    )
+  }
+  return filteringData
+}
+
+export function filterDataForm (dataRaw, filterForm) {
+  const filteringData = filterKeyword(dataRaw, filterForm)
+  return filteringData
 }

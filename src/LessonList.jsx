@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom'
 
 import LessonRow from './LessonRow'
-import { useLessonData } from './Utils'
+import { filterDataForm, useLessonData } from './Utils'
 
 const tableHeader = [
   '课号',
@@ -19,9 +19,10 @@ const tableHeader = [
 
 export default ({ filterData }) => {
   const { semester } = useParams()
-  const { data: lessons } = useLessonData(semester)
+  const { data: lessonsRaw } = useLessonData(semester)
 
-  if (lessons) {
+  if (lessonsRaw) {
+    const lessons = filterDataForm(lessonsRaw, filterData)
     return (
       <div>
         <p className='text-center mt-3'>共 {lessons.length} 条记录</p>
