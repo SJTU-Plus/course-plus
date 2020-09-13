@@ -7,7 +7,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout
         uses: actions/checkout@v2.3.1
         with:
           persist-credentials: false
@@ -28,7 +28,9 @@ jobs:
           yarn --frozen-lockfile --non-interactive
       - name: Build
         run: yarn build
-      - name: Deploy 🚀
+      - name: Remove jsmap
+        run: rm -rf dist/*.map
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.5.7
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
