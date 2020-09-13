@@ -3,19 +3,18 @@ import useSWR from 'swr'
 
 import { lessonFetcher } from './SWRFetcher'
 
-export function BreakLine (props) {
+export function BreakLine(props) {
   const result = props.data.split(props.sep)
-  return (<ul className='list-unstyled'>
-    {result.map((x, idx) =>
-      <li key={idx}>{x}</li>
-    )}
-  </ul>)
+  return (
+    <ul className='list-unstyled'>
+      {result.map((x, idx) => (
+        <li key={idx}>{x}</li>
+      ))}
+    </ul>
+  )
 }
 
-export function parseTimeLocation (
-  time,
-  location
-) {
+export function parseTimeLocation(time, location) {
   const tl = []
   if (!time) time = ''
   if (!location) location = ''
@@ -24,20 +23,17 @@ export function parseTimeLocation (
   for (let i = 0; i < Math.max(tt.length, ll.length); i++) {
     const time = i < tt.length ? tt[i] : ''
     const location = i < ll.length ? ll[i] : ''
-    if (tl.find(val => val.time === time && val.location === location)) continue
+    if (tl.find((val) => val.time === time && val.location === location))
+      continue
     tl.push({ time, location })
   }
   return tl
 }
 
-export function parseTimeLocationDay (
-  time,
-  location,
-  day
-) {
+export function parseTimeLocationDay(time, location, day) {
   const tl = parseTimeLocation(time, location)
   let result = '数据解析出错'
-  tl.forEach(x => {
+  tl.forEach((x) => {
     if (x.time.substring(0, 3) === dayName[day - 1]) {
       result = x.location
     }
@@ -45,16 +41,20 @@ export function parseTimeLocationDay (
   return result
 }
 
-export function TimeLocation (props) {
+export function TimeLocation(props) {
   const result = parseTimeLocation(props.time, props.location)
-  return (<ul className='list-unstyled'>
-    {result.map((lesson, idx) =>
-      <li key={idx}>{lesson.time} {lesson.location}</li>
-    )}
-  </ul>)
+  return (
+    <ul className='list-unstyled'>
+      {result.map((lesson, idx) => (
+        <li key={idx}>
+          {lesson.time} {lesson.location}
+        </li>
+      ))}
+    </ul>
+  )
 }
 
-export function useLessonData (semester) {
+export function useLessonData(semester) {
   return useSWR(`/course-plus-data/lessonData_${semester}.json`, lessonFetcher)
 }
 
@@ -65,10 +65,10 @@ export const dayName = [
   '星期四',
   '星期五',
   '星期六',
-  '星期日'
+  '星期日',
 ]
 
-export function parseBin (data) {
+export function parseBin(data) {
   const result = []
   let i = 1
   while (data > 0) {
@@ -79,11 +79,11 @@ export function parseBin (data) {
   return result
 }
 
-export function checkBin (data, bit) {
+export function checkBin(data, bit) {
   return (data & (1 << bit)) !== 0
 }
 
-export function useLocalStorageSet (key, initialValue) {
+export function useLocalStorageSet(key, initialValue) {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState(() => {
@@ -101,7 +101,7 @@ export function useLocalStorageSet (key, initialValue) {
 
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
-  const setValue = value => {
+  const setValue = (value) => {
     try {
       // Allow value to be a function so we have same API as useState
       const valueToStore =
@@ -119,7 +119,7 @@ export function useLocalStorageSet (key, initialValue) {
   return [storedValue, setValue]
 }
 
-export function filterKeyword (dataRaw, filterForm) {
+export function filterKeyword(dataRaw, filterForm) {
   let filteringData = dataRaw
   const keyword = filterForm.keyword
   const keywordType = filterForm.keywordType
@@ -129,53 +129,55 @@ export function filterKeyword (dataRaw, filterForm) {
   const composition = filterForm.composition
 
   if (keyword) {
-    filteringData = filteringData.filter(lesson => {
+    filteringData = filteringData.filter((lesson) => {
       if (lesson[keywordType]) {
-        return lesson[keywordType]
-          .toLowerCase()
-          .includes(keyword.toLowerCase())
+        return lesson[keywordType].toLowerCase().includes(keyword.toLowerCase())
       } else {
         return false
       }
     })
   }
   if (scheduleKey) {
-    filteringData = filteringData.filter(lesson =>
+    filteringData = filteringData.filter((lesson) =>
       lesson.sksj.includes(scheduleKey)
     )
   }
   if (lecturerKey) {
-    filteringData = filteringData.filter(lesson =>
+    filteringData = filteringData.filter((lesson) =>
       lesson.jsxx.includes(lecturerKey)
     )
   }
   if (placeKey) {
-    filteringData = filteringData.filter(lesson =>
+    filteringData = filteringData.filter((lesson) =>
       (lesson.jxdd || '').includes(placeKey)
     )
   }
   if (composition) {
-    filteringData = filteringData.filter(lesson =>
-      lesson.jxbzc.split(';').some(x => x.includes(composition))
+    filteringData = filteringData.filter((lesson) =>
+      lesson.jxbzc.split(';').some((x) => x.includes(composition))
     )
   }
   return filteringData
 }
 
-export function filterDataForm (dataRaw, filterForm) {
+export function filterDataForm(dataRaw, filterForm) {
   let filteringData = filterKeyword(dataRaw, filterForm)
   const checkedNj = filterForm.checkedNj
   const checkedLx = filterForm.checkedLx
   const checkedYx = filterForm.checkedYx
 
   if (checkedNj.size) {
-    filteringData = filteringData.filter(lesson => lesson.nj.split(',').some(x => checkedNj.has(x)))
+    filteringData = filteringData.filter((lesson) =>
+      lesson.nj.split(',').some((x) => checkedNj.has(x))
+    )
   }
   if (checkedLx.size) {
-    filteringData = filteringData.filter(lesson => checkedLx.has(lesson.kcxzmc))
+    filteringData = filteringData.filter((lesson) =>
+      checkedLx.has(lesson.kcxzmc)
+    )
   }
   if (checkedYx.size) {
-    filteringData = filteringData.filter(lesson => checkedYx.has(lesson.kkxy))
+    filteringData = filteringData.filter((lesson) => checkedYx.has(lesson.kkxy))
   }
   return filteringData
 }
