@@ -54,6 +54,7 @@ function App() {
           window.location.href = '/login?app=course_plus'
         }
       })
+      .catch(e => window.location.href = '/login?app=course_plus')
   }
 
   const colorize = (starLesson) => {
