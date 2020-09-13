@@ -1,5 +1,6 @@
 import './App.scss'
 
+import axios from 'axios'
 import chroma from 'chroma-js'
 import sortedBy from 'lodash/sortBy'
 import React, { useReducer } from 'react'
@@ -38,6 +39,22 @@ function App() {
     'selectedLesson',
     new Set([])
   )
+  const [sjtuLesson, setSjtuLesson] = useLocalStorageSet(
+    'sjtuLesson',
+    new Set([])
+  )
+
+  const syncFromISJTU = (semester) => {
+    axios
+      .get(`/api/course/lesson?term=${semester.replace('_', '-')}`)
+      .then((resp) => {
+        if (resp?.data?.error === 'success') {
+          setSjtuLesson(new Set(resp.data.entities.map((x) => x.name)))
+        } else {
+          window.location.href = '/login?app=course_plus'
+        }
+      })
+  }
 
   const colorize = (starLesson) => {
     const colorScale = chroma.scale('Spectral').gamma(0.5)
@@ -88,6 +105,15 @@ function App() {
                     colorMapping={colorize(starLesson)}
                   />
                 </Route>
+                <Route path='/:semester/classtable'>
+                  <PlanForm
+                    starLesson={sjtuLesson}
+                    state={sjtuLesson}
+                    classTableMode
+                    syncFromISJTU={syncFromISJTU}
+                    colorMapping={colorize(sjtuLesson)}
+                  />
+                </Route>
               </Switch>
 
               <p className='text-muted my-3 small'>
@@ -131,6 +157,12 @@ function App() {
                 <ClassTable
                   selectedLesson={selectedLesson}
                   colorMapping={colorize(starLesson)}
+                />
+              </Route>
+              <Route path='/:semester/classtable'>
+                <ClassTable
+                  selectedLesson={sjtuLesson}
+                  colorMapping={colorize(sjtuLesson)}
                 />
               </Route>
             </Switch>

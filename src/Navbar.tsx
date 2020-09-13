@@ -32,6 +32,7 @@ export default () => {
   const links = [
     { path: '/browse', text: '搜索', match: '/:semester/browse' },
     { path: '/plan', text: '排课', match: '/:semester/plan' },
+    { path: '/classtable', text: '课表', match: '/:semester/classtable' },
   ]
   const match_links = links.map((link) => ({
     path: link.path,
