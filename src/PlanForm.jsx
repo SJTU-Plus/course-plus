@@ -16,7 +16,14 @@ function downloadFile(filename, data) {
   link.click()
 }
 
-export default ({ state, setState, starLesson, colorMapping }) => {
+export default ({
+  state,
+  setState,
+  starLesson,
+  colorMapping,
+  classTableMode,
+  syncFromISJTU,
+}) => {
   const { semester } = useParams()
   const { data: lessons } = useLessonData(semester)
   const [firstDayDate, setFirstDayDate] = useState('2020-09-07')
@@ -55,7 +62,7 @@ export default ({ state, setState, starLesson, colorMapping }) => {
       <div>
         <Form.Row className='mb-3'>
           <Form.Label>
-            星标课程 (
+            {classTableMode ? '已选课程' : '星标课程'} (
             {sumBy(
               uniqBy(selectedLessonObj, 'jxbmc').map((l) => parseFloat(l.xf))
             )}{' '}
@@ -71,12 +78,16 @@ export default ({ state, setState, starLesson, colorMapping }) => {
                 id={lesson.jxbmc}
                 custom
               >
-                <Form.Check.Input
-                  type='checkbox'
-                  checked={state.has(lesson.jxbmc)}
-                  onChange={handleCheckChange}
-                  value={lesson.jxbmc}
-                />
+                {classTableMode ? (
+                  ''
+                ) : (
+                  <Form.Check.Input
+                    type='checkbox'
+                    checked={state.has(lesson.jxbmc)}
+                    onChange={handleCheckChange}
+                    value={lesson.jxbmc}
+                  />
+                )}
                 <Form.Check.Label>
                   <span
                     className='course-square'
@@ -92,6 +103,19 @@ export default ({ state, setState, starLesson, colorMapping }) => {
         </Form.Row>
 
         <Form.Row className='mb-1'>
+          {classTableMode ? (
+            <div className='col-12 mb-5'>
+              <button
+                type='button'
+                className='btn btn-sm btn-outline-primary'
+                onClick={() => syncFromISJTU(semester)}
+              >
+                从教学信息服务网同步
+              </button>
+            </div>
+          ) : (
+            ''
+          )}
           <Form.Group className='col-12 mb-1'>
             <Form.Label>本学期第一天</Form.Label>
             <Form.Control
@@ -100,7 +124,7 @@ export default ({ state, setState, starLesson, colorMapping }) => {
               onChange={(e) => setFirstDayDate(e.target.value)}
             />
           </Form.Group>
-          <div className='col-12'>
+          <div className='col-12 mb-1'>
             <button
               type='button'
               className='btn btn-sm btn-outline-primary'
