@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "parcel build index.html --public-url ./course-plus/",
+    "build": "parcel build index.html --public-url /course-plus/",
     "lint": "yarn lint:eslint",
     "lint:eslint": "eslint --ext .jsx,.js,.ts,.tsx src",
     "lint:fix": "yarn lint:eslint --fix",
