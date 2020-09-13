@@ -3,11 +3,7 @@ import './App.scss'
 import chroma from 'chroma-js'
 import sortedBy from 'lodash/sortBy'
 import React, { useReducer } from 'react'
-import {
-  HashRouter as Router,
-  Route,
-  Switch
-} from 'react-router-dom'
+import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 
 import ClassTable from './ClassTable'
 import FilterForm from './FilterForm'
@@ -17,9 +13,10 @@ import PlanForm from './PlanForm'
 import SemesterNav from './SemesterNav'
 import { useLocalStorageSet } from './Utils'
 
-function App () {
+function App() {
   const [filterFormState, setFilterFormState] = useReducer(
-    (state, newState) => ({ ...state, ...newState }), {
+    (state, newState) => ({ ...state, ...newState }),
+    {
       checkedNj: new Set(),
       checkedLx: new Set(),
       checkedYx: new Set(),
@@ -28,11 +25,18 @@ function App () {
       placeKey: '',
       keywordType: 'kcmc',
       keyword: '',
-      composition: ''
-    })
+      composition: '',
+    }
+  )
 
-  const [starLesson, setStarLesson] = useLocalStorageSet('starLesson', new Set([]))
-  const [selectedLesson, setSelectedLesson] = useLocalStorageSet('selectedLesson', new Set([]))
+  const [starLesson, setStarLesson] = useLocalStorageSet(
+    'starLesson',
+    new Set([])
+  )
+  const [selectedLesson, setSelectedLesson] = useLocalStorageSet(
+    'selectedLesson',
+    new Set([])
+  )
 
   const colorize = (starLesson) => {
     const colorScale = chroma.scale('Spectral').gamma(0.5)
@@ -40,9 +44,7 @@ function App () {
     const starLessonArray = [...starLesson]
     const colors = colorScale.colors(starLessonArray.length)
     const result = {}
-    sortedBy(starLessonArray).forEach(
-      (val, idx) => (result[val] = colors[idx])
-    )
+    sortedBy(starLessonArray).forEach((val, idx) => (result[val] = colors[idx]))
     return result
   }
 
@@ -51,7 +53,6 @@ function App () {
       <div className='container-fluid h-100'>
         <div className='row h-100'>
           <div className='col-3 h-100 bg-light overflow-auto'>
-
             <Switch>
               <Route exact path='/'>
                 <Navbar />
@@ -73,10 +74,18 @@ function App () {
               </Switch>
               <Switch>
                 <Route path='/:semester/browse'>
-                  <FilterForm state={filterFormState} setState={setFilterFormState} />
+                  <FilterForm
+                    state={filterFormState}
+                    setState={setFilterFormState}
+                  />
                 </Route>
                 <Route path='/:semester/plan'>
-                  <PlanForm starLesson={starLesson} state={selectedLesson} setState={setSelectedLesson} colorMapping={colorize(starLesson)} />
+                  <PlanForm
+                    starLesson={starLesson}
+                    state={selectedLesson}
+                    setState={setSelectedLesson}
+                    colorMapping={colorize(starLesson)}
+                  />
                 </Route>
               </Switch>
 
@@ -92,9 +101,8 @@ function App () {
                     <a href='https://github.com/SJTU-Plus/course-plus'>
                       本项目
                     </a>
-                      由
-                    <a href='https://sjtu-plus.github.io/'>SJTU-Plus</a>
-                      团队开发。
+                    由<a href='https://sjtu-plus.github.io/'>SJTU-Plus</a>
+                    团队开发。
                   </p>
                 </div>
                 <div className='col-auto m-0 p-0 d-flex d-row align-items-center'>
@@ -106,10 +114,17 @@ function App () {
           <div className='col-9 h-100 overflow-auto' id='scrollArea'>
             <Switch>
               <Route path='/:semester/browse'>
-                <LessonList filterData={filterFormState} state={starLesson} setState={setStarLesson} />
+                <LessonList
+                  filterData={filterFormState}
+                  state={starLesson}
+                  setState={setStarLesson}
+                />
               </Route>
               <Route path='/:semester/plan'>
-                <ClassTable selectedLesson={selectedLesson} colorMapping={colorize(starLesson)} />
+                <ClassTable
+                  selectedLesson={selectedLesson}
+                  colorMapping={colorize(starLesson)}
+                />
               </Route>
             </Switch>
           </div>

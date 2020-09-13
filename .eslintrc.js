@@ -5,7 +5,8 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard'
+    'standard',
+    'plugin:prettier/recommended'
   ],
   globals: {
     Atomics: 'readonly',
@@ -71,6 +72,7 @@ module.exports = {
         }
       }
     ],
-    '@typescript-eslint/explicit-function-return-type': 'off'
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    'prettier/prettier': ['error', { 'singleQuote': true, 'semi': false, 'jsxSingleQuote': true }]
   }
 }

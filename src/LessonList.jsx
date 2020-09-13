@@ -1,9 +1,7 @@
 import uniqBy from 'lodash/uniqBy'
 import React, { useEffect, useState } from 'react'
 import { InView } from 'react-intersection-observer'
-import {
-  useParams
-} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import LessonRow from './LessonRow'
 import { filterDataForm, useLessonData } from './Utils'
@@ -17,21 +15,25 @@ const tableHeader = [
   '上课时间地点',
   '备注',
   '年级',
-  '教学组成'
+  '教学组成',
 ]
 
-function DataLoaded ({ loaded, size }) {
+function DataLoaded({ loaded, size }) {
   if (!loaded) {
-    return <div>
-      <div className='spinner-border spinner-border-sm mr-3 text-muted'></div>
-      <span className='text-muted'>正在加载数据……</span>
-    </div>
-  } else {
-    return <div>
-      <div className='d-flex align-items-center justify-content-center mb-3'>
-        <span className='text-muted'>以上为全部 {size} 条记录</span>
+    return (
+      <div>
+        <div className='spinner-border spinner-border-sm mr-3 text-muted'></div>
+        <span className='text-muted'>正在加载数据……</span>
       </div>
-    </div>
+    )
+  } else {
+    return (
+      <div>
+        <div className='d-flex align-items-center justify-content-center mb-3'>
+          <span className='text-muted'>以上为全部 {size} 条记录</span>
+        </div>
+      </div>
+    )
   }
 }
 
@@ -55,7 +57,11 @@ export default ({ filterData, state, setState }) => {
     const truncatedLessons = lessons.slice(0, entries)
 
     const moreEntries = () => {
-      setTimeout(() => setEntries(Math.max(Math.min(entries + 100, lessons.length), 100)), 300)
+      setTimeout(
+        () =>
+          setEntries(Math.max(Math.min(entries + 100, lessons.length), 100)),
+        300
+      )
     }
 
     return (
@@ -65,27 +71,40 @@ export default ({ filterData, state, setState }) => {
           <table className='table table-sm small sjtu-table'>
             <thead>
               <tr>
-                {tableHeader.map(header => <th
-                  scope='col'
-                  className='table-header'
-                  key={header}
-                >
-                  {header}
-                </th>)}
-
+                {tableHeader.map((header) => (
+                  <th scope='col' className='table-header' key={header}>
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {truncatedLessons.map(lesson =>
-                <LessonRow lesson={lesson} key={lesson.jxbmc} name={lesson.jxbmc} state={state.has(lesson.jxbmc)} setState={handleStateChange}></LessonRow>
-              )}
+              {truncatedLessons.map((lesson) => (
+                <LessonRow
+                  lesson={lesson}
+                  key={lesson.jxbmc}
+                  name={lesson.jxbmc}
+                  state={state.has(lesson.jxbmc)}
+                  setState={handleStateChange}
+                ></LessonRow>
+              ))}
             </tbody>
           </table>
-          <InView as='div' onChange={inView => { if (inView) moreEntries() }} className='d-flex align-items-center justify-content-center mb-3'>
-            <DataLoaded loaded={entries >= lessons.length} size={lessons.length}></DataLoaded>
+          <InView
+            as='div'
+            onChange={(inView) => {
+              if (inView) moreEntries()
+            }}
+            className='d-flex align-items-center justify-content-center mb-3'
+          >
+            <DataLoaded
+              loaded={entries >= lessons.length}
+              size={lessons.length}
+            ></DataLoaded>
           </InView>
         </div>
-      </div>)
+      </div>
+    )
   } else {
     return <div></div>
   }
