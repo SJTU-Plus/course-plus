@@ -1,0 +1,60 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.course-navbar {
+  ul {
+    li.active {
+      a {
+        border-bottom: 1px solid theme-color("dark");
+      }
+    }
+  }
+}
+
+.sjtu-table {
+  table-layout: fixed;
+}
+
+.week-dot {
+  width: 6px;
+  height: 6px;
+  margin: 1px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.week-dot-conflict {
+  width: 6px;
+  height: 6px;
+  margin: 1px;
+  display: inline-block;
+  border: 0.5px solid #000000 !important;
+}
+
+.week-dot-empty {
+  width: 6px;
+  height: 6px;
+  margin: 1px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 0.5px solid #dee2e6 !important;
+}
+
+.course-square {
+  width: 8px;
+  height: 8px;
+  margin: 1px;
+  display: inline-block;
+}
+
+.classtable-row {
+  min-height: 6.5vh;
+  border-bottom: 0.1px dashed grey;
+}
+
+.classtable-table {
+  table-layout: fixed;
+}
+
+.classtable-first-col {
+  width: 2rem !important;
+}
