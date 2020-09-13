@@ -12,7 +12,13 @@ export default ({ selectedLesson, colorMapping }) => {
     const selectedLessonObjects = lessons.filter((lesson) =>
       selectedLesson.has(lesson.jxbmc)
     )
-    const allCol = range(1, 6)
+    let colMax = 5
+    selectedLessonObjects.forEach((lesson) => {
+      if (lesson.xqj > 5) {
+        colMax = 7
+      }
+    })
+    const allCol = range(1, colMax + 1)
     return (
       <table className='table classtable-table'>
         <thead>
