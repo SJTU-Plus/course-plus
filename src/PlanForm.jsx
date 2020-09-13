@@ -23,6 +23,7 @@ export default ({
   colorMapping,
   classTableMode,
   syncFromISJTU,
+  loading,
 }) => {
   const { semester } = useParams()
   const { data: lessons } = useLessonData(semester)
@@ -110,7 +111,12 @@ export default ({
                 className='btn btn-sm btn-outline-primary'
                 onClick={() => syncFromISJTU(semester)}
               >
-                从教学信息服务网同步
+                从教学信息服务网同步{' '}
+                {loading ? (
+                  <div className='spinner-border spinner-border-sm ml-1 text-primary'></div>
+                ) : (
+                  ''
+                )}
               </button>
             </div>
           ) : (

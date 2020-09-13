@@ -3,7 +3,7 @@ import './App.scss'
 import axios from 'axios'
 import chroma from 'chroma-js'
 import sortedBy from 'lodash/sortBy'
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 
@@ -43,17 +43,21 @@ function App() {
     'sjtuLesson',
     new Set([])
   )
+  const [loading, setLoading] = useState(false)
 
   const syncFromISJTU = (semester) => {
+    setLoading(true)
     axios
       .get(`/api/course/lesson?term=${semester.replace('_', '-')}`)
       .then((resp) => {
         if (resp?.data?.error === 'success') {
           setSjtuLesson(new Set(resp.data.entities.map((x) => x.name)))
+          setLoading(false)
         } else {
           window.location.href = '/login?app=course_plus'
         }
       })
+      .catch((e) => (window.location.href = '/login?app=course_plus'))
   }
 
   const colorize = (starLesson) => {
@@ -112,6 +116,7 @@ function App() {
                     classTableMode
                     syncFromISJTU={syncFromISJTU}
                     colorMapping={colorize(sjtuLesson)}
+                    loading={loading}
                   />
                 </Route>
               </Switch>
