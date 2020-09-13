@@ -97,14 +97,23 @@ function App() {
                 隐私政策：访问本网站，即代表您同意本网站使用“站长统计”收集您的访问信息。根据相关法律法规，本站不对欧盟用户提供服务。
               </p>
               <div className='row'>
-                <div className='col'>
+                <div className='col d-flex d-row align-items-center'>
                   <p className='text-muted my-3 small'>
                     <a href='https://github.com/SJTU-Plus/course-plus'>
-                      Course-Plus
+                      本项目
                     </a>{' '}
                     由 <a href='https://sjtu-plus.github.io/'>SJTU-Plus</a>{' '}
-                    团队开发并维护。
+                    维护。
                   </p>
+                </div>
+                <div className='col-auto m-0 p-0 d-flex d-row align-items-center'>
+                  <GitHubButton
+                    href='https://github.com/sjtu-plus/course-plus'
+                    data-show-count
+                    data-size='large'
+                  >
+                    Star
+                  </GitHubButton>
                 </div>
               </div>
             </div>
