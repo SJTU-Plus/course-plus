@@ -2,7 +2,8 @@ import countBy from 'lodash/countBy'
 import flatMap from 'lodash/flatMap'
 import keys from 'lodash/keys'
 import sortBy from 'lodash/sortBy'
-import React, { useReducer } from 'react'
+import uniqBy from 'lodash/uniqBy'
+import React from 'react'
 import Badge from 'react-bootstrap/Badge'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
@@ -35,7 +36,7 @@ export default withRouter(({ history, state, setState }) => {
   }
 
   if (lessons) {
-    const lessonFiltered = filterKeyword(lessons, state)
+    const lessonFiltered = filterKeyword(uniqBy(lessons, 'jxbmc'), state)
     const dataNj = countBy(flatMap(lessonFiltered, lesson => lesson.nj.split(',')))
     const dataLx = countBy(lessonFiltered, 'kcxzmc')
     const dataYx = countBy(lessonFiltered, 'kkxy')
@@ -68,6 +69,12 @@ export default withRouter(({ history, state, setState }) => {
           <Form.Group className='col-md-4 mb-3'>
             <Form.Label>地点</Form.Label>
             <Form.Control placeholder='不限' name='placeKey' value={state.placeKey} onChange={handleStateChange} />
+          </Form.Group>
+        </Form.Row>
+        <Form.Row className='mb-3'>
+          <Form.Group className='col mb-3'>
+            <Form.Label>教学组成</Form.Label>
+            <Form.Control placeholder='不限' name='composition' value={state.composition} onChange={handleStateChange} />
           </Form.Group>
         </Form.Row>
         <hr />

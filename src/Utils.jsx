@@ -126,6 +126,8 @@ export function filterKeyword (dataRaw, filterForm) {
   const scheduleKey = filterForm.scheduleKey
   const lecturerKey = filterForm.lecturerKey
   const placeKey = filterForm.placeKey
+  const composition = filterForm.composition
+
   if (keyword) {
     filteringData = filteringData.filter(lesson => {
       if (lesson[keywordType]) {
@@ -152,10 +154,28 @@ export function filterKeyword (dataRaw, filterForm) {
       (lesson.jxdd || '').includes(placeKey)
     )
   }
+  if (composition) {
+    filteringData = filteringData.filter(lesson =>
+      lesson.jxbzc.split(';').some(x => x.includes(composition))
+    )
+  }
   return filteringData
 }
 
 export function filterDataForm (dataRaw, filterForm) {
-  const filteringData = filterKeyword(dataRaw, filterForm)
+  let filteringData = filterKeyword(dataRaw, filterForm)
+  const checkedNj = filterForm.checkedNj
+  const checkedLx = filterForm.checkedLx
+  const checkedYx = filterForm.checkedYx
+
+  if (checkedNj.size) {
+    filteringData = filteringData.filter(lesson => lesson.nj.split(',').some(x => checkedNj.has(x)))
+  }
+  if (checkedLx.size) {
+    filteringData = filteringData.filter(lesson => checkedLx.has(lesson.kcxzmc))
+  }
+  if (checkedYx.size) {
+    filteringData = filteringData.filter(lesson => checkedYx.has(lesson.kkxy))
+  }
   return filteringData
 }

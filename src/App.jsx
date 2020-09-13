@@ -31,8 +31,8 @@ function App () {
       composition: ''
     })
 
-  const [starLesson, setStarLesson] = useLocalStorageSet('starLesson', new Set(['(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1', '(2020-2021-1)-CS433-1']))
-  const [selectedLesson, setSelectedLesson] = useLocalStorageSet('selectedLesson', new Set(['(2020-2021-1)-CA165-6', '(2020-2021-1)-CS448-1']))
+  const [starLesson, setStarLesson] = useLocalStorageSet('starLesson', new Set([]))
+  const [selectedLesson, setSelectedLesson] = useLocalStorageSet('selectedLesson', new Set([]))
 
   const colorize = (starLesson) => {
     const colorScale = chroma.scale('Spectral').gamma(0.5)
@@ -103,10 +103,10 @@ function App () {
               </div>
             </div>
           </div>
-          <div className='col-9 h-100 overflow-auto'>
+          <div className='col-9 h-100 overflow-auto' id='scrollArea'>
             <Switch>
               <Route path='/:semester/browse'>
-                <LessonList filterData={filterFormState} />
+                <LessonList filterData={filterFormState} state={starLesson} setState={setStarLesson} />
               </Route>
               <Route path='/:semester/plan'>
                 <ClassTable selectedLesson={selectedLesson} colorMapping={colorize(starLesson)} />
