@@ -17,7 +17,7 @@ export default function ({ semester, selectedLessonObj }) {
     downloadFile(
       `classtable-${semester}.ics`,
       generateICS(selectedLessonObj, new Date(firstDayDate)),
-      "text/calendar"
+      'text/calendar'
     )
   }
 
