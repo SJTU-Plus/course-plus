@@ -3,10 +3,10 @@ import Form from 'react-bootstrap/Form'
 
 import { generateICS } from './calendar'
 
-function downloadFile(filename, data) {
+function downloadFile(filename, data, mediaType) {
   const link = document.createElement('a')
   link.download = filename
-  const blob = new Blob([data], { type: 'text/plain' })
+  const blob = new Blob([data], { type: mediaType })
   link.href = window.URL.createObjectURL(blob)
   link.click()
 }
@@ -16,7 +16,8 @@ export default function ({ semester, selectedLessonObj }) {
   const downloadAsICS = () => {
     downloadFile(
       `classtable-${semester}.ics`,
-      generateICS(selectedLessonObj, new Date(firstDayDate))
+      generateICS(selectedLessonObj, new Date(firstDayDate)),
+      "text/calendar"
     )
   }
 
