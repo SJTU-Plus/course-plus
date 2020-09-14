@@ -52,7 +52,6 @@ export default withRouter(({ history, state, setState }) => {
                   name='keywordType'
                   value={state.keywordType}
                   onChange={handleStateChange}
-                  custom
                 >
                   <option value='kcmc'>课程名称</option>
                   <option value='kch'>课号</option>

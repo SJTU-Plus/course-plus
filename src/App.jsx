@@ -5,14 +5,24 @@ import chroma from 'chroma-js'
 import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+  HashRouter as Router,
+  matchPath,
+  Route,
+  Switch,
+  useLocation,
+} from 'react-router-dom'
 
 import ClassTable from './ClassTable'
+import ClassTableForm from './ClassTableForm'
 import FilterForm from './FilterForm'
 import LessonList from './LessonList'
+import LoginModal from './LoginModal'
 import Navbar from './Navbar'
 import PlanForm from './PlanForm'
 import SemesterNav from './SemesterNav'
+import ShowClassTable from './ShowClassTable'
+import SyncButton from './SyncButton'
 import { useLocalStorageSet } from './Utils'
 
 function App() {
@@ -43,21 +53,34 @@ function App() {
     'sjtuLesson',
     new Set([])
   )
-  const [loading, setLoading] = useState(false)
+  const [sjtuLessonLoading, setSjtuLessonLoading] = useState(false)
+
+  const [loginDialog, setLoginDialog] = useState(false)
 
   const syncFromISJTU = (semester) => {
-    setLoading(true)
+    setSjtuLessonLoading(true)
     axios
       .get(`/api/course/lesson?term=${semester.replace('_', '-')}`)
       .then((resp) => {
         if (resp?.data?.error === 'success') {
           setSjtuLesson(new Set(resp.data.entities.map((x) => x.name)))
-          setLoading(false)
+          setSjtuLessonLoading(false)
         } else {
-          window.location.href = '/login?app=course_plus'
+          setSjtuLessonLoading(false)
+          setLoginDialog(true)
         }
       })
-      .catch((e) => (window.location.href = '/login?app=course_plus'))
+      .catch((e) => {
+        setLoginDialog(true)
+        setSjtuLessonLoading(false)
+      })
+  }
+
+  const handleLogin = (result) => {
+    if (result) {
+      window.location.href = '/login?app=course_plus'
+    }
+    setLoginDialog(false)
   }
 
   const colorize = (starLesson) => {
@@ -72,9 +95,11 @@ function App() {
 
   return (
     <Router>
+      <LoginModal show={loginDialog} nextStep={handleLogin}></LoginModal>
+
       <div className='container-fluid h-100'>
         <div className='row h-100'>
-          <div className='col-3 h-100 bg-light overflow-auto'>
+          <div className='col-md-3 d-none d-md-block h-100 bg-light overflow-auto'>
             <Switch>
               <Route exact path='/'>
                 <Navbar />
@@ -110,13 +135,11 @@ function App() {
                   />
                 </Route>
                 <Route path='/:semester/classtable'>
-                  <PlanForm
-                    starLesson={sjtuLesson}
-                    state={sjtuLesson}
-                    classTableMode
+                  <ClassTableForm
+                    sjtuLesson={sjtuLesson}
+                    dataLoading={sjtuLessonLoading}
                     syncFromISJTU={syncFromISJTU}
                     colorMapping={colorize(sjtuLesson)}
-                    loading={loading}
                   />
                 </Route>
               </Switch>
@@ -149,9 +172,10 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='col-9 h-100 overflow-auto' id='scrollArea'>
+          <div className='col-md-9 h-100 overflow-auto' id='scrollArea'>
             <Switch>
               <Route path='/:semester/browse'>
+                <ShowClassTable></ShowClassTable>
                 <LessonList
                   filterData={filterFormState}
                   state={starLesson}
@@ -159,12 +183,17 @@ function App() {
                 />
               </Route>
               <Route path='/:semester/plan'>
+                <ShowClassTable></ShowClassTable>
                 <ClassTable
                   selectedLesson={selectedLesson}
                   colorMapping={colorize(starLesson)}
                 />
               </Route>
               <Route path='/:semester/classtable'>
+                <SyncButton
+                  syncFromISJTU={syncFromISJTU}
+                  dataLoading={sjtuLessonLoading}
+                ></SyncButton>
                 <ClassTable
                   selectedLesson={sjtuLesson}
                   colorMapping={colorize(sjtuLesson)}
