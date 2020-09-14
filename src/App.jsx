@@ -77,7 +77,6 @@ function App() {
   }
 
   const handleLogin = (result) => {
-    console.log(result)
     if (result) {
       window.location.href = '/login?app=course_plus'
     }
