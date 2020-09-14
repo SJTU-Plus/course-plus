@@ -5,29 +5,12 @@ import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import { useParams } from 'react-router-dom'
 
-import { generateICS } from './calendar'
+import ExportICSForm from './ExportICS'
 import { useLessonData } from './Utils'
 
-function downloadFile(filename, data) {
-  const link = document.createElement('a')
-  link.download = filename
-  const blob = new Blob([data], { type: 'text/plain' })
-  link.href = window.URL.createObjectURL(blob)
-  link.click()
-}
-
-export default ({
-  state,
-  setState,
-  starLesson,
-  colorMapping,
-  classTableMode,
-  syncFromISJTU,
-  loading,
-}) => {
+export default ({ state, setState, starLesson, colorMapping }) => {
   const { semester } = useParams()
   const { data: lessons } = useLessonData(semester)
-  const [firstDayDate, setFirstDayDate] = useState('2020-09-07')
 
   const handleCheckChange = (e) => {
     const checked = e.target.checked
@@ -52,18 +35,11 @@ export default ({
       'kch'
     )
 
-    const downloadAsICS = () => {
-      downloadFile(
-        `classtable-${semester}.ics`,
-        generateICS(selectedLessonObj, new Date(firstDayDate))
-      )
-    }
-
     return (
-      <div>
+      <>
         <Form.Row className='mb-3'>
           <Form.Label>
-            {classTableMode ? '已选课程' : '星标课程'} (
+            星标课程 (
             {sumBy(
               uniqBy(selectedLessonObj, 'jxbmc').map((l) => parseFloat(l.xf))
             )}{' '}
@@ -79,16 +55,12 @@ export default ({
                 id={lesson.jxbmc}
                 custom
               >
-                {classTableMode ? (
-                  ''
-                ) : (
-                  <Form.Check.Input
-                    type='checkbox'
-                    checked={state.has(lesson.jxbmc)}
-                    onChange={handleCheckChange}
-                    value={lesson.jxbmc}
-                  />
-                )}
+                <Form.Check.Input
+                  type='checkbox'
+                  checked={state.has(lesson.jxbmc)}
+                  onChange={handleCheckChange}
+                  value={lesson.jxbmc}
+                />
                 <Form.Check.Label>
                   <span
                     className='course-square'
@@ -102,45 +74,12 @@ export default ({
             ))}
           </div>
         </Form.Row>
-
-        <Form.Row className='mb-1'>
-          {classTableMode ? (
-            <div className='col-12 mb-5'>
-              <button
-                type='button'
-                className='btn btn-sm btn-outline-primary'
-                onClick={() => syncFromISJTU(semester)}
-              >
-                从教学信息服务网同步{' '}
-                {loading ? (
-                  <div className='spinner-border spinner-border-sm ml-1 text-primary'></div>
-                ) : (
-                  ''
-                )}
-              </button>
-            </div>
-          ) : (
-            ''
-          )}
-          <Form.Group className='col-12 mb-1'>
-            <Form.Label>本学期第一天</Form.Label>
-            <Form.Control
-              name='firstDayDate'
-              value={firstDayDate}
-              onChange={(e) => setFirstDayDate(e.target.value)}
-            />
-          </Form.Group>
-          <div className='col-12 mb-1'>
-            <button
-              type='button'
-              className='btn btn-sm btn-outline-primary'
-              onClick={downloadAsICS}
-            >
-              导出到 iCalendar
-            </button>
-          </div>
-        </Form.Row>
-      </div>
+        <hr />
+        <ExportICSForm
+          semester={semester}
+          selectedLessonObj={selectedLessonObj}
+        ></ExportICSForm>
+      </>
     )
   } else {
     return <div></div>

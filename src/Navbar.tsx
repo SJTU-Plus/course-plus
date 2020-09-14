@@ -7,7 +7,7 @@ function CoursePlusSvg() {
       width='1.25rem'
       height='1.25rem'
       viewBox='0 0 16 16'
-      className='bi bi-calendar-plus mr-1'
+      className='bi bi-calendar-plus mr-1 align-middle'
       fill='currentColor'
       xmlns='http://www.w3.org/2000/svg'
     >
@@ -52,7 +52,7 @@ export default () => {
   return (
     <nav className='navbar navbar-light navbar-expand course-navbar mb-3'>
       <span className='navbar-brand mb-0'>
-        <CoursePlusSvg /> Course+
+        <CoursePlusSvg /> <span className='align-middle'>Course+</span>
       </span>
       <div className='collapse navbar-collapse'>
         <ul className='navbar-nav ml-auto'>

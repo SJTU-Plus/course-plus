@@ -1,5 +1,6 @@
+import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { InView } from 'react-intersection-observer'
 import { useParams } from 'react-router-dom'
 
@@ -54,7 +55,7 @@ export default ({ filterData, state, setState }) => {
 
   if (lessonsRaw) {
     const lessons = filterDataForm(uniqBy(lessonsRaw, 'jxbmc'), filterData)
-    const truncatedLessons = lessons.slice(0, entries)
+    const truncatedLessons = sortBy(lessons, 'kch').slice(0, entries)
 
     const moreEntries = () => {
       setTimeout(
@@ -65,7 +66,7 @@ export default ({ filterData, state, setState }) => {
     }
 
     return (
-      <div>
+      <>
         <p className='text-center mt-3'>共 {lessons.length} 条记录</p>
         <div className='table-responsive-md'>
           <table className='table table-sm small sjtu-table'>
@@ -103,7 +104,7 @@ export default ({ filterData, state, setState }) => {
             ></DataLoaded>
           </InView>
         </div>
-      </div>
+      </>
     )
   } else {
     return <div></div>

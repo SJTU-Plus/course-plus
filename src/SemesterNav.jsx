@@ -33,7 +33,7 @@ export default withRouter(({ history }) => {
     <div className='form-row'>
       <Form.Group className='col mb-3'>
         <Form.Label>学年学期</Form.Label>
-        <Form.Control as='select' custom onChange={onPathChange}>
+        <Form.Control as='select' onChange={onPathChange}>
           {lessonList
             .map((option) => (
               <option
