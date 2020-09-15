@@ -18,25 +18,25 @@
   width: 6px;
   height: 6px;
   margin: 1px;
-  border-radius: 50%;
   display: inline-block;
 }
 
 .week-dot-conflict {
-  width: 6px;
-  height: 6px;
-  margin: 1px;
-  display: inline-block;
   border: 0.5px solid #000000 !important;
 }
 
-.week-dot-empty {
-  width: 6px;
-  height: 6px;
-  margin: 1px;
+.week-dot-color {
   border-radius: 50%;
-  display: inline-block;
+}
+
+.week-dot-empty {
+  border-radius: 50%;
   border: 0.5px solid #dee2e6 !important;
+}
+
+.week-dot-wrapper {
+  line-height: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .course-square {

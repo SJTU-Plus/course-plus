@@ -28,7 +28,7 @@ function addDays(date, days) {
   return nDate
 }
 
-export function generateICS(lessons, begin) {
+export function generateICS(lessons, begin, semester) {
   const events = []
   lessons.forEach((lesson) => {
     parseBin(lesson.zcd).forEach((week) => {
@@ -51,6 +51,7 @@ export function generateICS(lessons, begin) {
         title: `${lesson.kch} ${lesson.kcmc}`,
         description: `${lesson.jszc}, ${lesson.xf} 学分, 第 ${week} 周`,
         location: parseTimeLocationDay(lesson.sksj, lesson.jxdd, lesson.xqj),
+        calName: `课程表 ${semester}`,
       }
       events.push(event)
     })
