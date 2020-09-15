@@ -99,7 +99,7 @@ function App() {
 
       <div className='container-fluid h-100'>
         <div className='row h-100'>
-          <div className='col-md-3 d-none d-md-block h-100 bg-light overflow-auto'>
+          <div className='col-md-4 d-none d-md-block h-100 bg-light overflow-auto'>
             <Switch>
               <Route exact path='/'>
                 <Navbar />
@@ -172,7 +172,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='col-md-9 h-100 overflow-auto' id='scrollArea'>
+          <div className='col-md-8 h-100 overflow-auto' id='scrollArea'>
             <Switch>
               <Route path='/:semester/browse'>
                 <ShowClassTable></ShowClassTable>

@@ -16,7 +16,7 @@ export default function ({ semester, selectedLessonObj }) {
   const downloadAsICS = () => {
     downloadFile(
       `classtable-${semester}.ics`,
-      generateICS(selectedLessonObj, new Date(firstDayDate)),
+      generateICS(selectedLessonObj, new Date(firstDayDate), semester),
       'text/calendar'
     )
   }

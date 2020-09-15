@@ -1,10 +1,36 @@
+import chunk from 'lodash/chunk'
 import flatMap from 'lodash/flatMap'
 import keys from 'lodash/keys'
+import map from 'lodash/map'
 import max from 'lodash/max'
 import sortBy from 'lodash/sortBy'
 import React from 'react'
 
 import { checkBin, parseBin, parseTimeLocationDay } from './Utils'
+
+function splitBy(elements, by) {
+  return chunk(elements, by).map((chk, idx) => (
+    <div className='d-block' key={idx}>
+      {chk}
+    </div>
+  ))
+}
+
+function autoSplit(elements, chunkNumber) {
+  return (
+    <>
+      <div className='d-md-none week-dot-wrapper'>
+        {splitBy(elements, chunkNumber[0])}
+      </div>
+      <div className='d-none d-md-block d-xl-none week-dot-wrapper'>
+        {splitBy(elements, chunkNumber[1])}
+      </div>
+      <div className='d-none d-xl-block week-dot-wrapper'>
+        {splitBy(elements, chunkNumber[2])}
+      </div>
+    </>
+  )
+}
 
 export default ({
   day,
@@ -14,10 +40,12 @@ export default ({
   selectedLesson,
 }) => {
   const weekDots = []
-  const maxWeek =
-    max(flatMap(selectedLesson, (lesson) => parseBin(lesson.zcd))) || 16
+  const maxWeek = max(flatMap(selectedLesson, (lesson) => parseBin(lesson.zcd)))
   const conflictLesson = []
   const showLesson = {}
+  let showDots = false
+  const maxDay = max(map(selectedLesson, 'xqj')) || 0
+  const splitArray = maxDay <= 5 ? [8, 8, 16] : [4, 4, 8]
 
   for (let week = 0; week < maxWeek; week++) {
     let dot = ''
@@ -39,29 +67,35 @@ export default ({
       }
     })
     if (dot === '') {
-      weekDots.push(<span className='week-dot-empty' key={week}></span>)
+      weekDots.push(
+        <span className='week-dot week-dot-empty' key={week}></span>
+      )
     } else if (dot === 'CONFLICT') {
-      weekDots.push(<span className='week-dot-conflict' key={week}></span>)
+      weekDots.push(
+        <span className='week-dot week-dot-conflict' key={week}></span>
+      )
+      showDots = true
     } else {
       weekDots.push(
         <span
-          className='week-dot'
+          className='week-dot week-dot-color'
           style={{ backgroundColor: colorMapping[dot] }}
           key={week}
         ></span>
       )
+      showDots = true
     }
   }
   return (
     <div className='small my-2'>
-      <div>{weekDots}</div>
+      <div>{showDots ? autoSplit(weekDots, splitArray) : ''}</div>
       {sortBy(keys(showLesson)).map((key) => {
         const lesson = showLesson[key]
         return (
           <div className='row mr-1' key={lesson.jxbmc}>
             <div className='col-auto p-0'>
               <span
-                className='week-dot mr-1'
+                className='week-dot week-dot-color mr-1'
                 style={{ backgroundColor: colorMapping[lesson.jxbmc] }}
               ></span>
             </div>
