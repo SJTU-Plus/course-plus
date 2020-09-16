@@ -6,10 +6,10 @@ SJTU 学期开课表索引与排课。
 
 ### 在线使用
 
-本项目已部署至 GitHub Pages ，网址： https://sjtu-plus.github.io/course-plus/
+本项目已部署至 SJTU-Plus ，网址： https://plus.sjtu.edu.cn/course-plus
 
 
-### 从代码运行
+### 从代码运行(JAccount接口部分功能不受支持)
 
 软件需求
 
@@ -34,6 +34,9 @@ yarn
 ```
 node server.js
 ```
+
+浏览器访问 http://localhost:1234 ，访问本地服务
+
 
 ## 免责声明
 
