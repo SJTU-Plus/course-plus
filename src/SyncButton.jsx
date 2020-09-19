@@ -5,7 +5,7 @@ export default function ({ syncFromISJTU, dataLoading }) {
   const { semester } = useParams()
   return (
     <a
-      className='row text-reset jumbotron jumbotron-fluid d-block d-md-none px-1 py-3 text-center my-0'
+      className='row text-reset jumbotron jumbotron-fluid d-block d-md-none px-1 py-3 text-center my-0 course-button'
       onClick={() => syncFromISJTU(semester)}
     >
       {dataLoading ? (

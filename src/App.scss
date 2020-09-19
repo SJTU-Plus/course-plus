@@ -53,8 +53,27 @@
 
 .classtable-table {
   table-layout: fixed;
+  @include media-breakpoint-between(xs, sm) {
+    min-height: 90vh;
+  }
 }
 
 .classtable-first-col {
   width: 2rem !important;
+}
+
+.classtable-col {
+  @include media-breakpoint-between(xs, sm) {
+    width: 30vw;
+  }
+}
+
+.classtable-frame {
+  @include media-breakpoint-between(xs, sm) {
+    overflow-x: scroll;
+  }
+}
+
+.classtable-wrapper {
+  overflow-y: scroll;
 }

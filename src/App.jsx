@@ -99,7 +99,7 @@ function App() {
 
       <div className='container-fluid h-100'>
         <div className='row h-100'>
-          <div className='col-md-4 d-none d-md-block h-100 bg-light overflow-auto'>
+          <div className='col-md-3 d-none d-md-block h-100 bg-light overflow-auto'>
             <Switch>
               <Route exact path='/'>
                 <Navbar />
@@ -172,34 +172,46 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='col-md-8 h-100 overflow-auto' id='scrollArea'>
-            <Switch>
-              <Route path='/:semester/browse'>
-                <ShowClassTable></ShowClassTable>
-                <LessonList
-                  filterData={filterFormState}
-                  state={starLesson}
-                  setState={setStarLesson}
-                />
-              </Route>
-              <Route path='/:semester/plan'>
-                <ShowClassTable></ShowClassTable>
-                <ClassTable
-                  selectedLesson={selectedLesson}
-                  colorMapping={colorize(starLesson)}
-                />
-              </Route>
-              <Route path='/:semester/classtable'>
-                <SyncButton
-                  syncFromISJTU={syncFromISJTU}
-                  dataLoading={sjtuLessonLoading}
-                ></SyncButton>
-                <ClassTable
-                  selectedLesson={sjtuLesson}
-                  colorMapping={colorize(sjtuLesson)}
-                />
-              </Route>
-            </Switch>
+          <div className='col-md-9 h-100 classtable-wrapper'>
+            <div className='mb-3'>
+              <Switch>
+                <Route path='/:semester/browse'>
+                  <ShowClassTable></ShowClassTable>
+                </Route>
+                <Route path='/:semester/plan'>
+                  <ShowClassTable></ShowClassTable>
+                </Route>
+                <Route path='/:semester/classtable'>
+                  <SyncButton
+                    syncFromISJTU={syncFromISJTU}
+                    dataLoading={sjtuLessonLoading}
+                  ></SyncButton>
+                </Route>
+              </Switch>
+            </div>
+            <div className='classtable-frame w-100'>
+              <Switch>
+                <Route path='/:semester/browse'>
+                  <LessonList
+                    filterData={filterFormState}
+                    state={starLesson}
+                    setState={setStarLesson}
+                  />
+                </Route>
+                <Route path='/:semester/plan'>
+                  <ClassTable
+                    selectedLesson={selectedLesson}
+                    colorMapping={colorize(starLesson)}
+                  />
+                </Route>
+                <Route path='/:semester/classtable'>
+                  <ClassTable
+                    selectedLesson={sjtuLesson}
+                    colorMapping={colorize(sjtuLesson)}
+                  />
+                </Route>
+              </Switch>
+            </div>
           </div>
         </div>
       </div>
