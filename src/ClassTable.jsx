@@ -27,7 +27,7 @@ export default ({ selectedLesson, colorMapping }) => {
               #
             </th>
             {allCol.map((n, lessonCol) => (
-              <th scope='col' key={lessonCol}>
+              <th scope='col' key={lessonCol} className='classtable-col'>
                 {dayName[lessonCol]}
               </th>
             ))}
