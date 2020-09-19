@@ -1,4 +1,5 @@
 import { createEvents } from 'ics'
+import moment from 'moment'
 
 import { parseBin, parseTimeLocationDay } from './Utils'
 
@@ -28,22 +29,29 @@ function addDays(date, days) {
   return nDate
 }
 
-export function generateICS(lessons, begin, semester) {
+export function generateICS(lessons, begin, semester, fixtures) {
+  console.log(fixtures)
   const events = []
   lessons.forEach((lesson) => {
     parseBin(lesson.zcd).forEach((week) => {
       const blocks = parseBin(lesson.cdjc)
       const start = Math.min(...blocks) - 1
       const end = Math.max(...blocks) - 1
-      const time = addDays(begin, (week - 1) * 7 + lesson.xqj - 1)
+      let time = moment(begin).add((week - 1) * 7 + lesson.xqj - 1, 'day')
+      fixtures.forEach((rule) => {
+        if (rule.week === week && rule.day === lesson.xqj) {
+          time = rule.on
+        }
+      })
+      if (!time) return
       const startAt = timeAt[start]
       const endAt = timeAt[end] + 45
       const duration = endAt - startAt
       const event = {
         start: [
-          time.getFullYear(),
-          time.getMonth() + 1,
-          time.getDate(),
+          time.year(),
+          time.month() + 1,
+          time.date(),
           Math.floor(startAt / 60),
           startAt % 60,
         ],

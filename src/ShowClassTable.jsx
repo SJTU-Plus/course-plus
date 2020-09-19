@@ -11,7 +11,9 @@ export default function () {
       >
         <span className='h4'>显示本学期课表</span>
       </Link>
-      <p className="text-muted small text-center d-md-none">请使用 PC 访问以使用完整功能。</p>
+      <p className='text-muted small text-center d-md-none'>
+        请使用 PC 访问以使用完整功能。
+      </p>
     </div>
   )
 }

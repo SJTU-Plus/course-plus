@@ -173,7 +173,7 @@ function App() {
             </div>
           </div>
           <div className='col-md-9 h-100 classtable-wrapper'>
-            <div className="mb-3">
+            <div className='mb-3'>
               <Switch>
                 <Route path='/:semester/browse'>
                   <ShowClassTable></ShowClassTable>
@@ -212,7 +212,6 @@ function App() {
                 </Route>
               </Switch>
             </div>
-
           </div>
         </div>
       </div>
