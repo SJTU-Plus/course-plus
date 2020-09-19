@@ -23,12 +23,6 @@ const timeAt = [
   return parseInt(hour) * 60 + parseInt(minute)
 })
 
-function addDays(date, days) {
-  const nDate = new Date(date.valueOf())
-  nDate.setDate(nDate.getDate() + days)
-  return nDate
-}
-
 export function generateICS(lessons, begin, semester, fixtures) {
   const events = []
   lessons.forEach((lesson) => {

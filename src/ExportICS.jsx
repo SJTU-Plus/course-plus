@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 
 import { generateICS } from './calendar'
+import { dayName } from './Utils'
 
 function downloadFile(filename, data, mediaType) {
   const link = document.createElement('a')
@@ -86,6 +87,16 @@ export default function ({ semester, selectedLessonObj }) {
             <Form.Check.Label>{key.name}</Form.Check.Label>
           </Form.Check>
         ))}
+        <ul className='list-unstyled small'>
+          {getFixtures().map((fixture, idx) => (
+            <li key={idx}>
+              第 {fixture.week} 周{dayName[fixture.day - 1]}{' '}
+              {fixture.on
+                ? fixture.on.format('[调至] YYYY-MM-DD (dddd)')
+                : '不上课'}
+            </li>
+          ))}
+        </ul>
       </div>
       <div className='col-12 mb-1'>
         <button
