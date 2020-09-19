@@ -30,7 +30,6 @@ function addDays(date, days) {
 }
 
 export function generateICS(lessons, begin, semester, fixtures) {
-  console.log(fixtures)
   const events = []
   lessons.forEach((lesson) => {
     parseBin(lesson.zcd).forEach((week) => {
