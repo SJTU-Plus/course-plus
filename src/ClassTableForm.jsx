@@ -86,7 +86,7 @@ export default ({
               className='btn btn-sm btn-outline-primary ml-3'
               onClick={addToStar}
             >
-              把已选课程加星标
+              将已选课程添加到排课待选
             </button>
           </div>
         </Form.Row>
