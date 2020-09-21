@@ -95,13 +95,24 @@ export default withRouter(({ history, state, setState }) => {
             />
           </Form.Group>
         </Form.Row>
-        <Form.Row className='mb-3'>
+        <Form.Row>
           <Form.Group className='col mb-3'>
             <Form.Label>教学组成</Form.Label>
             <Form.Control
               placeholder='不限'
               name='composition'
               value={state.composition}
+              onChange={handleStateChange}
+            />
+          </Form.Group>
+        </Form.Row>
+        <Form.Row>
+          <Form.Group className='col mb-1'>
+            <Form.Label>备注</Form.Label>
+            <Form.Control
+              placeholder='不限'
+              name='notes'
+              value={state.notes}
               onChange={handleStateChange}
             />
           </Form.Group>
