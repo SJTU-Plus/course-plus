@@ -38,6 +38,7 @@ function App() {
       keywordType: 'kcmc',
       keyword: '',
       composition: '',
+      notes: '',
     }
   )
 

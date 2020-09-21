@@ -127,6 +127,7 @@ export function filterKeyword(dataRaw, filterForm) {
   const lecturerKey = filterForm.lecturerKey
   const placeKey = filterForm.placeKey
   const composition = filterForm.composition
+  const notes = filterForm.notes
 
   if (keyword) {
     filteringData = filteringData.filter((lesson) => {
@@ -155,6 +156,11 @@ export function filterKeyword(dataRaw, filterForm) {
   if (composition) {
     filteringData = filteringData.filter((lesson) =>
       lesson.jxbzc.split(';').some((x) => x.includes(composition))
+    )
+  }
+  if (notes) {
+    filteringData = filteringData.filter((lesson) =>
+      (lesson.xkbz || '').includes(notes)
     )
   }
   return filteringData
