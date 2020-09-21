@@ -8,12 +8,27 @@ import { useParams } from 'react-router-dom'
 import ExportICSForm from './ExportICS'
 import { useLessonData } from './Utils'
 
-export default ({ sjtuLesson, dataLoading, syncFromISJTU, colorMapping }) => {
+export default ({
+  sjtuLesson,
+  dataLoading,
+  syncFromISJTU,
+  colorMapping,
+  starLesson,
+  setStarLesson,
+}) => {
   const { semester } = useParams()
   const { data: lessons } = useLessonData(semester)
 
   const onSyncClick = () => {
     syncFromISJTU(semester)
+  }
+
+  const addToStar = () => {
+    const set = new Set(starLesson)
+    sjtuLesson.forEach((lesson) => {
+      set.add(lesson)
+    })
+    setStarLesson(set)
   }
 
   if (lessons) {
@@ -65,6 +80,13 @@ export default ({ sjtuLesson, dataLoading, syncFromISJTU, colorMapping }) => {
                 ''
               )}
               同步数据
+            </button>
+            <button
+              type='button'
+              className='btn btn-sm btn-outline-primary ml-3'
+              onClick={addToStar}
+            >
+              将已选课程添加到排课待选
             </button>
           </div>
         </Form.Row>

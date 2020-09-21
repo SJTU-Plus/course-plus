@@ -138,6 +138,8 @@ function App() {
                 <Route path='/:semester/classtable'>
                   <ClassTableForm
                     sjtuLesson={sjtuLesson}
+                    starLesson={starLesson}
+                    setStarLesson={setStarLesson}
                     dataLoading={sjtuLessonLoading}
                     syncFromISJTU={syncFromISJTU}
                     colorMapping={colorize(sjtuLesson)}
