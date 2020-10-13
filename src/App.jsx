@@ -64,7 +64,7 @@ function App() {
       .get(`/api/course/lesson?term=${semester.replace('_', '-')}`)
       .then((resp) => {
         if (resp?.data?.error === 'success') {
-          setSjtuLesson(new Set(resp.data.entities.map((x) => x.name)))
+          setSjtuLesson(new Set(resp.data.entities.map((x) => x.code)))
           setSjtuLessonLoading(false)
         } else {
           setSjtuLessonLoading(false)
