@@ -6,7 +6,7 @@ import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   matchPath,
   Route,
   Switch,
