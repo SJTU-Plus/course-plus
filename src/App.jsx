@@ -7,10 +7,8 @@ import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
 import {
   BrowserRouter as Router,
-  matchPath,
   Route,
   Switch,
-  useLocation,
 } from 'react-router-dom'
 
 import ClassTable from './ClassTable'
@@ -71,7 +69,7 @@ function App() {
           setLoginDialog(true)
         }
       })
-      .catch((e) => {
+      .catch(() => {
         setLoginDialog(true)
         setSjtuLessonLoading(false)
       })
