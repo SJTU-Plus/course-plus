@@ -5,11 +5,7 @@ import chroma from 'chroma-js'
 import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import ClassTable from './ClassTable'
 import ClassTableForm from './ClassTableForm'
