@@ -2,8 +2,9 @@ import './App.scss'
 
 import axios from 'axios'
 import chroma from 'chroma-js'
-import sortedBy from 'lodash/sortBy'
+import { groupBy } from 'lodash'
 import forEach from 'lodash/forEach'
+import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
 import {
@@ -25,7 +26,6 @@ import SemesterNav from './SemesterNav'
 import ShowClassTable from './ShowClassTable'
 import SyncButton from './SyncButton'
 import { useLocalStorageSet } from './Utils'
-import { groupBy } from 'lodash'
 
 function App() {
   const [filterFormState, setFilterFormState] = useReducer(
@@ -89,13 +89,18 @@ function App() {
   const colorize = (starLesson) => {
     const colorScale = chroma.scale('Spectral').gamma(0.5)
     // const colorScale = chroma.scale(['yellow', 'navy']).mode('lch');
-    const starLessonArray = [...starLesson];
+    const starLessonArray = [...starLesson]
     const result = {}
     console.log(starLessonArray)
-    forEach(groupBy(starLessonArray, lesson => lesson.split('-').slice(0, 3).join('-')), v => {
-      const colors = colorScale.colors(v.length)
-      sortedBy(v).forEach((val, idx) => (result[val] = colors[idx]))
-    })
+    forEach(
+      groupBy(starLessonArray, (lesson) =>
+        lesson.split('-').slice(0, 3).join('-')
+      ),
+      (v) => {
+        const colors = colorScale.colors(v.length)
+        sortedBy(v).forEach((val, idx) => (result[val] = colors[idx]))
+      }
+    )
     return result
   }
 
