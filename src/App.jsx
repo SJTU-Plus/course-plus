@@ -91,7 +91,6 @@ function App() {
     // const colorScale = chroma.scale(['yellow', 'navy']).mode('lch');
     const starLessonArray = [...starLesson]
     const result = {}
-    console.log(starLessonArray)
     forEach(
       groupBy(starLessonArray, (lesson) =>
         lesson.split('-').slice(0, 3).join('-')
