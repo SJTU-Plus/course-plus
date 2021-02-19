@@ -41,7 +41,7 @@ const allFixtures = [
 ]
 
 export default function ({ semester, selectedLessonObj }) {
-  const [firstDayDate, setFirstDayDate] = useState('2020-09-07')
+  const [firstDayDate, setFirstDayDate] = useState('2021-02-22')
   const [fixtures, setFixtures] = useState(new Set([]))
 
   const getFixtures = () => {
