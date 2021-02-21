@@ -116,6 +116,11 @@ export default function LessonDetail({ lesson, color }) {
           ) : (
             <></>
           )}
+          {lesson.kzmc ? (
+            <p className='card-text'>通识课模块：{lesson.kzmc}</p>
+          ) : (
+            <></>
+          )}
           <span className='card-text'>班级组成</span>
           <ul className='list-group list-group-flush border-top border-bottom mb-3'>
             {lesson.jxbzc.split(';').map((item, idx) => (

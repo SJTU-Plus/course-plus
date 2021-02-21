@@ -35,6 +35,7 @@ function App() {
       checkedNj: new Set(),
       checkedLx: new Set(),
       checkedYx: new Set(),
+      checkedTy: new Set(),
       scheduleKey: '',
       lecturerKey: '',
       placeKey: '',

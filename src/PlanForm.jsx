@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import uniqBy from 'lodash/uniqBy'
-import React, { useState } from 'react'
+import React from 'react'
 import Form from 'react-bootstrap/Form'
 import { useParams } from 'react-router-dom'
 

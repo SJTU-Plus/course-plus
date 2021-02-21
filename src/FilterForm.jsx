@@ -1,4 +1,5 @@
 import countBy from 'lodash/countBy'
+import filter from 'lodash/filter'
 import flatMap from 'lodash/flatMap'
 import keys from 'lodash/keys'
 import sortBy from 'lodash/sortBy'
@@ -45,6 +46,11 @@ export default withRouter(({ history, state, setState }) => {
     )
     const dataLx = countBy(lessonFiltered, 'kcxzmc')
     const dataYx = countBy(lessonFiltered, 'kkxy')
+    const dataTy = countBy(
+      flatMap(filter(lessonFiltered, 'kzmc'), (lesson) =>
+        lesson.kzmc.split(',')
+      )
+    )
 
     return (
       <div>
@@ -173,6 +179,28 @@ export default withRouter(({ history, state, setState }) => {
                   {key}
                   <Badge pill variant='secondary' className='ml-1'>
                     {dataYx[key]}
+                  </Badge>
+                </Form.Check.Label>
+              </Form.Check>
+            ))}
+          </div>
+        </Form.Row>
+        <Form.Row className='mb-3'>
+          <Form.Label>通识课模块</Form.Label>
+          <div className='col-12'>
+            {sortBy(keys(dataTy)).map((key) => (
+              <Form.Check type='checkbox' key={key} id={key} custom>
+                <Form.Check.Input
+                  type='checkbox'
+                  name='checkedTy'
+                  checked={state.checkedTy.has(key)}
+                  onChange={handleCheckChange}
+                  value={key}
+                />
+                <Form.Check.Label>
+                  {key}
+                  <Badge pill variant='secondary' className='ml-1'>
+                    {dataTy[key]}
                   </Badge>
                 </Form.Check.Label>
               </Form.Check>
