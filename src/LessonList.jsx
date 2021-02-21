@@ -5,7 +5,7 @@ import { InView } from 'react-intersection-observer'
 import { useParams } from 'react-router-dom'
 
 import LessonRow from './LessonRow'
-import { filterDataForm, useLessonData } from './Utils'
+import { filterDataForm, useLessonConversion, useLessonData } from './Utils'
 
 const tableHeader = [
   '课号',
@@ -41,7 +41,7 @@ function DataLoaded({ loaded, size }) {
 export default ({ filterData, state, setState }) => {
   const { semester } = useParams()
   const { data: lessonsRaw } = useLessonData(semester)
-  const [entries, setEntries] = useState(100)
+  const [entries, setEntries] = useState(20)
 
   const handleStateChange = ({ name, value }) => {
     const set = new Set(state)
@@ -53,8 +53,14 @@ export default ({ filterData, state, setState }) => {
     setState(set)
   }
 
+  const { data: lessonConversion } = useLessonConversion()
+
   if (lessonsRaw) {
-    const lessons = filterDataForm(uniqBy(lessonsRaw, 'jxbmc'), filterData)
+    const lessons = filterDataForm(
+      uniqBy(lessonsRaw, 'jxbmc'),
+      filterData,
+      lessonConversion
+    )
     const truncatedLessons = sortBy(lessons, 'kch').slice(0, entries)
 
     const moreEntries = () => {
@@ -87,6 +93,7 @@ export default ({ filterData, state, setState }) => {
                   name={lesson.jxbmc}
                   state={state.has(lesson.jxbmc)}
                   setState={handleStateChange}
+                  lessonConversion={lessonConversion}
                 ></LessonRow>
               ))}
             </tbody>
