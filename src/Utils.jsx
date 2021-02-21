@@ -58,6 +58,14 @@ export function useLessonData(semester) {
   return useSWR(`/course-plus-data/lessonData_${semester}.json`, lessonFetcher)
 }
 
+export function useIndexData() {
+  return useSWR(`/course-plus-data/lessonData_index.json`, lessonFetcher)
+}
+
+export function useLessonDetail() {
+  return useSWR(`/course-plus-data/lesson_description_2019.json`, lessonFetcher)
+}
+
 export const dayName = [
   '星期一',
   '星期二',

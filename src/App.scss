@@ -77,3 +77,19 @@
 .classtable-wrapper {
   overflow-y: scroll;
 }
+
+.lesson-detail-card {
+  margin: 1rem;
+  width: 25rem;
+  max-height: 40rem;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.lesson-dot {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  display: inline-block;
+}

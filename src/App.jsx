@@ -13,6 +13,7 @@ import {
   Route,
   Switch,
   useLocation,
+  useParams,
 } from 'react-router-dom'
 
 import ClassTable from './ClassTable'

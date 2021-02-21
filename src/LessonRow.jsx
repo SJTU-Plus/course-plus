@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import { Tooltip } from 'react-tippy'
 
+import LessonDetail from './LessonDetail'
 import { BreakLine, TimeLocation } from './Utils'
 
 function StarSvg({ size }) {
@@ -80,6 +82,18 @@ function Star({ size, state, hover }) {
   }
 }
 
+function PopperClass({ lesson }) {
+  return (
+    <Tooltip
+      interactive
+      position='right'
+      html={<LessonDetail lesson={lesson}></LessonDetail>}
+    >
+      <a className='btn btn-link btn-sm text-reset p-0'>详情</a>
+    </Tooltip>
+  )
+}
+
 export default function LessonRow({ lesson, name, state, setState }) {
   const [onHover, setOnHover] = useState(false)
 
@@ -97,42 +111,8 @@ export default function LessonRow({ lesson, name, state, setState }) {
           </span>
           <span className='ml-1'>{lesson.kch}</span>
         </a>
-        {/* <button
-                    type="button"
-                    className="btn btn-link btn-sm star-btn"
-                    @click="star(lesson.jxb_id)"
-                  > */}
-        {/* <span
-                      v-bind:className="{
-                        'text-primary': isStarred(lesson.jxb_id),
-                        'text-muted': !isStarred(lesson.jxb_id)
-                      }"
-                    >
-                      <StarIcon size="1.5x"></StarIcon>
-                      { lesson.kch }
-                    </span> */}
-        {/* </button> */}
         <br />
-        {/* <popper
-                    trigger="hover"
-                    :options="{
-                      placement: 'right',
-                      modifiers: { offset: { offset: '0,10px' } }
-                    }"
-                  > */}
-        {/* <LessonDetail
-                      :lesson="lesson"
-                      :lessonDetail="lessonDetail"
-                    ></LessonDetail> */}
-        {/*
-                    <button
-                      type="button"
-                      className="btn btn-link btn-sm text-muted"
-                      slot="reference"
-                    >
-                      详情
-                    </button> */}
-        {/* </popper> */}
+        <PopperClass lesson={lesson}></PopperClass>
       </th>
       <td className='yxmc'>{lesson.kkxy}</td>
       <td className='xm'>
