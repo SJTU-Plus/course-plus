@@ -4,7 +4,6 @@ import { parseTimeLocation, useLessonDetail } from './Utils'
 
 export default function LessonDetail({ lesson, color }) {
   const { data: lessonDetail } = useLessonDetail()
-  console.log(lessonDetail)
   return (
     <>
       <div className='card lesson-detail-card shadow-sm font-weight-normal small'>
@@ -65,14 +64,16 @@ export default function LessonDetail({ lesson, color }) {
           </ul>
           <p>
             {
-              (((lessonDetail || {})[lesson.kch] || {}).profile || {})
-                .chineseIntro
+              (((lessonDetail || {})[lesson.kch] || {}).profile || {})[
+                '中文课程简介'
+              ]
             }
           </p>
           <p>
             {
-              (((lessonDetail || {})[lesson.kch] || {}).profile || {})
-                .englishIntro
+              (((lessonDetail || {})[lesson.kch] || {}).profile || {})[
+                '英文课程简介'
+              ]
             }
           </p>
           <p className='card-text text-muted pb-3'>
