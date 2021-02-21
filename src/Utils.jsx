@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import useSWR from 'swr'
 
-import { lessonFetcher } from './SWRFetcher'
+import fetcher, { lessonFetcher } from './SWRFetcher'
 
 export function BreakLine(props) {
   const result = props.data.split(props.sep)
@@ -63,7 +63,7 @@ export function useIndexData() {
 }
 
 export function useLessonDetail() {
-  return useSWR(`/course-plus-data/lesson_description_2019.json`, lessonFetcher)
+  return useSWR(`/course-plus-data/lesson_description_2019.json`, fetcher)
 }
 
 export const dayName = [
