@@ -1,9 +1,80 @@
 import React from 'react'
 
-import { parseTimeLocation, useLessonDetail } from './Utils'
+import {
+  parseTimeLocation,
+  useLessonConversion,
+  useLessonDetail,
+} from './Utils'
+
+function ArrowRightSvg({ size }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      xmlns='http://www.w3.org/2000/svg'
+      fill='currentColor'
+      className='bi bi-arrow-right-short'
+      viewBox='0 0 16 16'
+    >
+      <path
+        fillRule='evenodd'
+        d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z'
+      />
+    </svg>
+  )
+}
+
+function ConversionInfo({ lessonConversion, kch }) {
+  if (lessonConversion) {
+    if (lessonConversion.to_new[kch]) {
+      return (
+        <span className='mr-1'>
+          <b>{kch}</b>
+          <ArrowRightSvg size='1rem'></ArrowRightSvg>
+          {lessonConversion.to_new[kch]}
+        </span>
+      )
+    }
+    if (lessonConversion.to_old[kch]) {
+      return (
+        <span className='mr-1'>
+          {lessonConversion.to_old[kch]}
+          <ArrowRightSvg size='1rem'></ArrowRightSvg>
+          <b>{kch}</b>
+        </span>
+      )
+    }
+  }
+  return <></>
+}
+
+function parseProfile(lessonDetail, lessonConversion, kch) {
+  if (lessonDetail) {
+    if (lessonDetail[kch]) {
+      return lessonDetail[kch].profile
+    }
+    if (lessonConversion) {
+      let try_kch = lessonConversion.to_new[kch]
+      if (try_kch) {
+        if (lessonDetail[try_kch]) {
+          return lessonDetail[try_kch].profile
+        }
+      }
+      try_kch = lessonConversion.to_old[kch]
+      if (try_kch) {
+        if (lessonDetail[try_kch]) {
+          return lessonDetail[try_kch].profile
+        }
+      }
+    }
+  }
+  return {}
+}
 
 export default function LessonDetail({ lesson, color }) {
   const { data: lessonDetail } = useLessonDetail()
+  const { data: lessonConversion } = useLessonConversion()
+
   return (
     <>
       <div className='card lesson-detail-card shadow-sm font-weight-normal small'>
@@ -12,7 +83,7 @@ export default function LessonDetail({ lesson, color }) {
             {color ? (
               <span
                 className='lesson-dot'
-                style={{ 'background-color': color }}
+                style={{ backgroundColor: color }}
               ></span>
             ) : (
               <></>
@@ -20,6 +91,10 @@ export default function LessonDetail({ lesson, color }) {
             {lesson.kch} {lesson.kcmc}
           </h5>
           <h6 className='card-subtitle mb-2 text-muted'>
+            <ConversionInfo
+              kch={lesson.kch}
+              lessonConversion={lessonConversion}
+            ></ConversionInfo>
             <span>{lesson.jszc}</span>
             {lesson.jszc !== lesson.zjs ? (
               <span>(上课教师: {lesson.zjs})</span>
@@ -64,14 +139,14 @@ export default function LessonDetail({ lesson, color }) {
           </ul>
           <p>
             {
-              (((lessonDetail || {})[lesson.kch] || {}).profile || {})[
+              parseProfile(lessonDetail, lessonConversion, lesson.kch)[
                 '中文课程简介'
               ]
             }
           </p>
           <p>
             {
-              (((lessonDetail || {})[lesson.kch] || {}).profile || {})[
+              parseProfile(lessonDetail, lessonConversion, lesson.kch)[
                 '英文课程简介'
               ]
             }

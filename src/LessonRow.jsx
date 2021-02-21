@@ -94,12 +94,44 @@ function PopperClass({ lesson }) {
   )
 }
 
-export default function LessonRow({ lesson, name, state, setState }) {
+function ConversionInfo({ lessonConversion, kch }) {
+  if (lessonConversion) {
+    if (lessonConversion.to_new[kch]) {
+      return (
+        <>
+          <br />
+          <span className='text-muted'>
+            (新 {lessonConversion.to_new[kch]})
+          </span>
+        </>
+      )
+    }
+    if (lessonConversion.to_old[kch]) {
+      return (
+        <>
+          <br />
+          <span className='text-muted'>
+            (原 {lessonConversion.to_old[kch]})
+          </span>
+        </>
+      )
+    }
+  }
+  return <></>
+}
+
+export default function LessonRow({
+  lesson,
+  name,
+  state,
+  setState,
+  lessonConversion,
+}) {
   const [onHover, setOnHover] = useState(false)
 
   return (
     <tr key={lesson.jxbmc}>
-      <th className='kcbm' scope='row'>
+      <td className='kcbm' scope='row'>
         <a
           className='btn btn-link btn-sm text-reset p-0'
           onClick={() => setState({ name, value: !state })}
@@ -111,9 +143,13 @@ export default function LessonRow({ lesson, name, state, setState }) {
           </span>
           <span className='ml-1'>{lesson.kch}</span>
         </a>
+        <ConversionInfo
+          lessonConversion={lessonConversion}
+          kch={lesson.kch}
+        ></ConversionInfo>
         <br />
         <PopperClass lesson={lesson}></PopperClass>
-      </th>
+      </td>
       <td className='yxmc'>{lesson.kkxy}</td>
       <td className='xm'>
         <BreakLine data={lesson.jszc} sep=','></BreakLine>

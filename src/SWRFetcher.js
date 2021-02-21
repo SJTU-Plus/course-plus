@@ -1,4 +1,6 @@
 import { get } from 'axios'
+import invert from 'lodash/invert'
+
 export default (...args) => get(...args).then((resp) => resp.data)
 
 export const lessonFetcher = (...args) =>
@@ -14,3 +16,11 @@ export const lessonFetcher = (...args) =>
       return lesson
     })
   )
+
+export const conversionFetcher = (...args) =>
+  get(...args).then((resp) => {
+    return {
+      to_new: resp.data,
+      to_old: invert(resp.data),
+    }
+  })

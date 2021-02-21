@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import useSWR from 'swr'
 
-import fetcher, { lessonFetcher } from './SWRFetcher'
+import fetcher, { conversionFetcher, lessonFetcher } from './SWRFetcher'
 
 export function BreakLine(props) {
   const result = props.data.split(props.sep)
@@ -63,7 +63,11 @@ export function useIndexData() {
 }
 
 export function useLessonDetail() {
-  return useSWR(`/course-plus-data/lesson_description_2019.json`, fetcher)
+  return useSWR(`/course-plus-data/lesson_description_2020.json`, fetcher)
+}
+
+export function useLessonConversion() {
+  return useSWR(`/course-plus-data/lesson_conversion.json`, conversionFetcher)
 }
 
 export const dayName = [
@@ -127,10 +131,9 @@ export function useLocalStorageSet(key, initialValue) {
   return [storedValue, setValue]
 }
 
-export function filterKeyword(dataRaw, filterForm) {
+export function filterKeyword(dataRaw, filterForm, lessonConversion) {
   let filteringData = dataRaw
   const keyword = filterForm.keyword
-  const keywordType = filterForm.keywordType
   const scheduleKey = filterForm.scheduleKey
   const lecturerKey = filterForm.lecturerKey
   const placeKey = filterForm.placeKey
@@ -139,11 +142,33 @@ export function filterKeyword(dataRaw, filterForm) {
 
   if (keyword) {
     filteringData = filteringData.filter((lesson) => {
-      if (lesson[keywordType]) {
-        return lesson[keywordType].toLowerCase().includes(keyword.toLowerCase())
-      } else {
-        return false
+      if (lesson.kcmc.toLowerCase().includes(keyword.toLowerCase())) {
+        return true
       }
+      if (lesson.kch.toLowerCase().includes(keyword.toLowerCase())) {
+        return true
+      }
+      if (lessonConversion) {
+        if (lessonConversion.to_new[lesson.kch]) {
+          if (
+            lessonConversion.to_new[lesson.kch]
+              .toLowerCase()
+              .includes(keyword.toLowerCase())
+          ) {
+            return true
+          }
+        }
+        if (lessonConversion.to_old[lesson.kch]) {
+          if (
+            lessonConversion.to_old[lesson.kch]
+              .toLowerCase()
+              .includes(keyword.toLowerCase())
+          ) {
+            return true
+          }
+        }
+      }
+      return false
     })
   }
   if (scheduleKey) {
@@ -174,8 +199,8 @@ export function filterKeyword(dataRaw, filterForm) {
   return filteringData
 }
 
-export function filterDataForm(dataRaw, filterForm) {
-  let filteringData = filterKeyword(dataRaw, filterForm)
+export function filterDataForm(dataRaw, filterForm, lessonConversion) {
+  let filteringData = filterKeyword(dataRaw, filterForm, lessonConversion)
   const checkedNj = filterForm.checkedNj
   const checkedLx = filterForm.checkedLx
   const checkedYx = filterForm.checkedYx
