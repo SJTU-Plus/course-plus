@@ -17,8 +17,8 @@ app.use('/api/course/lesson', (req, res) => {
     if (loggedIn) {
         setTimeout(() => res.json({
             error: "success",
-            entities: ["(2020-2021-1)-CS410-1", "(2020-2021-1)-CS467-1"].map(x => ({ name: x }))
-        }), 3000)
+            entities: ["(2020-2021-2)-EI314-1", "(2020-2021-2)-IS305-1"].map(x => ({ code: x }))
+        }), 500)
     } else {
         res.json({ 'error': 'not logged in' })
     }

@@ -1,8 +1,10 @@
 import 'moment/locale/zh-cn'
 
+import axios from 'axios'
 import concat from 'lodash/concat'
+import find from 'lodash/find'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 
 import { generateICS } from './calendar'
@@ -41,8 +43,23 @@ const allFixtures = [
 ]
 
 export default function ({ semester, selectedLessonObj }) {
-  const [firstDayDate, setFirstDayDate] = useState('2021-02-22')
+  const [firstDayDate, setFirstDayDate] = useState('')
   const [fixtures, setFixtures] = useState(new Set([]))
+
+  useEffect(() => {
+    const getLessonIndex = async () => {
+      const semesterIndex = (
+        await axios.get('/course-plus-data/lessonData_index.json')
+      ).data
+      const index = find(
+        semesterIndex,
+        (index) => semester === `${index.year}_${index.semester}`
+      )
+      setFirstDayDate((index || {}).first_day || '2021-01-01')
+    }
+
+    getLessonIndex().then()
+  }, [semester])
 
   const getFixtures = () => {
     let result = []
