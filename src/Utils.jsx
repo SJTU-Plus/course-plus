@@ -204,6 +204,7 @@ export function filterDataForm(dataRaw, filterForm, lessonConversion) {
   const checkedNj = filterForm.checkedNj
   const checkedLx = filterForm.checkedLx
   const checkedYx = filterForm.checkedYx
+  const checkedTy = filterForm.checkedTy
 
   if (checkedNj.size) {
     filteringData = filteringData.filter((lesson) =>
@@ -217,6 +218,11 @@ export function filterDataForm(dataRaw, filterForm, lessonConversion) {
   }
   if (checkedYx.size) {
     filteringData = filteringData.filter((lesson) => checkedYx.has(lesson.kkxy))
+  }
+  if (checkedTy.size) {
+    filteringData = filteringData.filter((lesson) =>
+      lesson.kzmc.split(',').some((x) => checkedTy.has(x))
+    )
   }
   return filteringData
 }
