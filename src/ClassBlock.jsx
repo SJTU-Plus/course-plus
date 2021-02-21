@@ -110,6 +110,7 @@ export default ({
                 >
                   <Tooltip
                     interactive
+                    unmountHTMLWhenHide={true}
                     position='right'
                     html={
                       <LessonDetail

@@ -87,6 +87,7 @@ function PopperClass({ lesson }) {
     <Tooltip
       interactive
       position='right'
+      unmountHTMLWhenHide={true}
       html={<LessonDetail lesson={lesson}></LessonDetail>}
     >
       <a className='btn btn-link btn-sm text-reset p-0'>详情</a>
