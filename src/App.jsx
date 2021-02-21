@@ -7,13 +7,7 @@ import forEach from 'lodash/forEach'
 import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
-import {
-  HashRouter as Router,
-  matchPath,
-  Route,
-  Switch,
-  useLocation,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import ClassTable from './ClassTable'
 import ClassTableForm from './ClassTableForm'
@@ -73,7 +67,7 @@ function App() {
           setLoginDialog(true)
         }
       })
-      .catch((e) => {
+      .catch(() => {
         setLoginDialog(true)
         setSjtuLessonLoading(false)
       })
