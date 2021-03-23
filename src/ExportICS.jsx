@@ -40,6 +40,16 @@ const allFixtures = [
       { week: 5, day: 4, on: null },
     ],
   },
+  {
+    name: '2021 春季学期 (清明节+劳动节+端午节)',
+    rules: [
+      { week: 7, day: 1, on: null },
+      { week: 11, day: 2, on: moment('2021-04-25', 'YYYY-MM-DD') },
+      { week: 11, day: 1, on: moment('2021-05-08', 'YYYY-MM-DD') },
+      { week: 11, day: 3, on: null },
+      { week: 17, day: 1, on: null },
+    ]
+  },
 ]
 
 export default function ({ semester, selectedLessonObj }) {
