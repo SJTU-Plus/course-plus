@@ -48,7 +48,7 @@ const allFixtures = [
       { week: 11, day: 1, on: moment('2021-05-08', 'YYYY-MM-DD') },
       { week: 11, day: 3, on: null },
       { week: 17, day: 1, on: null },
-    ]
+    ],
   },
 ]
 
