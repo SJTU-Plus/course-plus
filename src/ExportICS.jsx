@@ -50,6 +50,18 @@ const allFixtures = [
       { week: 17, day: 1, on: null },
     ],
   },
+  {
+    name: '2021 中秋+国庆',
+    rules: [
+      { week: 2, day: 1, on: moment('2021-09-18', 'YYYY-MM-DD') },
+      { week: 2, day: 2, on: null },
+      { week: 4, day: 2, on: moment('2021-09-26', 'YYYY-MM-DD') },
+      { week: 4, day: 4, on: moment('2021-10-09', 'YYYY-MM-DD') },
+      { week: 3, day: 5, on: null },
+      { week: 4, day: 1, on: null },
+      { week: 4, day: 3, on: null },
+    ],
+  },
 ]
 
 export default function ({ semester, selectedLessonObj }) {
