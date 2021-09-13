@@ -170,8 +170,7 @@ function App() {
                     <a href='https://github.com/SJTU-Plus/course-plus'>
                       本项目
                     </a>{' '}
-                    由 <a href='https://sjtu-plus.github.io/'>SJTU-Plus</a>{' '}
-                    维护。
+                    由 <a href='https://plus.sjtu.edu.cn/'>SJTU-Plus</a> 维护。
                   </p>
                 </div>
                 <div className='col-auto m-0 p-0 d-flex d-row align-items-center'>
