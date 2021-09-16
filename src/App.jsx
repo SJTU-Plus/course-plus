@@ -62,6 +62,15 @@ function App() {
 
   const [loginDialog, setLoginDialog] = useState(false)
 
+  const removeStarLesson = (value) => {
+    const set = new Set(starLesson)
+    set.delete(value)
+    setStarLesson(set)
+    const set2 = new Set(selectedLesson)
+    set2.delete(value)
+    setSelectedLesson(set2)
+  }
+
   const syncFromISJTU = (semester) => {
     setSjtuLessonLoading(true)
     axios
@@ -141,6 +150,7 @@ function App() {
                 <Route path='/:semester/plan'>
                   <PlanForm
                     starLesson={starLesson}
+                    removeStarLesson={removeStarLesson}
                     state={selectedLesson}
                     setState={setSelectedLesson}
                     colorMapping={colorize(starLesson)}
