@@ -5,7 +5,9 @@ import map from 'lodash/map'
 import max from 'lodash/max'
 import sortBy from 'lodash/sortBy'
 import React from 'react'
+import { Tooltip } from 'react-tippy'
 
+import LessonDetail from './LessonDetail'
 import { checkBin, parseBin, parseTimeLocationDay } from './Utils'
 
 function splitBy(elements, by) {
@@ -106,8 +108,20 @@ export default ({
                     conflictLesson.includes(lesson.jxbmc) ? 'text-danger' : ''
                   }
                 >
-                  <span className='mr-1'>{lesson.kch}</span>
-                  <span>{lesson.kcmc}</span>
+                  <Tooltip
+                    interactive
+                    unmountHTMLWhenHide={true}
+                    position='right'
+                    html={
+                      <LessonDetail
+                        lesson={lesson}
+                        color={colorMapping[lesson.jxbmc]}
+                      ></LessonDetail>
+                    }
+                  >
+                    <span className='mr-1'>{lesson.kch}</span>
+                    <span>{lesson.kcmc}</span>
+                  </Tooltip>
                 </span>
                 <br />
                 <span className='mr-1'>{lesson.jszc}</span>

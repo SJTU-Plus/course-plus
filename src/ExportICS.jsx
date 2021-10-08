@@ -1,8 +1,10 @@
 import 'moment/locale/zh-cn'
 
+import axios from 'axios'
 import concat from 'lodash/concat'
+import find from 'lodash/find'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 
 import { generateICS } from './calendar'
@@ -38,11 +40,48 @@ const allFixtures = [
       { week: 5, day: 4, on: null },
     ],
   },
+  {
+    name: '2021 春季学期 (清明节+劳动节+端午节)',
+    rules: [
+      { week: 7, day: 1, on: null },
+      { week: 11, day: 2, on: moment('2021-04-25', 'YYYY-MM-DD') },
+      { week: 11, day: 1, on: moment('2021-05-08', 'YYYY-MM-DD') },
+      { week: 11, day: 3, on: null },
+      { week: 17, day: 1, on: null },
+    ],
+  },
+  {
+    name: '2021 中秋+国庆',
+    rules: [
+      { week: 2, day: 1, on: moment('2021-09-18', 'YYYY-MM-DD') },
+      { week: 2, day: 2, on: null },
+      { week: 4, day: 2, on: moment('2021-09-26', 'YYYY-MM-DD') },
+      { week: 4, day: 4, on: moment('2021-10-09', 'YYYY-MM-DD') },
+      { week: 3, day: 5, on: null },
+      { week: 4, day: 1, on: null },
+      { week: 4, day: 3, on: null },
+    ],
+  },
 ]
 
 export default function ({ semester, selectedLessonObj }) {
-  const [firstDayDate, setFirstDayDate] = useState('2020-09-07')
+  const [firstDayDate, setFirstDayDate] = useState('')
   const [fixtures, setFixtures] = useState(new Set([]))
+
+  useEffect(() => {
+    const getLessonIndex = async () => {
+      const semesterIndex = (
+        await axios.get('/course-plus-data/lessonData_index.json')
+      ).data
+      const index = find(
+        semesterIndex,
+        (index) => semester === `${index.year}_${index.semester}`
+      )
+      setFirstDayDate((index || {}).first_day || '2021-01-01')
+    }
+
+    getLessonIndex().then()
+  }, [semester])
 
   const getFixtures = () => {
     let result = []

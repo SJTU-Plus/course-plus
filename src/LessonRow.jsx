@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import { Tooltip } from 'react-tippy'
 
+import LessonDetail from './LessonDetail'
 import { BreakLine, TimeLocation } from './Utils'
 
 function StarSvg({ size }) {
@@ -80,12 +82,57 @@ function Star({ size, state, hover }) {
   }
 }
 
-export default function LessonRow({ lesson, name, state, setState }) {
+function PopperClass({ lesson }) {
+  return (
+    <Tooltip
+      interactive
+      position='right'
+      unmountHTMLWhenHide={true}
+      html={<LessonDetail lesson={lesson}></LessonDetail>}
+    >
+      <a className='btn btn-link btn-sm text-reset p-0'>详情</a>
+    </Tooltip>
+  )
+}
+
+function ConversionInfo({ lessonConversion, kch }) {
+  if (lessonConversion) {
+    if (lessonConversion.to_new[kch]) {
+      return (
+        <>
+          <br />
+          <span className='text-muted'>
+            (新 {lessonConversion.to_new[kch]})
+          </span>
+        </>
+      )
+    }
+    if (lessonConversion.to_old[kch]) {
+      return (
+        <>
+          <br />
+          <span className='text-muted'>
+            (原 {lessonConversion.to_old[kch]})
+          </span>
+        </>
+      )
+    }
+  }
+  return <></>
+}
+
+export default function LessonRow({
+  lesson,
+  name,
+  state,
+  setState,
+  lessonConversion,
+}) {
   const [onHover, setOnHover] = useState(false)
 
   return (
     <tr key={lesson.jxbmc}>
-      <th className='kcbm' scope='row'>
+      <td className='kcbm' scope='row'>
         <a
           className='btn btn-link btn-sm text-reset p-0'
           onClick={() => setState({ name, value: !state })}
@@ -97,43 +144,13 @@ export default function LessonRow({ lesson, name, state, setState }) {
           </span>
           <span className='ml-1'>{lesson.kch}</span>
         </a>
-        {/* <button
-                    type="button"
-                    className="btn btn-link btn-sm star-btn"
-                    @click="star(lesson.jxb_id)"
-                  > */}
-        {/* <span
-                      v-bind:className="{
-                        'text-primary': isStarred(lesson.jxb_id),
-                        'text-muted': !isStarred(lesson.jxb_id)
-                      }"
-                    >
-                      <StarIcon size="1.5x"></StarIcon>
-                      { lesson.kch }
-                    </span> */}
-        {/* </button> */}
+        <ConversionInfo
+          lessonConversion={lessonConversion}
+          kch={lesson.kch}
+        ></ConversionInfo>
         <br />
-        {/* <popper
-                    trigger="hover"
-                    :options="{
-                      placement: 'right',
-                      modifiers: { offset: { offset: '0,10px' } }
-                    }"
-                  > */}
-        {/* <LessonDetail
-                      :lesson="lesson"
-                      :lessonDetail="lessonDetail"
-                    ></LessonDetail> */}
-        {/*
-                    <button
-                      type="button"
-                      className="btn btn-link btn-sm text-muted"
-                      slot="reference"
-                    >
-                      详情
-                    </button> */}
-        {/* </popper> */}
-      </th>
+        <PopperClass lesson={lesson}></PopperClass>
+      </td>
       <td className='yxmc'>{lesson.kkxy}</td>
       <td className='xm'>
         <BreakLine data={lesson.jszc} sep=','></BreakLine>

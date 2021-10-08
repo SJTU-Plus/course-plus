@@ -2,10 +2,19 @@ import './App.scss'
 
 import axios from 'axios'
 import chroma from 'chroma-js'
+import { groupBy } from 'lodash'
+import forEach from 'lodash/forEach'
 import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  matchPath,
+  Route,
+  Switch,
+  useLocation,
+  useParams,
+} from 'react-router-dom'
 
 import ClassTable from './ClassTable'
 import ClassTableForm from './ClassTableForm'
@@ -26,6 +35,7 @@ function App() {
       checkedNj: new Set(),
       checkedLx: new Set(),
       checkedYx: new Set(),
+      checkedTy: new Set(),
       scheduleKey: '',
       lecturerKey: '',
       placeKey: '',
@@ -51,6 +61,15 @@ function App() {
   const [sjtuLessonLoading, setSjtuLessonLoading] = useState(false)
 
   const [loginDialog, setLoginDialog] = useState(false)
+
+  const removeStarLesson = (value) => {
+    const set = new Set(starLesson)
+    set.delete(value)
+    setStarLesson(set)
+    const set2 = new Set(selectedLesson)
+    set2.delete(value)
+    setSelectedLesson(set2)
+  }
 
   const syncFromISJTU = (semester) => {
     setSjtuLessonLoading(true)
@@ -82,9 +101,16 @@ function App() {
     const colorScale = chroma.scale('Spectral').gamma(0.5)
     // const colorScale = chroma.scale(['yellow', 'navy']).mode('lch');
     const starLessonArray = [...starLesson]
-    const colors = colorScale.colors(starLessonArray.length)
     const result = {}
-    sortedBy(starLessonArray).forEach((val, idx) => (result[val] = colors[idx]))
+    forEach(
+      groupBy(starLessonArray, (lesson) =>
+        lesson.split('-').slice(0, 3).join('-')
+      ),
+      (v) => {
+        const colors = colorScale.colors(v.length)
+        sortedBy(v).forEach((val, idx) => (result[val] = colors[idx]))
+      }
+    )
     return result
   }
 
@@ -124,6 +150,7 @@ function App() {
                 <Route path='/:semester/plan'>
                   <PlanForm
                     starLesson={starLesson}
+                    removeStarLesson={removeStarLesson}
                     state={selectedLesson}
                     setState={setSelectedLesson}
                     colorMapping={colorize(starLesson)}
@@ -153,8 +180,7 @@ function App() {
                     <a href='https://github.com/SJTU-Plus/course-plus'>
                       本项目
                     </a>{' '}
-                    由 <a href='https://sjtu-plus.github.io/'>SJTU-Plus</a>{' '}
-                    维护。
+                    由 <a href='https://plus.sjtu.edu.cn/'>SJTU-Plus</a> 维护。
                   </p>
                 </div>
                 <div className='col-auto m-0 p-0 d-flex d-row align-items-center'>

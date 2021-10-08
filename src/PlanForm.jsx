@@ -1,14 +1,20 @@
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import uniqBy from 'lodash/uniqBy'
-import React, { useState } from 'react'
+import React from 'react'
 import Form from 'react-bootstrap/Form'
 import { useParams } from 'react-router-dom'
 
 import ExportICSForm from './ExportICS'
 import { useLessonData } from './Utils'
 
-export default ({ state, setState, starLesson, colorMapping }) => {
+export default ({
+  state,
+  setState,
+  starLesson,
+  removeStarLesson,
+  colorMapping,
+}) => {
   const { semester } = useParams()
   const { data: lessons } = useLessonData(semester)
 
@@ -69,12 +75,28 @@ export default ({ state, setState, starLesson, colorMapping }) => {
                   <span className='ml-1 d-inline-block'>{lesson.kch}</span>
                   <span className='ml-2 d-inline-block'>{lesson.kcmc}</span>
                   <span className='ml-2 d-inline-block'>{lesson.jszc}</span>
+                  <a
+                    className='ml-2 small'
+                    onClick={() => removeStarLesson(lesson.jxbmc)}
+                  >
+                    移除
+                  </a>
                 </Form.Check.Label>
               </Form.Check>
             ))}
           </div>
         </Form.Row>
+
+        <button
+          type='button'
+          className='btn btn-sm btn-outline-primary'
+          onClick={() => setState(new Set())}
+        >
+          全部取消选中
+        </button>
+
         <hr />
+
         <ExportICSForm
           semester={semester}
           selectedLessonObj={selectedLessonObj}
