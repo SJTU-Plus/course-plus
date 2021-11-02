@@ -8,7 +8,7 @@ import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   matchPath,
   Route,
   Switch,
@@ -84,7 +84,7 @@ function App() {
           setLoginDialog(true)
         }
       })
-      .catch(() => {
+      .catch((e) => {
         setLoginDialog(true)
         setSjtuLessonLoading(false)
       })
