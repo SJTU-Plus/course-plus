@@ -133,12 +133,12 @@ export function useLocalStorageSet(key, initialValue) {
 
 export function filterKeyword(dataRaw, filterForm, lessonConversion) {
   let filteringData = dataRaw
-  const keyword = filterForm.keyword
-  const scheduleKey = filterForm.scheduleKey
-  const lecturerKey = filterForm.lecturerKey
-  const placeKey = filterForm.placeKey
-  const composition = filterForm.composition
-  const notes = filterForm.notes
+  const keyword = filterForm.keyword.trim()
+  const scheduleKey = filterForm.scheduleKey.trim()
+  const lecturerKey = filterForm.lecturerKey.trim()
+  const placeKey = filterForm.placeKey.trim()
+  const composition = filterForm.composition.trim()
+  const notes = filterForm.notes.trim()
 
   if (keyword) {
     filteringData = filteringData.filter((lesson) => {
