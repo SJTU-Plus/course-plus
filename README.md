@@ -31,7 +31,7 @@ yarn
 启动本地服务
 
 ```
-node server.js
+npm run start
 ```
 
 浏览器访问 http://localhost:1234 , 访问本地服务。部分功能需要接入 jAccount 使用，这些功能已经提供 mock API。
