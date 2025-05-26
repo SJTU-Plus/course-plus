@@ -48,6 +48,12 @@
     "use-query-params": "^1.1.6"
   },
   "devDependencies": {
+    "@parcel/config-default": "^2.15.2",
+    "@parcel/core": "^2.15.2",
+    "@parcel/bundler-library": "^2.15.2",
+    "@parcel/packager-raw-url": "2.15.2",
+    "@parcel/transformer-sass": "2.15.2",
+    "@parcel/transformer-webmanifest": "2.15.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -73,7 +79,7 @@
     "eslint-plugin-simple-import-sort": "^5.0.3",
     "eslint-plugin-standard": "^4.0.1",
     "express": "^4.17.1",
-    "parcel-bundler": "^1.12.4",
+    "parcel": "^2.15.2",
     "prettier": "^2.1.1",
     "sass": "^1.26.10",
     "serve-static": "^1.14.1"
