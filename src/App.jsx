@@ -180,7 +180,23 @@ function App() {
                     <a href='https://github.com/SJTU-Plus/course-plus'>
                       本项目
                     </a>{' '}
-                    由 <a href='https://plus.sjtu.edu.cn/' target='_blank'>SJTU-Plus</a> 开发，<a href='https://geek.sjtu.edu.cn/'>思源极客协会</a>维护。
+                    由{' '}
+                    <a
+                      href='https://plus.sjtu.edu.cn/'
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      SJTU-Plus
+                    </a>{' '}
+                    开发，
+                    <a
+                      href='https://geek.sjtu.edu.cn/'
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      思源极客协会
+                    </a>
+                    维护。
                   </p>
                 </div>
               </div>
